@@ -20,16 +20,24 @@ class HttpClient extends \apcirest {
   public $base_url = 'https://www.allplayers.com';
 
   /**
+   * Format string
+   * @todo - Make this a mime-type.
+   *
+   * @var string
+   */
+  public $format = 'json';
+
+  /**
    * @todo - Cleanup constructor on parent (or just use a different parent).
    *
    * @param string $url
    * @param string $user_name
    * @param string $password
    */
-  public function __construct($url, $user_name = NULL, $password = NULL) {
+  public function __construct($url) {
     $this->base_url = $url;
     $url_parts = parse_url($url);
-    parent::__construct($url_parts['host'], $user_name, $password);
+    $this->host = $url_parts['host'];
 
     // @todo - Remove this and use class var at request time.
     $this->proto = $url_parts['scheme'] . '://';
@@ -39,6 +47,7 @@ class HttpClient extends \apcirest {
 
     // Disable logging by default. @todo - Move change upstream.
     // @todo - Create a Drupal watchdog Log class.
+    $this->logger = \Log::singleton('console', '', __CLASS__, PEAR_LOG_DEBUG);
     $this->logger->setMask(PEAR_LOG_NONE);
   }
 
