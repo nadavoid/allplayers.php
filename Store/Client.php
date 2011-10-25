@@ -39,22 +39,30 @@ class Client extends \AllPlayers\Component\HttpClient{
    * @nicetohave
    * Line items in the cart services users cart.
    *
+   * @param string $user_uuid
+   *   User UUID string.
+   *
    * @return Array
    *   Array of cart line item objects.
    */
-  function usersCartIndex() {
-    return $this->index('users/mycart');
+  function usersCartIndex($user_uuid) {
+    return $this->index('users/' . $user_uuid . '/cart');
   }
 
   /**
    * @musthave
    * Add items to the services users cart.
    *
+   * @param string $user_uuid
+   *   User UUID string.
+   * @param string $product_uuid
+   *   Product UUID string.
+   *
    * @return bool
    *   TRUE if succesfully added.
    */
-  function usersCartAdd($product_uuid) {
-    return $this->post('users/mycart/add', array('product_uuid' => $product_uuid));
+  function usersCartAdd($user_uuid, $product_uuid, $for_user_uuid = NULL) {
+    return $this->post('users/' . $user_uuid . '/add_to_cart', array('product_uuid' => $product_uuid, 'for_user_uuid' => $for_user_uuid));
   }
 
   /**
@@ -64,7 +72,7 @@ class Client extends \AllPlayers\Component\HttpClient{
    * @param string $uuid
    */
   function groupStoreUrl($uuid) {
-    return $this->base_url . '/group_store/' . $uuid;
+    return $this->base_url . '/group_store/uuid/' . $uuid;
   }
 
   /**
@@ -110,5 +118,15 @@ class Client extends \AllPlayers\Component\HttpClient{
    */
   function productGet($uuid) {
     return $this->get('products/' . $uuid);
+  }
+
+  /**
+   * @musthave
+   * Link to product base path.
+   *
+   * @param string $uuid
+   */
+  function productUrl($uuid) {
+    return $this->base_url . '/product/uuid/' . $uuid;
   }
 }
