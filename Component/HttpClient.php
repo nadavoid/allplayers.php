@@ -55,9 +55,14 @@ class HttpClient extends \apcirest {
    * @todo - Choose a path to hit.
    * $_COOKIE['CHOCOLATECHIP']
    *
-   * @param array $shared_cookie
+   * @param string $cookie_name
+   * @param string $cookie
+   * @param string $auth_path
    */
-  public function ssoSessionInit($cookie_name, $cookie) {
-    $this->cookies[$cookie_name] = $cookie;
+  public function ssoSessionInit($cookie_name, $cookie, $auth_path = 'group_stores') {
+    $this->cookies[] = array('name' => $cookie_name, 'value' => $cookie);
+
+    $this->get($auth_path, array(), array(), FALSE);
+    $this->storeCookies();
   }
 }

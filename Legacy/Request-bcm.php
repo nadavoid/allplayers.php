@@ -823,6 +823,13 @@ if ( ( HTTP_REQUEST_METHOD_PUT == $this->_method  )
                 $this->_url->path = $redirect;
             }
 
+            // Set any response cookies received.  Required for bakery login.
+            if ($response_cookies = $this->getResponseCookies()) {
+              foreach($response_cookies as $cookie) {
+                $this->addCookie($cookie['name'], $cookie['value']);
+              }
+            }
+
             $this->_redirects++;
             return $this->sendRequest($saveBody);
 

@@ -29,10 +29,10 @@ class RESTClient {
 
 
 
-  public function createRequest($url, $method, $arr = null) {
+  public function createRequest($url, $method, $arr = null, $allow_redirects = TRUE) {
     $this->curr_url = $url;
     $this->method = $method;
-    $this->req = new HTTP_Request($url);
+    $this->req = new HTTP_Request($url, array('allowRedirects' => $allow_redirects));
     $this->inputs = $arr;
     if ($this->debug >=10) {
       echo "CONN:$url with $method\n";

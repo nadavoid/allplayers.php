@@ -94,12 +94,12 @@ class apcirest {
    * @return
    *   array or object from decodeResponse().
    */
-  private function httpRequest($verb, $path, $query, $params = array(), $headers = array()) {
+  private function httpRequest($verb, $path, $query, $params = array(), $headers = array(), $allow_redirects = TRUE) {
     $url = $this->proto . $this->host . "/api/v1/rest/" . $path;
     if (!empty($query)) {
       $url .= '?' . http_build_query($query);
     }
-    $this->rest->createRequest($url, $verb);
+    $this->rest->createRequest($url, $verb, NULL, $allow_redirects);
     $this->rest->setBody(json_encode($params));
     $this->rest->addHeader("Cache-Control",'no-cache, must-revalidate, post-check=0, pre-check=0');
     $this->rest->addHeader("Accept",'application/json');
@@ -135,8 +135,8 @@ class apcirest {
    * @return
    *   array from process_response().
    */
-  public function get($path, $query = array(), $headers = array()) {
-    return $this->httpRequest('GET', $path, $query, NULL, $headers);
+  public function get($path, $query = array(), $headers = array(), $allow_redirects = TRUE) {
+    return $this->httpRequest('GET', $path, $query, NULL, $headers, $allow_redirects);
   }
 
   /**
@@ -373,7 +373,7 @@ class apcirest {
  /**
    * List users events based on parameters
    *
-   * @param int $uuid
+   * @param string $uuid
    *  user uuid
    *
    * @param string $fields
