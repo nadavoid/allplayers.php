@@ -55,7 +55,7 @@ class apcirest {
   //  also used for mapping bid from one machine to another machine
   //   static $nid_map  = array();
 
-  public function __construct($host = "localhost", $user_name = "user", $password = "password", $proto="http://", $req, $type = "apcipage", $debug) {
+  public function __construct($host = "localhost", $user_name = "user", $password = "password", $proto="http://", $req = NULL, $type = "apcipage", $debug = FALSE) {
     $this->format = 'json';
     $this->user_name = $user_name;
     $this->password = $password;
