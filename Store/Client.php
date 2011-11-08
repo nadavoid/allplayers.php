@@ -65,6 +65,10 @@ class Client extends \AllPlayers\Component\HttpClient{
     return $this->post('users/' . $user_uuid . '/add_to_cart', array('product_uuid' => $product_uuid, 'for_user_uuid' => $for_user_uuid));
   }
 
+  function groupStoreIndex() {
+    return $this->get('group_stores');
+  }
+
   /**
    * @musthave
    * Link to group store.
@@ -129,4 +133,21 @@ class Client extends \AllPlayers\Component\HttpClient{
   function productUrl($uuid) {
     return $this->base_url . '/product/uuid/' . $uuid;
   }
+
+   /**
+   * Login via user endpoint. (Overriding)
+   *
+   * @param string $user
+   *  username
+   * @param string $pass
+   *  password
+   */
+  public function userLogin($user, $pass) {
+    // Changing login path to 'user/login' (was 'users/login').
+    // 'user/' path is from core services. 'users/' path is custom resource.
+    $ret = $this->post('user/login', array('username' => $user, 'password' => $pass));
+    $this->session = array('session_name' => $ret->session_name, 'sessid' => $ret->sessid);
+    return $ret;
+  }
+
 }
