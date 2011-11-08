@@ -156,15 +156,4 @@ class MockClient extends Client{
     return $product;
   }
 
-  /**
-   * get a user to test with
-   * @return object
-   *  User object
-   */
-  function usersGetSampleUser() {
-    // @todo enable users retrieve action
-    $user = $this->userGetUser($this->cart_owner_uuid);
-    return $user;
-  }
-
 }
