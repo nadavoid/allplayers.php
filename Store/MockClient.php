@@ -12,10 +12,25 @@ class MockClient extends Client{
    */
   function usersCartIndex() {
     //return $this->index('users/mycart');
-    return array(
-      array('item' => 'Foo', 'quantity' => '2', 'unit_price' => '100.00', 'line_price' => '200.00'),
-      array('item' => 'Bar', 'quantity' => '1', 'unit_price' => '50.00', 'line_price' => '50.00'),
-    );
+    $return = array();
+
+    $line_item = new \stdClass();
+    $line_item->quantity = 2;
+    $line_item->title = 'Foo';
+    $line_item->unit_price = '$100.00';
+    $line_item->line_price = '$200.00';
+    $line_item->group_name = 'Test Group';
+    $return[] = $line_item;
+
+    $line_item = new \stdClass();
+    $line_item->quantity = 1;
+    $line_item->title = 'Bar';
+    $line_item->unit_price = '$50.00';
+    $line_item->line_price = '$50.00';
+    $line_item->group_name = 'Another Group';
+    $return[] = $line_item;
+
+    return $return;
   }
 
   /**
@@ -29,6 +44,33 @@ class MockClient extends Client{
     return TRUE;
   }
 
+  function groupStoreIndex() {
+    $return = array();
+
+    $group = new \stdClass();
+    $group->uuid = '1234';
+    $group->store_status = '0';
+    $group->title = 'Test Title';
+    $group->uri = $this->base_url . '/something/' . $group->uuid;
+    $return[] = $group;
+
+    $group = new \stdClass();
+    $group->uuid = '2222';
+    $group->store_status = '0';
+    $group->title = 'Inactive Store';
+    $group->uri = $this->base_url . '/something/' . $group->uuid;
+    $return[] = $group;
+
+    $group = new \stdClass();
+    $group->uuid = '3334';
+    $group->store_status = '1';
+    $group->title = 'Another Test Store';
+    $group->uri = $this->base_url . '/something/' . $group->uuid;
+    $return[] = $group;
+
+    return $return;
+  }
+
   /**
    * @musthave
    * @todo - Get information about a group store if it exists.
@@ -39,9 +81,10 @@ class MockClient extends Client{
   function groupStoreGet($uuid) {
     //$this->get('group_stores/' . $uuid);
     $group = new \stdClass();
-    $group->uuid = $uuid;
-    $group->title = 'The test group';
     $group->store_status = '1';
+    $group->title = 'The test group';
+    $group->uri = $this->base_url . '/something/' . $uuid;
+    $group->uuid = $uuid;
     return $group;
   }
 
@@ -99,16 +142,29 @@ class MockClient extends Client{
       );
     }
     else {
-      $product->title = 'Registration for Coach';
-      $product->uuid = '275e7cf0-ef54-11e0-be50-0800200c9a66';
-      $product->link = $this->base_url . '/products/123';
-      $product->type = 'registration';
-      $product->roleName = 'Coach';
-      $product->rid = '123';
-      $product->price = '20.00';
       $product->installmentsAllowed = '0';
+      $product->link = $this->base_url . '/products/123';
+      $product->price_raw = '2000';
+      $product->rid = '123';
+      $product->roleName = 'Coach';
+      $product->title = 'Registration for Coach';
+      $product->type = 'registration';
+      $product->uri = $this->base_url . '/something/' . $uuid;
+      $product->uuid = '275e7cf0-ef54-11e0-be50-0800200c9a66';
     }
 
     return $product;
   }
+
+  /**
+   * get a user to test with
+   * @return object
+   *  User object
+   */
+  function usersGetSampleUser() {
+    // @todo enable users retrieve action
+    $user = $this->userGetUser($this->cart_owner_uuid);
+    return $user;
+  }
+
 }
