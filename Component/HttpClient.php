@@ -38,6 +38,9 @@ class HttpClient extends \apcirest {
     $this->base_url = $url;
     $url_parts = parse_url($url);
     $this->host = $url_parts['host'];
+    if (!empty($url_parts['port'])) {
+      $this->host .= ':' . $url_parts['port'];
+    }
 
     // @todo - Remove this and use class var at request time.
     $this->proto = $url_parts['scheme'] . '://';
