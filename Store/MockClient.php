@@ -130,7 +130,7 @@ class MockClient extends Client{
       $product->title = 'Registration for Player';
       $product->uuid = '11cf8960-ef54-11e0-be50-0800200c9a66';
       $product->link = $this->base_url . '/products/321';
-      $product->type = 'registration';
+      $product->type = 'registration_fee';
       $product->roleName = 'Player';
       $product->rid = '321';
       $product->price = '100.00';
@@ -148,7 +148,7 @@ class MockClient extends Client{
       $product->rid = '123';
       $product->roleName = 'Coach';
       $product->title = 'Registration for Coach';
-      $product->type = 'registration';
+      $product->type = 'registration_fee';
       $product->uri = $this->base_url . '/something/' . $uuid;
       $product->uuid = '275e7cf0-ef54-11e0-be50-0800200c9a66';
     }
