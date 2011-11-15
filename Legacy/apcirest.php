@@ -306,6 +306,29 @@ class apcirest {
       'password'  => $password
     ));
   }
+  
+  /**
+   * Update A User
+   *
+   * @param $firstname
+   * @param $lastname
+   * @param $email
+   * @param $gender
+   * @param $birthday
+   * @param $password
+   * @return object
+   *   user object
+   */
+  public function userUpdateUser($uuid, $firstname, $lastname, $email, $gender, $birthday, $password) {
+    return $this->put("users/".$uuid, array(
+      'firstname' => $firstname,
+      'lastname'  => $lastname,
+      'email'     => $email,
+      'gender'    => $gender,
+      'birthday'  => $birthday,
+      'password'  => $password,
+    ));
+  }
 
   /**
    * List users groups based on parameters
@@ -435,7 +458,59 @@ class apcirest {
     $this->session_name = NULL;
     return $ret;
   }
-
+  
+  /**
+   * Create a group
+   *
+   * @param string $title
+   * @param string $description
+   * @param array $location
+   * @param array $category
+   * @param string $group_type
+   * @param string $web_address
+   * @param string $status
+   * @param string $groupmates_enabled
+   * @return object
+   *   user object
+   */
+  public function groupsCreateGroup($title, $description, $location, $category, $group_type, $web_address, $status, $groupmates_enabled) {
+    return $this->post("groups", array(
+      'title' => $title,
+      'description'  => $description,
+      'location'     => array_filter($location),
+      'category'    => array_filter($category),
+      'group_type'  => $group_type,
+      'web_address'  => $web_address,
+      'status' => $status,
+      'groupmates_enabled' => $groupmates_enabled,
+    ));
+  }
+  
+  /**
+   * Update a group
+   *
+   * @param string $title
+   * @param string $description
+   * @param array $location
+   * @param array $category
+   * @param string $group_type
+   * @param string $web_address
+   * @param string $status
+   * @param string $groupmates_enabled
+   * @return object
+   *   user object
+   */
+  public function groupsUpdateGroup($uuid, $title, $description, $location, $category, $status, $groupmates_enabled) {
+    return $this->put("groups/".$uuid, array(
+      'title' => $title,
+      'description'  => $description,
+      'location'     => array_filter($location),
+      'category'    => array_filter($category),
+      'status' => $status,
+      'groupmates_enabled' => $groupmates_enabled,
+    ));
+  }
+  
   /**
    * Retrieve a specific group
    *
