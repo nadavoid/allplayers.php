@@ -103,6 +103,16 @@ class Client extends \AllPlayers\Component\HttpClient{
   }
 
   /**
+   * Synchronize group store users with users on www
+   *
+   * @param string $uuid
+   * @param boolean $admins_only
+   */
+  function groupStoreSyncUsers($uuid, $admins_only = TRUE) {
+    return $this->post('group_stores/' . $uuid . '/sync_users', array('admins_only' => $admins_only));
+  }
+
+  /**
    * @musthave
    * @todo - List group products, optionally by type.
    *
