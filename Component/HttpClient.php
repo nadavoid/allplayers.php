@@ -68,4 +68,8 @@ class HttpClient extends \apcirest {
     $this->get($auth_path, array(), array(), FALSE);
     $this->storeCookies();
   }
+
+  public function authSessionInit($username = NULL, $password = NULL) {
+    $this->userLogin($username, $password);
+  }
 }
