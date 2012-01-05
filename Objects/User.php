@@ -2,6 +2,7 @@
 namespace AllPlayers\Objects;
 
 use DateTime;
+use stdClass;
 
 /**
  * Defines standard user fields.
