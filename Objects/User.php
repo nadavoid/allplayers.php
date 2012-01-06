@@ -16,12 +16,12 @@ abstract class User extends stdClass {
   /**
    * @var string
    */
-  public $firstname;
+  public $first_name;
 
   /**
    * @var string
    */
-  public $lastname;
+  public $last_name;
 
   /**
    * @var string
