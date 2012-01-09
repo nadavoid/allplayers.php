@@ -1,7 +1,9 @@
 <?php
 namespace AllPlayers\Store;
 
-class Client extends \AllPlayers\Component\HttpClient{
+use AllPlayers\Component\HttpClient;
+
+class Client extends HttpClient{
   // @todo - This isn't configurable upstream.
   const ENDPOINT = '/api/rest/v1/';
 
