@@ -146,7 +146,7 @@ class Client extends HttpClient{
     return $this->base_url . '/product/uuid/' . $uuid;
   }
 
-   /**
+  /**
    * Login via user endpoint. (Overriding)
    *
    * @param string $user
@@ -160,6 +160,18 @@ class Client extends HttpClient{
     $ret = $this->post('user/login', array('username' => $user, 'password' => $pass));
     $this->session = array('session_name' => $ret->session_name, 'sessid' => $ret->sessid);
     return $ret;
+  }
+
+  /**
+   * Generate the embed HTML for a group store donation form.
+   *
+   * @param string $uuid
+   *   UUID of the group with a group store.
+   * @return string
+   *   HTML embed snip.  Requires JS on the client.
+   */
+  public function embedDonateHtml($uuid) {
+    return "<script src='{$this->base_url}/groups/{$uuid}/donation-embed/js'></script>";
   }
 
 }
