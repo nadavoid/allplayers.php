@@ -25,6 +25,13 @@ date_default_timezone_set(@date_default_timezone_get());
 class apcirest {
 
   public $host = "allplayers:8080";
+
+  /**
+   * The base path for the API endpoint.
+   * @var string
+   */
+  public $path_prefix = '/api/v1/rest';
+
   public $proto = "http:";
   private $user_name = "user";
   private $password = "password";
@@ -95,7 +102,7 @@ class apcirest {
    *   array or object from decodeResponse().
    */
   private function httpRequest($verb, $path, $query, $params = array(), $headers = array(), $allow_redirects = TRUE) {
-    $url = $this->proto . $this->host . "/api/v1/rest/" . $path;
+    $url = $this->proto . $this->host . $this->path_prefix . "/" . $path;
     if (!empty($query)) {
       $url .= '?' . http_build_query($query);
     }
