@@ -3,6 +3,7 @@ namespace AllPlayers\Component;
 
 use RESTClient;
 
+use ErrorException;
 use InvalidArgumentException;
 use Log;
 
@@ -71,10 +72,10 @@ class HttpClient {
   public $cookies = array();
 
   /**
-   * @todo - Cleanup constructor on parent (or just use a different parent).
-   *
    * @param string $url
    *   e.g. https://www.allplayers.com/api/v1/rest
+   * @param Log $logger
+   *   (optional)
    */
   public function __construct($url_prefix, Log $logger = NULL) {
     // Validate $url argument
