@@ -15,6 +15,16 @@ class Client extends HttpClient{
   public $base_url = 'https://store.allplayers.com';
 
   /**
+   * @param string $url
+   *   e.g. "https://store.mercury.dev.allplayers.com"
+   * @param Log $logger
+   *   (Optional)
+   */
+  public function __construct($url, Log $logger = NULL) {
+    parent::__construct($url . '/api/v1/rest', $logger);
+  }
+
+  /**
    * @musthave
    * Link to users cart.
    */
