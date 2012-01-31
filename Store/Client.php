@@ -110,8 +110,8 @@ class Client extends HttpClient{
    * @param string $uuid
    *   Group UUID string.
    */
-  function groupStoreEnable($uuid) {
-    return $this->put('group_stores/' . $uuid . '/enable');
+  function groupStoreActivate($uuid) {
+    return $this->post('group_stores', array('uuid' => $uuid));
   }
 
   /**

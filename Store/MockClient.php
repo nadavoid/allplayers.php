@@ -89,16 +89,21 @@ class MockClient extends Client{
   }
 
   /**
-   * @nicetohave
+   * @musthave
    * @todo - Initialize and enable a group store now.
    * @todo - This will require different privileges? Or should we just expect the current user to have that?
    *
    * @param string $uuid
    *   Group UUID string.
    */
-  function groupStoreEnable($uuid) {
-    //return $this->put('group_stores/' . $uuid . '/enable');
-    return array('success' => '1');
+  function groupStoreActivate($uuid) {
+    //return $this->post('group_stores', array('uuid' => $uuid));
+    $group_store = new \stdClass();
+    $group_store->uuid = $uuid;
+    $group_store->title = 'The test group';
+    $group_store->uri = $this->base_url.'/store/1';
+
+    return $group_store;
   }
 
   /**
