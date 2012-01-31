@@ -1,6 +1,5 @@
 <?php
 namespace AllPlayers;
-
 use AllPlayers\Component\HttpClient;
 use Log;
 
@@ -41,14 +40,15 @@ class Client extends HttpClient {
    *   user object
    */
   public function userCreateUser($firstname, $lastname, $email, $gender, $birthday, $password) {
-    return $this->post("users", array(
-  'firstname' => $firstname,
-    'lastname'  => $lastname,
-    'email'     => $email,
-    'gender'    => $gender,
-        'birthday'  => $birthday,
-        'password'  => $password
-    ));
+    $params = array(
+      'firstname' => $firstname,
+      'lastname' => $lastname,
+      'email' => $email,
+      'gender' => $gender,
+      'birthday' => $birthday,
+      'password' => $password
+    );
+    return $this->post("users", $params);
   }
 
   /**
@@ -68,7 +68,7 @@ class Client extends HttpClient {
    */
   public function userGetMyGroups($uuid, $fields = NULL, $page = 0, $limit = NULL) {
     //compile path
-    $path = 'users/'.$uuid.'/groups';
+    $path = 'users/' . $uuid . '/groups';
     return $this->index($path, $parameters = NULL, $fields, $page, $limit);
   }
 
@@ -89,7 +89,7 @@ class Client extends HttpClient {
    */
   public function userGetGroupmates($uuid, $fields = NULL, $page = 0, $limit = NULL) {
     //compile path
-    $path = 'users/'.$uuid.'/groupmates';
+    $path = 'users/' . $uuid . '/groupmates';
     return $this->index($path, $parameters = NULL, $fields, $page, $limit);
   }
 
@@ -110,7 +110,7 @@ class Client extends HttpClient {
    */
   public function userGetFriends($uuid, $fields = NULL, $page = 0, $limit = NULL) {
     //compile path
-    $path = 'users/'.$uuid.'/friends';
+    $path = 'users/' . $uuid . '/friends';
     return $this->index($path, $parameters = NULL, $fields, $page, $limit);
   }
 
@@ -131,7 +131,7 @@ class Client extends HttpClient {
    */
   public function userGetEvents($uuid, $fields = NULL, $page = 0, $limit = NULL) {
     //compile path
-    $path = 'users/'.$uuid.'/events';
+    $path = 'users/' . $uuid . '/events';
     return $this->index($path, $parameters = NULL, $fields, $page, $limit);
   }
 
@@ -152,7 +152,7 @@ class Client extends HttpClient {
    */
   public function userGetEventsUpcoming($uuid, $fields = NULL, $page = 0, $limit = NULL) {
     //compile path
-    $path = 'users/'.$uuid.'/events/upcoming';
+    $path = 'users/' . $uuid . '/events/upcoming';
     return $this->index($path, $parameters = NULL, $fields, $page, $limit);
   }
 
@@ -191,9 +191,9 @@ class Client extends HttpClient {
    */
   public function groupsGetGroup($uuid, $fields = NULL) {
     //compile path
-    $path = 'groups/'.$uuid;
+    $path = 'groups/' . $uuid;
     $query = array();
-    if ($fields){
+    if ($fields) {
       $query['fields'] = $fields;
     }
     return $this->get($path, $query);
@@ -223,17 +223,18 @@ class Client extends HttpClient {
    * @param mixed $page
    *  what page of the results to call
    */
-  public function groupsIndex($search = NULL, $zip = NULL, $search_distance = 10, $search_units = 'mile', $fields = NULL, $limit = NULL, $page = 0) {
+  public function groupsIndex($search = NULL, $zip = NULL, $search_distance = 10, $search_units = 'mile',
+      $fields = NULL, $limit = NULL, $page = 0) {
     //compile path
     $path = 'groups';
     $parameters = array(
-  'search' => $search,
-  'distance' => array(
-  'postal_code' => $zip,
-  'search_distance' => $search_distance,
-  'search_units' => $search_units,
-    ),
-  'feature' => 'All',
+      'search' => $search,
+      'distance' => array(
+        'postal_code' => $zip,
+        'search_distance' => $search_distance,
+        'search_units' => $search_units,
+      ),
+      'feature' => 'All',
     );
     return $this->index($path, $parameters, $fields, $page, $limit);
   }
@@ -253,9 +254,9 @@ class Client extends HttpClient {
    * @param int $limit
    *  how many results should come back per page
    */
-  public function groupsGetMembers($uuid, $fields = NULL, $page = 0, $limit = NULL){
+  public function groupsGetMembers($uuid, $fields = NULL, $page = 0, $limit = NULL) {
     //compile path
-    $path = 'groups/'.$uuid.'/members';
+    $path = 'groups/' . $uuid . '/members';
     return $this->index($path, $parameters = NULL, $fields, $page, $limit);
   }
 
@@ -276,7 +277,7 @@ class Client extends HttpClient {
    */
   public function groupsGetAlbums($uuid, $fields = NULL, $page = 0, $limit = NULL) {
     //compile path
-    $path = 'groups/'.$uuid.'/albums';
+    $path = 'groups/' . $uuid . '/albums';
     return $this->index($path, $parameters = NULL, $fields, $page, $limit);
   }
 
@@ -297,10 +298,9 @@ class Client extends HttpClient {
    */
   public function groupsGetPhotos($uuid, $fields = NULL, $page = 0, $limit = NULL) {
     //compile path
-    $path = 'groups/'.$uuid.'/photos';
+    $path = 'groups/' . $uuid . '/photos';
     return $this->index($path, $parameters = NULL, $fields, $page, $limit);
   }
-
 
   /**
    * List a groups events based on parameters
@@ -319,10 +319,9 @@ class Client extends HttpClient {
    */
   public function groupsGetEvents($uuid, $fields = NULL, $page = 0, $limit = NULL) {
     //compile path
-    $path = 'groups/'.$uuid.'/events';
+    $path = 'groups/' . $uuid . '/events';
     return $this->index($path, $parameters = NULL, $fields, $page, $limit);
   }
-
 
   /**
    * List a groups upcoming based on parameters
@@ -341,10 +340,9 @@ class Client extends HttpClient {
    */
   public function groupsGetEventsUpcoming($uuid, $fields = NULL, $page = 0, $limit = NULL) {
     //compile path
-    $path = 'groups/'.$uuid.'/events/upcoming';
+    $path = 'groups/' . $uuid . '/events/upcoming';
     return $this->index($path, $parameters = NULL, $fields, $page, $limit);
   }
-
 
   /**
    * Returns a specific album's photos based on parameters
@@ -363,7 +361,7 @@ class Client extends HttpClient {
    */
   public function albumsGetPhotos($uuid, $fields = NULL, $page = 0, $limit = NULL) {
     //compile path
-    $path = 'albums/'.$uuid.'/photos';
+    $path = 'albums/' . $uuid . '/photos';
     return $this->index($path, $parameters = NULL, $fields, $page, $limit);
   }
 
@@ -378,7 +376,7 @@ class Client extends HttpClient {
    */
   public function photosGetPhoto($pid, $fields = NULL) {
     //compile path
-    $path = 'photos/'.$pid;
+    $path = 'photos/' . $pid;
     $query = array('fields' => $fields);
     return $this->get($path, $query);
   }
@@ -394,9 +392,9 @@ class Client extends HttpClient {
    */
   public function eventsGetEvent($eid, $fields = NULL) {
     //compile path
-    $path = 'events/'.$eid;
+    $path = 'events/' . $eid;
     $query = array();
-    if ($fields){
+    if ($fields) {
       $query['fields'] = $fields;
     }
     return $this->get($path, $query);
@@ -413,9 +411,9 @@ class Client extends HttpClient {
    */
   public function resourcesGetResource($uuid, $fields = NULL) {
     //compile path
-    $path = 'resources/'.$uuid;
+    $path = 'resources/' . $uuid;
     $query = array();
-    if ($fields){
+    if ($fields) {
       $query['fields'] = $fields;
     }
     return $this->get($path, $query);
@@ -448,12 +446,12 @@ class Client extends HttpClient {
   public function messagesGetMessageOrThread($id, $type = NULL, $fields = NULL) {
     // @todo type = null or thread?
     //compile path
-    $path = 'messages/'.$id;
+    $path = 'messages/' . $id;
     $query = array();
-    if ($type){
+    if ($type) {
       $query['type'] = $type;
     }
-    if ($fields){
+    if ($fields) {
       $query['fields'] = $fields;
     }
     return $this->get($path, $query);
@@ -479,7 +477,7 @@ class Client extends HttpClient {
     //compile path
     $path = 'messages';
     $parameters = array();
-    if ($box){
+    if ($box) {
       $parameters['box'] = $box;
     }
     return $this->index($path, $parameters, $fields, $page, $limit);
@@ -504,16 +502,14 @@ class Client extends HttpClient {
   public function messagesCreateMessageOrThread($thread_id = NULL, $recipients = NULL, $subject = NULL, $body) {
     //compile path
     $path = 'messages';
-    $params = array(
-  'body' => $body,
-    );
-    if ($thread_id){
+    $params = array('body' => $body,);
+    if ($thread_id) {
       $params['thread_id'] = $thread_id;
     }
-    if ($recipients){
+    if ($recipients) {
       $params['recipients'] = $recipients;
     }
-    if ($subject){
+    if ($subject) {
       $params['subject'] = $subject;
     }
     return $this->post($path, $params);
@@ -534,11 +530,9 @@ class Client extends HttpClient {
    */
   public function messagesUpdateMessageOrThread($id, $status, $type = NULL) {
     //compile path
-    $path = 'messages/'.$id;
-    $params = array(
-  'status' => $status,
-    );
-    if ($type){
+    $path = 'messages/' . $id;
+    $params = array('status' => $status,);
+    if ($type) {
       $params['type'] = $type;
     }
     return $this->put($path, $params);
@@ -556,9 +550,9 @@ class Client extends HttpClient {
    */
   public function messagesDeleteMessageOrThread($id, $type = NULL) {
     //compile path
-    $path = 'messages/'.$id;
+    $path = 'messages/' . $id;
     $query = array();
-    if ($type){
+    if ($type) {
       $query['type'] = $type;
     }
     return $this->delete($path, $query);
