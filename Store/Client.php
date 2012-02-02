@@ -5,14 +5,14 @@ use AllPlayers\Component\HttpClient;
 
 class Client extends HttpClient{
   // @todo - This isn't configurable upstream.
-  const ENDPOINT = '/api/rest/v1/';
+  const ENDPOINT = '/api/v1/rest';
 
   /**
    * Default AllPlayers.com Store URL.
    *
    * @var string
    */
-  public $base_url = 'https://store.allplayers.com';
+  public $base_url = NULL;
 
   /**
    * @param string $url
@@ -20,8 +20,12 @@ class Client extends HttpClient{
    * @param Log $logger
    *   (Optional)
    */
-  public function __construct($url, Log $logger = NULL) {
-    parent::__construct($url . '/api/v1/rest', $logger);
+  public function __construct($base_url, Log $logger = NULL) {
+    if (empty($base_url)) {
+      throw new InvalidArgumentException('Invalid argument 1: base_url must be a base URL to the Store.');
+    }
+    $this->base_url = $base_url;
+    parent::__construct($base_url . self::ENDPOINT, $logger);
   }
 
   /**
