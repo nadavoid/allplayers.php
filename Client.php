@@ -2,6 +2,7 @@
 namespace AllPlayers;
 use AllPlayers\Component\HttpClient;
 use Log;
+use ErrorException;
 
 class Client extends HttpClient {
 
@@ -40,15 +41,45 @@ class Client extends HttpClient {
    *   user object
    */
   public function userCreateUser($firstname, $lastname, $email, $gender, $birthday, $password) {
-    $params = array(
+    $userData = array(
       'firstname' => $firstname,
-      'lastname' => $lastname,
-      'email' => $email,
-      'gender' => $gender,
-      'birthday' => $birthday,
-      'password' => $password
+      'lastname'  => $lastname,
+      'email'     => $email,
+      'gender'    => $gender,
+      'birthday'  => $birthday,
+      'password'  => $password
     );
-    return $this->post("users", $params);
+    try {
+      $ret = $this->post("users", $userData);
+    }
+    catch (ErrorException $e) {
+      $messageJson = $this->rest->getResponse();
+      $messageParts = json_decode($messageJson);
+      $answer = $this->captchaSolve($messageParts->captcha_problem);
+      $headers = array(
+        'X-ALLPLAYERS-CAPTCHA-TOKEN'    => $messageParts->captcha_token,
+        'X-ALLPLAYERS-CAPTCHA-SOLUTION' => $answer,
+      );
+      $ret = $this->post("users", $userData, $headers);
+    }
+    return $ret;
+  }
+
+  /**
+   * Solve a captcha
+   *
+   * @param string $problem
+   *    Math captchas look like "7 + 4 = "
+   * @return string
+   *    The correct captcha answer
+   */
+  function captchaSolve($problem) {
+    $parts = explode('+', $problem);
+    $math1 = trim($parts[0]);
+    $math2parts = explode('=', $parts[1]);
+    $math2 = trim($math2parts[0]);
+    $answer = $math1 + $math2;
+    return (string) $answer;
   }
 
   /**

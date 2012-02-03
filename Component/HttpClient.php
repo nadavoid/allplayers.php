@@ -121,6 +121,9 @@ class HttpClient {
     $this->rest->addHeader("Cache-Control",'no-cache, must-revalidate, post-check=0, pre-check=0');
     $this->rest->addHeader("Accept",'application/json');
     $this->rest->addHeader('Content-Type', 'application/json');
+    foreach ($headers as $key => $value) {
+      $this->rest->addHeader($key, $value);
+    }
     $this->addCookies();
 
     $this->logger->info("HTTP $verb: $url");
