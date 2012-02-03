@@ -259,7 +259,7 @@ class Client extends HttpClient {
       'groupmates_enabled' => $optional_config['groupmates_enabled'],
       'groups_above' => $optional_config['groups_above'],
     );
-    return $this->post("users", array_filter($params));
+    return $this->post("groups", array_filter($params));
   }
 
   /**
