@@ -2,7 +2,6 @@
 namespace AllPlayers;
 use AllPlayers\Component\HttpClient;
 use Log;
-use ErrorException;
 
 class Client extends HttpClient {
 
@@ -40,46 +39,42 @@ class Client extends HttpClient {
    * @return object
    *   user object
    */
-  public function userCreateUser($firstname, $lastname, $email, $gender, $birthday, $password) {
-    $userData = array(
+  public function userCreateUser($firstname, $lastname, $email, $gender, $birthday, $password = NULL) {
+    $params = array(
       'firstname' => $firstname,
-      'lastname'  => $lastname,
-      'email'     => $email,
-      'gender'    => $gender,
-      'birthday'  => $birthday,
-      'password'  => $password
+      'lastname' => $lastname,
+      'email' => $email,
+      'gender' => $gender,
+      'birthday' => $birthday,
+      'password' => $password,
     );
-    try {
-      $ret = $this->post("users", $userData);
-    }
-    catch (ErrorException $e) {
-      $messageJson = $this->rest->getResponse();
-      $messageParts = json_decode($messageJson);
-      $answer = $this->captchaSolve($messageParts->captcha_problem);
-      $headers = array(
-        'X-ALLPLAYERS-CAPTCHA-TOKEN'    => $messageParts->captcha_token,
-        'X-ALLPLAYERS-CAPTCHA-SOLUTION' => $answer,
-      );
-      $ret = $this->post("users", $userData, $headers);
-    }
-    return $ret;
+    return $this->post("users", array_filter($params));
   }
 
   /**
-   * Solve a captcha
+   * Update a user
    *
-   * @param string $problem
-   *    Math captchas look like "7 + 4 = "
-   * @return string
-   *    The correct captcha answer
+   * @param $firstname
+   * @param $lastname
+   * @param $email
+   * @param $gender
+   * @param $birthday
+   * @param $password
+   * @param $last_modified
+   * @return object
+   *   user object
    */
-  function captchaSolve($problem) {
-    $parts = explode('+', $problem);
-    $math1 = trim($parts[0]);
-    $math2parts = explode('=', $parts[1]);
-    $math2 = trim($math2parts[0]);
-    $answer = $math1 + $math2;
-    return (string) $answer;
+  public function userUpdateUser($uuid, $firstname, $lastname, $email, $gender, $birthday, $password = NULL, $last_modified) {
+    $params = array(
+      'firstname' => $firstname,
+      'lastname' => $lastname,
+      'email' => $email,
+      'gender' => $gender,
+      'birthday' => $birthday,
+      'password' => $password,
+      'last_modified' => $last_modified,
+    );
+    return $this->put("users/".$uuid, array_filter($params));
   }
 
   /**
@@ -211,6 +206,7 @@ class Client extends HttpClient {
     return $ret;
   }
 
+
   /**
    * Retrieve a specific group
    *
@@ -228,6 +224,42 @@ class Client extends HttpClient {
       $query['fields'] = $fields;
     }
     return $this->get($path, $query);
+  }
+
+  /**
+   * Create a group
+   *
+   * @param $title
+   * @param $description
+   * @param array $location
+   *   Contains group location information in an array.
+   *   $location['zip'] is required at minimum
+   * @param array $category
+   *   Contains group category in an array.
+   *   $category[0] = 'sports'
+   * @param array $optional_config
+   *   Contains optional groups configuration. Possible keys
+   *    group_type - what type of group is this
+   *    web_address - groups web address. after www.allplayers.com/g/
+   *    $status - active or inactive
+   *    $groupmates_enabled - FALSE or TRUE
+   *    $groups_above - array of parent groups
+   * @return object
+   *   user object
+   */
+  public function groupsCreateGroup($title, $description, $location, $category, $optional_config) {
+    $params = array(
+      'title' => $title,
+      'description' => $description,
+      'location' => $location,
+      'category' => $category,
+      'group_type' => $optional_config['group_type'],
+      'web_address' => $optional_config['web_address'],
+      'status' => $optional_config['status'],
+      'groupmates_enabled' => $optional_config['groupmates_enabled'],
+      'groups_above' => $optional_config['groups_above'],
+    );
+    return $this->post("users", array_filter($params));
   }
 
   /**
@@ -373,6 +405,18 @@ class Client extends HttpClient {
     //compile path
     $path = 'groups/' . $uuid . '/events/upcoming';
     return $this->index($path, $parameters = NULL, $fields, $page, $limit);
+  }
+
+  /**
+   * Join a user to a group
+   *
+   * @param group_uuid
+   * @param user_uuid
+   * @return object
+   *   user object
+   */
+  public function groupsJoinUser($group_uuid, $user_uuid) {
+    return $this->post('groups/'.$group_uuid.'/join/'.$user_uuid);
   }
 
   /**
