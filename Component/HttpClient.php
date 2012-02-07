@@ -130,12 +130,13 @@ class HttpClient {
     $this->rest->sendRequest();
 
     $this->responseCode = $this->rest->responseCode;
+    $this->responseBody = $this->rest->getResponse();
     if ((int)$this->responseCode >= 400) {
       if ($this->debug) {
         $this->logger->debug(print_r($this->rest, TRUE));
       }
       $this->logger->err("HTTP $this->responseCode from $url");
-      throw new ErrorException('HTTP ' . $this->responseCode, $this->responseCode);
+      throw new ErrorException('HTTP ' . $this->responseCode.' '.$this->responseBody, $this->responseCode);
     }
 
     $this->logger->info("HTTP $this->responseCode from $url");
