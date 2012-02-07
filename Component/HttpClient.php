@@ -136,7 +136,7 @@ class HttpClient {
         $this->logger->debug(print_r($this->rest, TRUE));
       }
       $this->logger->err("HTTP $this->responseCode from $url");
-      throw new ErrorException('HTTP ' . $this->responseCode .' '. $this->responseBody, $this->responseCode);
+      throw new ErrorException('HTTP ' . $this->responseCode . ' ' . $this->responseBody, $this->responseCode);
     }
 
     $this->logger->info("HTTP $this->responseCode from $url");
