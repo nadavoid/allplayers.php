@@ -2,6 +2,7 @@
 namespace AllPlayers;
 use AllPlayers\Component\HttpClient;
 use Log;
+use ErrorException;
 
 class Client extends HttpClient {
 
@@ -28,30 +29,6 @@ class Client extends HttpClient {
   }
 
   /**
-   * Create a user
-   *
-   * @param $firstname
-   * @param $lastname
-   * @param $email
-   * @param $gender
-   * @param $birthday
-   * @param $password
-   * @return object
-   *   user object
-   */
-  public function userCreateUser($firstname, $lastname, $email, $gender, $birthday, $password = NULL) {
-    $params = array(
-      'firstname' => $firstname,
-      'lastname' => $lastname,
-      'email' => $email,
-      'gender' => $gender,
-      'birthday' => $birthday,
-      'password' => $password,
-    );
-    return $this->post("users", array_filter($params));
-  }
-
-  /**
    * Update a user
    *
    * @param $firstname
@@ -75,6 +52,59 @@ class Client extends HttpClient {
       'last_modified' => $last_modified,
     );
     return $this->put("users/".$uuid, array_filter($params));
+  }
+  /**
+   * Create a user
+   *
+   * @param $firstname
+   * @param $lastname
+   * @param $email
+   * @param $gender
+   * @param $birthday
+   * @param $password
+   * @return object
+   *   user object
+   */
+  public function userCreateUser($firstname, $lastname, $email, $gender, $birthday, $password = NULL) {
+    $userData = array(
+      'firstname' => $firstname,
+      'lastname'  => $lastname,
+      'email'     => $email,
+      'gender'    => $gender,
+      'birthday'  => $birthday,
+      'password'  => $password
+    );
+    try {
+      $ret = $this->post("users", array_filter($userData));
+    }
+    catch (ErrorException $e) {
+      $messageJson = $this->rest->getResponse();
+      $messageParts = json_decode($messageJson);
+      $answer = $this->captchaSolve($messageParts->captcha_problem);
+      $headers = array(
+        'X-ALLPLAYERS-CAPTCHA-TOKEN'    => $messageParts->captcha_token,
+        'X-ALLPLAYERS-CAPTCHA-SOLUTION' => $answer,
+      );
+      $ret = $this->post("users", array_filter($userData), $headers);
+    }
+    return $ret;
+  }
+
+  /**
+   * Solve a captcha
+   *
+   * @param string $problem
+   *    Math captchas look like "7 + 4 = "
+   * @return string
+   *    The correct captcha answer
+   */
+  function captchaSolve($problem) {
+    $parts = explode('+', $problem);
+    $math1 = trim($parts[0]);
+    $math2parts = explode('=', $parts[1]);
+    $math2 = trim($math2parts[0]);
+    $answer = $math1 + $math2;
+    return (string) $answer;
   }
 
   /**
