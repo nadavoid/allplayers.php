@@ -1,8 +1,6 @@
 <?php
 namespace AllPlayers;
 use AllPlayers\Component\HttpClient;
-use Log;
-use ErrorException;
 
 class Client extends HttpClient {
 
