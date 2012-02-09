@@ -75,7 +75,7 @@ class Client extends HttpClient {
     try {
       $ret = $this->post("users", array_filter($userData));
     }
-    catch (ErrorException $e) {
+    catch (\ErrorException $e) {
       $messageJson = $this->rest->getResponse();
       $messageParts = json_decode($messageJson);
       if (!empty($messageParts->form_errors)){
