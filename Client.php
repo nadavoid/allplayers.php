@@ -448,7 +448,7 @@ class Client extends HttpClient {
    *   user object
    */
   public function groupsJoinUser($group_uuid, $user_uuid) {
-    return $this->post('groups/'.$group_uuid.'/join/'.$user_uuid);
+    return $this->post('groups/' . $group_uuid . '/join/' . $user_uuid);
   }
 
   /**
