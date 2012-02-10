@@ -279,8 +279,6 @@ class HttpClient {
       $found = 0;
       $page_results = $this->get($path, array_filter($query));
       if (is_object($page_results)){
-        //APCI @TODO fix this this is not right for an object
-        // this is still acting like it's an array
         foreach ($page_results as $key => $value){
           $results[$key] = $value;
         }
