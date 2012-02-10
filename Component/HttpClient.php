@@ -280,6 +280,7 @@ class HttpClient {
       $page_results = $this->get($path, array_filter($query));
       if (is_object($page_results)){
         foreach ($page_results as $key => $value){
+	  $found =1;
           $results[$key] = $value;
         }
       }
