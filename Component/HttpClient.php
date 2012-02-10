@@ -271,21 +271,28 @@ class HttpClient {
     }
     // Page *, loop to get all.
     $query['page'] = 0;
-    $results = array();
 
+   $results = array();
+   $found = 0;
     // Index loop.
     do {
+      $found = 0;
       $page_results = $this->get($path, array_filter($query));
       if (is_object($page_results)){
+        //APCI @TODO fix this this is not right for an object
+        // this is still acting like it's an array
         foreach ($page_results as $key => $value){
           $results[$key] = $value;
         }
       }
       else{
-        $results = array_merge($results, $page_results);
+        if(!empty($page_results[0])) {
+          $found = 1;
+          $results = array_merge($results, $page_results);
+        }
       }
       $query['page']++;
-    } while (count($page_results) == $limit);
+    } while ( (count($page_results) <= $limit) && $found);
 
     return $results;
   }
