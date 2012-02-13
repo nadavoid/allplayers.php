@@ -14,6 +14,9 @@ use Log;
 require_once dirname(__FILE__) . '/../Legacy/Request-bcm.php';
 require_once dirname(__FILE__) . '/../Legacy/RESTClient.php';
 
+/**
+ * Handy RESTful wrapper.
+ */
 class HttpClient {
 
   /**
@@ -38,7 +41,7 @@ class HttpClient {
    * @todo
    * @deprecated - This should be wrapped/extended by the main class.
    *
-   * @var \RESTClient
+   * @var RESTClient
    */
   public $rest = NULL;
 

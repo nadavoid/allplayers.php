@@ -3,6 +3,9 @@ namespace AllPlayers;
 
 use AllPlayers\Component\HttpClient;
 
+/**
+ * Methods for interacting with the main AllPlayers application API.
+ */
 class Client extends HttpClient {
 
   /**
