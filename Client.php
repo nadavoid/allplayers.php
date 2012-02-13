@@ -1,5 +1,6 @@
 <?php
 namespace AllPlayers;
+
 use AllPlayers\Component\HttpClient;
 
 class Client extends HttpClient {
@@ -10,7 +11,7 @@ class Client extends HttpClient {
    * @param Log $logger
    *   (optional)
    */
-  public function __construct($base_url, Log $logger = NULL) {
+  public function __construct($base_url, \Log $logger = NULL) {
     parent::__construct($base_url . '/api/v1/rest', $logger);
   }
 
