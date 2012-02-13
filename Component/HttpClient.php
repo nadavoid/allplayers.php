@@ -270,7 +270,7 @@ class HttpClient {
    * @return array
    *   Array containing the stdObjects the index lists.
    */
-  public function index($path, $query = NULL, $fields = NULL, $page = 0, $page_size = 20) {
+  public function index($path, $query = array(), $fields = NULL, $page = 0, $page_size = 20) {
     $query['fields'] = $fields;
     $query['page'] = $page;
     $query['pagesize'] = (isset($page_size)) ? $page_size : 20;
