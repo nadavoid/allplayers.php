@@ -78,7 +78,7 @@ class Client extends HttpClient {
     catch (\ErrorException $e) {
       $messageJson = $this->rest->getResponse();
       $messageParts = json_decode($messageJson);
-      if (!empty($messageParts->form_errors)){
+      if (!empty($messageParts->form_errors) && is_object($messageParts->form_errors)){
         //if there are form errors besides captcha
         throw $e;
       }
