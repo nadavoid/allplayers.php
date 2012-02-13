@@ -249,49 +249,55 @@ class HttpClient {
    * Helper function to get all items from an index endpoint.
    *
    * @param string $path
-   * @param array $parameters
+   *   Relative path to the endpoint. (e.g. /users).
+   * @param array $query
+   *   (Optional) URL Query parameters.  Many endpoints take filters in
+   *   'parameters' array.
    * @param string $fields
-   * @param mixed $page
-   *   Numeric page number or '*' to fetch all pages.
+   *   (Optional) Specify fields you'd like the resource to return
+   *   (e.g. title, status).
+   * @param integer|string $page
+   *   (Optional) Numeric page number or '*' to fetch all pages. Default to 0.
+   *   NOTE: The '*' parameter is a simple helper for basic CLI usage, using
+   *   this loop is not recommended as it could easily cause a timeout or
+   *   out-of-memory error.
+   * @param integer $page_size
+   *   (Optional) Limit the number of results returned per page.  If not set,
+   *   then we default to 20.
+   *   NOTE: This does not limit the overall return set when using the '*'
+   *   page parameter.
+   *
+   * @return array
+   *   Array containing the stdObjects the index lists.
    */
-  public function index($path, $parameters = NULL, $fields = NULL, $page = 0, $limit = NULL) {
-    $query = array(
-        'fields' => $fields,
-        'page' => $page,
-        'limit' => $limit,
-    );
-    if ($parameters){
-      foreach ($parameters as $key => $value){
-        $query[$key] = $value;
-      }
-    }
+  public function index($path, $query = NULL, $fields = NULL, $page = 0, $page_size = 20) {
+    $query['fields'] = $fields;
+    $query['page'] = $page;
+    $query['pagesize'] = (isset($page_size)) ? $page_size : 20;
+
+    // "limit" was renamed to "pagesize", maintain both for backwards compatibility.
+    $query['limit'] = $query['pagesize'];
+
     // Page specified, get only that page.
     if (is_numeric($page)) {
       return $this->get($path, array_filter($query));
     }
+    elseif ($page != '*') {
+      throw new InvalidArgumentException('Invalid argument 4: page must be an integer or "*".');
+    }
+
     // Page *, loop to get all.
     $query['page'] = 0;
+    $results = array();
 
-   $results = array();
-   $found = 0;
     // Index loop.
     do {
-      $found = 0;
+      // Get current page
       $page_results = $this->get($path, array_filter($query));
-      if (is_object($page_results)){
-        foreach ($page_results as $key => $value){
-	  $found =1;
-          $results[$key] = $value;
-        }
-      }
-      else{
-        if(!empty($page_results[0])) {
-          $found = 1;
-          $results = array_merge($results, $page_results);
-        }
-      }
+      // Merge into overall result.
+      $results = array_merge($results, (array) $page_results);
       $query['page']++;
-    } while ( (count($page_results) <= $limit) && $found);
+    } while (count($page_results) == $query['pagesize']); // If the result count != to pagesize, we are on the last page and stop looping.
 
     return $results;
   }
