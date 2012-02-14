@@ -86,12 +86,17 @@ class Client extends HttpClient {
         //if there are form errors besides captcha
         throw $e;
       }
-      $answer = $this->captchaSolve($messageParts->captcha_problem);
-      $headers = array(
-        'X-ALLPLAYERS-CAPTCHA-TOKEN'    => $messageParts->captcha_token,
-        'X-ALLPLAYERS-CAPTCHA-SOLUTION' => $answer,
-      );
-      $ret = $this->post("users", array_filter($userData), $headers);
+
+      // Retry if captcha error.
+      // @todo - Create seperate Exception for captcha to simplify this code.
+      if (isset($messageParts->captcha_error)) {
+        $answer = $this->captchaSolve($messageParts->captcha_error->captcha_problem);
+        $headers = array(
+          'X-ALLPLAYERS-CAPTCHA-TOKEN'    => $messageParts->captcha_error->captcha_token,
+          'X-ALLPLAYERS-CAPTCHA-SOLUTION' => $answer,
+        );
+        $ret = $this->post("users", array_filter($userData), $headers);
+      }
     }
     return $ret;
   }
