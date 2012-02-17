@@ -461,6 +461,18 @@ class Client extends HttpClient {
   }
 
   /**
+   * Set a group's manager
+   *
+   * @param group_uuid
+   * @param user_uuid
+   * @return object
+   *   user object
+   */
+  public function groupsSetManager($group_uuid, $user_uuid) {
+    return $this->post('groups/' . $group_uuid . '/setmanager/' . $user_uuid);
+  }
+
+  /**
    * Returns a specific album's photos based on parameters
    *
    * @param int $uuid
