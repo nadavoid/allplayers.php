@@ -3,6 +3,9 @@ namespace AllPlayers;
 
 use AllPlayers\Component\HttpClient;
 
+use ErrorException;
+use Log;
+
 /**
  * Methods for interacting with the main AllPlayers application API.
  */
@@ -14,7 +17,7 @@ class Client extends HttpClient {
    * @param Log $logger
    *   (optional)
    */
-  public function __construct($base_url, \Log $logger = NULL) {
+  public function __construct($base_url, Log $logger = NULL) {
     parent::__construct($base_url . '/api/v1/rest', $logger);
   }
 
@@ -79,7 +82,7 @@ class Client extends HttpClient {
     try {
       $ret = $this->post("users", array_filter($userData));
     }
-    catch (\ErrorException $e) {
+    catch (ErrorException $e) {
       $messageJson = $this->rest->getResponse();
       $messageParts = json_decode($messageJson);
       if (!empty($messageParts->form_errors)){
