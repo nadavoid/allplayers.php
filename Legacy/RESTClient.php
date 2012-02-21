@@ -106,8 +106,7 @@ class RESTClient {
 
     $this->response = $this->req->sendRequest();
     if (PEAR::isError($this->response)) {
-      echo $this->response->getMessage();
-      die();
+      throw new Exception($this->response->getMessage());
     } else {
       $this->responseCode = $this->req->getResponseCode();
       $this->responseBody = $this->req->getResponseBody();
