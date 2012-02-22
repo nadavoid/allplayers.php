@@ -247,6 +247,8 @@ class Client extends HttpClient {
     $ret = $this->post('users/logout');
     $this->sess = NULL;
     $this->session_name = NULL;
+    $this->cookies = array();
+    $this->session = NULL;
     return $ret;
   }
 
