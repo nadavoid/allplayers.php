@@ -185,6 +185,45 @@ class Client extends HttpClient {
   }
 
   /**
+   * List user's friend requests based on parameters
+   *
+   * @param string $uuid
+   *  user uuid
+   */
+  public function userGetFriendRequests($uuid) {
+    //compile path
+    $path = 'users/' . $uuid . '/friendrequests';
+    return $this->index($path);
+  }
+
+  /**
+   * Request to be a friend with a user
+   *
+   * @param string $uuid
+   *  user uuid of requestee
+   */
+  public function userRequestFriend($uuid) {
+    //compile path
+    $path = 'users/' . $uuid . '/requestfriend';
+    return $this->post($path);
+  }
+
+  /**
+   * Approve a friendship request
+   *
+   * @param string $uuid
+   *  user uuid of requestee
+   *
+   * @param int $request_id
+   *  user uuid of requestee
+   */
+  public function userApproveFriend($uuid, $request_id) {
+    //compile path
+    $path = 'users/' . $uuid . '/approvefriend/' . $request_id;
+    return $this->post($path);
+  }
+
+  /**
    * List users events based on parameters
    *
    * @param string $uuid
