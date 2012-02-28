@@ -215,7 +215,7 @@ class Client extends HttpClient {
    *  user uuid of requestee
    *
    * @param int $request_id
-   *  user uuid of requestee
+   *  ID of friend request to approve
    */
   public function userApproveFriend($uuid, $request_id) {
     //compile path
