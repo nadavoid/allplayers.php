@@ -554,6 +554,122 @@ class Client extends HttpClient {
   }
 
   /**
+   * Create an event
+   * @param array $groups
+   *   A numerically keyed array of group uuids.
+   *
+   * @param $title
+   *
+   * @param $description
+   *
+   * @param array $date_time
+   *   Contains event date information with all times in UTC
+   *   $date_time['start'] and $date_time['end'] required at minimum
+   *
+   * @param string $category
+   *   Contains event category
+   *
+   * @param array $resources
+   *   a numerically keyed array of resource uuids
+   *
+   * @param array $competitors
+   *   an array of competitors groups UUIDs, labels and scores. Example:
+   * @code
+   *   $competitors = array(
+   *    'c964752e-eead-11e0-abff-080027706aa2' => array(
+   *       'label' => 'Home Team',
+   *       'score' => '35',
+   *     ),
+   *    'b0f67f02-6179-11e1-9932-b37b4e17875f' => array(
+   *      'label' => 'Away Team'
+   *      'score' => '30',
+   *     ),
+   *   );
+   * @endcode
+   *
+   * @param string $published
+   *   TRUE/FALSE whether event will be published.
+   *
+   * @param string $external_id
+   *   An external ID to associate to a remote database
+   *
+   * @return object
+   *   user object
+   */
+  public function eventsCreateEvent($groups, $title, $description, $date_time, $category = NULL, $resources = NULL, $competitors = NULL, $published = TRUE, $external_id = NULL) {
+    $params = array(
+      'groups' => $groups,
+      'title' => $title,
+      'description' => $description,
+      'date_time' => $date_time,
+      'category' => $category,
+      'resources' => $resources,
+      'competitors' => $competitors,
+      'published' => $published,
+      'external_id' => $external_id,
+    );
+    return $this->post("events", array_filter($params));
+  }
+
+  /**
+   * Update an event
+   * @param array $groups
+   *   A numerically keyed array of group uuids.
+   *
+   * @param $title
+   *
+   * @param $description
+   *
+   * @param array $date_time
+   *   Contains event date information with all times in UTC
+   *   $date_time['start'] and $date_time['end'] required at minimum
+   *
+   * @param string $category
+   *   Contains event category
+   *
+   * @param array $resources
+   *   a numerically keyed array of resource uuids
+   *
+   * @param array $competitors
+   *   an array of competitors groups UUIDs, labels and scores. Example:
+   * @code
+   *   $competitors = array(
+   *    'c964752e-eead-11e0-abff-080027706aa2' => array(
+   *       'label' => 'Home Team',
+   *       'score' => '35',
+   *     ),
+   *    'b0f67f02-6179-11e1-9932-b37b4e17875f' => array(
+   *      'label' => 'Away Team'
+   *      'score' => '30',
+   *     ),
+   *   );
+   * @endcode
+   *
+   * @param string $published
+   *   TRUE/FALSE whether event will be published.
+   *
+   * @param string $external_id
+   *   An external ID to associate to a remote database
+   *
+   * @return object
+   *   user object
+   */
+  public function eventsUpdateEvent($event_uuid, $groups, $title, $description, $date_time, $category = NULL, $resources = NULL, $competitors = NULL, $published = TRUE, $external_id = NULL) {
+    $params = array(
+      'groups' => $groups,
+      'title' => $title,
+      'description' => $description,
+      'date_time' => $date_time,
+      'category' => $category,
+      'resources' => $resources,
+      'competitors' => $competitors,
+      'published' => $published,
+      'external_id' => $external_id,
+    );
+    return $this->put("events/" . $event_uuid, array_filter($params));
+  }
+
+  /**
    * Return a specific event
    *
    * @param int $eid
