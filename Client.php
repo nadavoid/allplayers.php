@@ -714,6 +714,7 @@ class Client extends HttpClient {
    * @return object
    *   resource object
    */
+  // @todo why is this taking a node?
   public function resourceCreate($node) {
     return $this->post("resources", $node);
   }
