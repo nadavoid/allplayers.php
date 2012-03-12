@@ -36,7 +36,7 @@ abstract class Event extends stdClass {
   /**
    * @var array
    */
-  public $resources;
+  public $resource_ids;
 
   /**
    * @var array
