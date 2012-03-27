@@ -654,7 +654,7 @@ class Client extends HttpClient {
    * @return object
    *   user object
    */
-  public function eventsUpdateEvent($event_uuid, $groups, $title, $description, $date_time, $category = NULL, $resources = NULL, $competitors = NULL, $published = TRUE, $external_id = NULL) {
+  public function eventsUpdateEvent($event_uuid, $groups = NULL, $title = NULL, $description = NULL, $date_time = NULL, $category = NULL, $resources = NULL, $competitors = NULL, $published = TRUE, $external_id = NULL) {
     $params = array(
       'groups' => $groups,
       'title' => $title,
@@ -710,13 +710,61 @@ class Client extends HttpClient {
   /**
    * Create a resource
    *
-   * @param $node
+   * @param $groups
+   *   An array of group_uuids this resource belongs to
+   * @param $title
+   *   Resource Title
+   * @param $location
+   *   $location array.  $location['zip'] required at minimum
+   * @param $availability
+   *   $array of the resource's availabilities.  If none passed, the resource is assumed
+   *   to be always available
+   * @param $external_id
+   *   a 72 character string to associate to external data
    * @return object
    *   resource object
    */
   // @todo why is this taking a node?
-  public function resourceCreate($node) {
-    return $this->post("resources", $node);
+  public function resourceCreate($groups, $title, $location, $availability = NULL, $external_id = NULL) {
+    $params = array(
+      'groups' => $groups,
+      'title' => $title,
+      'location' => $location,
+      'availability' => $availability,
+      'external_id' => $external_id,
+    );
+    return $this->post("resources", array_filter($params));
+  }
+
+  /**
+   * Update a resource
+   *
+   * @param $uuid
+   *   the UUID of the resource being updated
+   * @param $groups
+   *   An array of group_uuids this resource belongs to
+   * @param $title
+   *   Resource Title
+   * @param $location
+   *   $location array.  $location['zip'] required at minimum
+   * @param $availability
+   *   $array of the resource's availabilities.  If none passed, the resource is assumed
+   *   to be always available
+   * @param $external_id
+   *   a 72 character string to associate to external data
+   * @return object
+   *   resource object
+   */
+  // @todo why is this taking a node?
+  public function resourceUpdate($uuid, $groups = NULL, $title = NULL, $location = NULL, $availability = NULL, $external_id = NULL) {
+    $params = array(
+      'groups' => $groups,
+      'title' => $title,
+      'location' => $location,
+      'availability' => $availability,
+      'external_id' => $external_id,
+    );
+    return $this->put("resources/" . $uuid, array_filter($params));
   }
 
   /**
