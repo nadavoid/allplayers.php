@@ -1,0 +1,215 @@
+<?php
+namespace AllPlayers\Calendar;
+
+use stdClass;
+use DateTime;
+use DateTimeZone;
+
+/**
+ * Defines standard APDate fields.
+ */
+class Vevent extends stdClass {
+
+  /**
+   * @var DateTime
+   */
+  public $start;
+
+  /**
+   * @var DateTime
+   */
+  public $end;
+
+  /* Public Functions */
+  /**
+   * From Api
+   */
+  public static function fromApi($api_data) {
+    $repeat = array();
+    $api_data = (array) $api_data;
+    if (!empty($api_data['repeat_info'])) {
+      $repeat = (array) $api_data['repeat_info'];
+      $repeat['until'] = empty($repeat['until']) ? NULL : new DateTime('@' . strtotime($repeat['until']));
+      if (!empty($repeat['exdate'])) {
+        foreach ($repeat['exdate'] as $key => $exdate) {
+          $repeat['exdate'][$key] = new DateTime('@' . strtotime($exdate));
+        }
+      }
+      if (!empty($repeat['rdate'])) {
+        foreach ($repeat['rdate'] as $key => $rdate) {
+          $repeat['rdate'][$key] = new DateTime('@' . strtotime($rdate));
+        }
+      }
+    }
+    $first_date = current($api_data);
+    $start = new DateTime('@' . strtotime($first_date->start));
+    $end = new DateTime('@' . strtotime($first_date->end));
+    return new self($start, $end, $repeat);
+  }
+
+
+  /**
+   * APDateInst Constructor
+   *
+   * @param DateTime $start
+   *   A DateTime object specifying the start of the event. Will be converted to UTC
+   *
+   * @param DateTime $end
+   *   A DateTime object specifying the end of the event. Will be converted to UTC
+   *
+   * @param array $repeat
+   *   An array of repeat settings and DateTime objects
+   */
+  public function __construct(DateTime $start, DateTime $end, $repeat = array()) {
+    $this->start = $start;
+    $this->end = $end;
+    if (!empty($repeat)) {
+      $this->interval = empty($repeat['interval']) ? NULL : $repeat['interval'];
+      $this->freq = empty($repeat['freq']) ? NULL : $repeat['freq'];
+      $this->until = empty($repeat['until']) ? NULL : $repeat['until'];
+      $this->byMonth = empty($repeat['bymonth']) ? NULL : $repeat['bymonth'];
+      $this->byDay = empty($repeat['byday']) ? NULL : $repeat['byday'];
+      $this->byMonthDay = empty($repeat['bymonthday']) ? NULL : $repeat['bymonthday'];
+      $this->exDate = empty($repeat['exdate']) ? NULL : $repeat['exdate'];
+      $this->rDate = empty($repeat['rdate']) ? NULL : $repeat['rdate'];
+    }
+    $this->setTimezone(NULL, 'UTC');
+  }
+
+  /**
+   * Sets timezone for the whole object.
+   *
+   * @param array $properties
+   *   array of DateTime objects and the keys must be valid property names
+   *
+   * @param string $timezone_name
+   *   The name of the timezone the dates need to be converted to
+   */
+  public function setTimezone ($properties = NULL, $timezone_name = 'UTC') {
+    // If there are properties modify, else run the whole object.
+    if (empty($properties)) {
+      $properties = get_object_vars($this);
+    }
+    // We have properties ready, either entire object or just select few.  Convert em.
+    $timezone = new DateTimeZone($timezone_name);
+    foreach ($properties as $prop_name => $prop) {
+      if (!empty($prop) && ($prop instanceof DateTime || is_array($prop))) {
+        $this->{$prop_name} = $this->setPropTimezone($prop, $timezone);
+      }
+    }
+  }
+
+  /**
+   * Builds an array of dates for api creation
+   */
+  public function buildSettings() {
+    $this->setTimezone(NULL, 'UTC');
+    $vevent = array(
+      'start' => $this->toApi($this->start),
+      'end' => $this->toApi($this->end),
+      'repeat' => array(
+        'interval' => empty($this->interval) ? NULL : $this->interval,
+        'freq' => empty($this->freq) ? NULL : $this->freq,
+        'until' => empty($this->until) ? NULL : $this->toApi($this->until, 'until'),
+        'bymonth' => empty($this->byMonth) ? NULL : $this->byMonth,
+        'byday' => empty($this->byDay) ? NULL : $this->byDay,
+        'bymonthday' => empty($this->byMonthDay) ? NULL : $this->byMonthDay,
+        'exdate' => empty($this->exDate) ? NULL : $this->toApi($this->exDate, 'exdate'),
+        'rdate' => empty($this->rDate) ? NULL : $this->toApi($this->rDate, 'rdate'),
+      ),
+    );
+    $vevent['repeat'] = array_filter($vevent['repeat']);
+    // @todo do this as a callback to array_filter
+    return array_filter($vevent);
+  }
+
+  /**
+   * Private Methods
+   */
+
+  /**
+   * Sets a timezone for a given property
+   *
+   * @param mixed $property
+   *   an object property that can either be an array of DateTime objects or a single one
+   *
+   * @param string $timezone
+   *   A DateTimeZone object to convert the dates to
+   *
+   * @return mixed
+   *   Either an array of DateTime objects or a single one.
+   */
+  private function setPropTimezone($property, DateTimeZone $timezone) {
+    // Handle exdate and rdate arrays.
+    if (!is_array($property)) {
+      $property = array($property);
+    }
+    foreach ($property as $dt) {
+      if ($dt instanceof DateTime) {
+        if ($dt->getTimezone() != $timezone) {
+          $dt->setTimezone($timezone);
+        }
+      }
+    }
+    return (count($property) == 1) ? array_pop($property) : $property;
+  }
+
+  /**
+   * Formats an array of date objects for API input
+   */
+  protected function toApi($date, $type = '') {
+    $format = ($type == 'until' || $type == 'exdate' || $type == 'rdate') ? 'Y-m-d\T\0\0\:\0\0\:\0\0' : 'Y-m-d\TH:i:\0\0';
+    $return = array();
+    if (!is_array($date)) {
+      $date = array($date);
+    }
+    foreach ($date as $key => $single_date) {
+      $return[$key] = $single_date->format($format);
+    }
+    return (count($return) == 1) ? array_pop($return) : $return;
+  }
+  /**
+   * Compares Two Vevents
+   */
+  // @todo - use dateTime -> diff for diffing
+  public function diff($otherVevent){
+    $diff = array();
+    $start_diff = $this->start->diff($otherVevent->start)->format('%I');
+    if ($start_diff > 0){
+      $diff['start'] = $start_diff;
+    }
+    $end_diff = $this->end->diff($otherVevent->end)->format('%I');
+    if ($end_diff > 0){
+      $diff['end'] = $start_diff;
+    }
+
+    // Finish checking if this is a simple date.
+    if (empty($this->repeat) || empty($otherVevent->repeat)){
+      return $diff;
+    }
+    // @todo fix camelcase
+    $self_r_keys = array_keys($this->repeat);
+    $other_r_keys = array_keys($otherVevent->repeat);
+    $repeat_diff = array_diff($self_r_keys, $other_r_keys);
+    if (!empty($repeat_diff)) {
+      $diff['repeat'] = $repeat_diff;
+    }
+    foreach($self_r_keys as $key) {
+      if (is_array($this->repeat[$key])) {
+        // recurse down
+        foreach ($this->repeat[$key] as $r_item) {
+          if (empty($otherVevent->repeat[$key]) || !in_array($r_item, $otherVevent->repeat[$key])) {
+            $diff[$key][]= $r_item;
+            break;
+          }
+        }
+      }
+      else {
+        if ($this->repeat[$key] != $otherVevent->repeat[$key]) {
+          $diff[$key][] = $this->repeat[$key];
+        }
+      }
+    }
+    return $diff;
+  }
+}
