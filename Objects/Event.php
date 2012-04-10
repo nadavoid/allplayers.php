@@ -125,22 +125,32 @@ class Event extends stdClass {
         // Check competitors
         $this_competitors = $this->competitors;
         $other_competitors = $otherEvent->competitors;
-        // Since this comparison is used for both api response data and randomEvent data,
-        // slight modifications are in order to this check.
-        // Munch the data a tiny bit to get the right structure.
-        // @todo think about whether it makes sense to modify the event inputs to match instead
-        if (is_object(current($this_competitors))) {
-          foreach ($this_competitors as $key => $this_comp) {
-            $this_competitors[$this_comp->uuid] = array(
-              'label' => empty($this_comp->label) ? NULL : $this_comp->label,
-              'score' => empty($this_comp->score) ? NULL : $this_comp->score,
-            );
-            unset($this_competitors[$key]);
+        foreach ($this_competitors as $r_comp) {
+          $r_comp = (array) $r_comp;
+          foreach ($other_competitors as $api_comp) {
+            $api_comp = (array) $api_comp;
+            $found = 0;
+            if ($r_comp['uuid'] == $api_comp['uuid']) {
+              $found = 1;
+            }
+            // UUID matches, that means if there are labels or scores those should match too.
+            if ($found == 1) {
+              if (!empty($r_comp['label']) && $r_comp['label'] != $api_comp['label']) {
+                // Labels don't match.
+                $found = 0;
+                break;
+              }
+              if (!empty($r_comp['score']) && $r_comp['score'] != $api_comp['score']) {
+                $found = 0;
+                break;
+              }
+              // If we haven't failed by now, it all matches, break the loop.
+              break;
+            }
           }
-        }
-        foreach ($other_competitors as $other_comp) {
-          if (!isset($this_competitors[$other_comp->uuid])) {
-            $diff['competitors'][] = $other_comp->uuid;
+          // Check complete, check found and throw error by diff.
+          if ($found == 0) {
+            $diff['competitiors'][] = $r_comp['uuid'];
           }
         }
       }
