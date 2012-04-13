@@ -28,10 +28,22 @@ class Client extends HttpClient {
    * @return object
    *   user object.
    */
-  public function userGetUser($uuid, $fields = NULL) {
-    $query = array('fields' => $fields);
+  public function userGetUser($uuid) {
     return $this->get("users/$uuid");
   }
+
+  /**
+   * Get a list of users based on fields passed in
+   *
+   * @param array $field
+   *   parameters to pass as a query string while searching for users.
+   *
+   * @return array
+   *   This is an array of user objects
+   */
+   public function userGetUsers($fields = array()) {
+     return $this->get("users", $fields);
+   }
 
   /**
    * Update a user
