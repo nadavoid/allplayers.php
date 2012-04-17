@@ -41,7 +41,7 @@ class Client extends HttpClient {
    * @return array
    *   This is an array of user objects
    */
-   public function userGetUsers($fields = array()) {
+   public function usersIndex($fields = array()) {
      return $this->get("users", $fields);
    }
 
