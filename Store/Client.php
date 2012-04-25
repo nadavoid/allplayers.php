@@ -188,4 +188,32 @@ class Client extends HttpClient{
     return "<script src='{$this->base_url}/groups/{$uuid}/donation-embed/js'></script>";
   }
 
+  /**
+   *
+   * @param string $group_uuid
+   * @param string $method
+   * @param array $method_info
+   * @return Array
+   *   Array of payment methods.
+   */
+  function groupPaymentMethodSet($group_uuid, $method, $method_info = array()) {
+    return $this->post('group_stores/' . $group_uuid . '/payment_method', array('method' => $method, 'method_info' => $method_info));
+  }
+
+  /**
+   *
+   * @param string $group_uuid
+   * @param string $method
+   * @return Array
+   *   Array of payment methods.
+   */
+  function groupPaymentMethodGet($group_uuid, $method = NULL) {
+    if (is_null($method)) {
+      return $this->get('group_stores/' . $group_uuid . '/payment_methods');
+    }
+    else {
+      return $this->get('group_stores/' . $group_uuid . '/payment_methods', array('method' => $method));
+    }
+  }
+
 }
