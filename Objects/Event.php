@@ -127,6 +127,7 @@ class Event extends stdClass {
     $this->published = $published;
     $this->external_id = $external_id;
   }
+
   /**
    * Compares two objects against each other
    *
