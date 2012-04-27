@@ -1,4 +1,9 @@
 <?php
+/**
+ * @file
+ * Handles event objects within the AllPlayers API
+ */
+
 namespace AllPlayers\Objects;
 
 use stdClass;
@@ -57,27 +62,59 @@ class Event extends stdClass {
    */
   public $external_id;
 
-  /*Public Functions*/
-
-  public static function fromApi($api_data){
-    if (!is_array($api_data)){
+  /**
+   * Public Functions
+   */
+  /**
+   * Takes event data from api and creates new self
+   *
+   * @param array $api_data
+   *   Data returned from api
+   */
+  public static function fromApi($api_data) {
+    if (!is_array($api_data)) {
       $api_data = (array) $api_data;
     }
     $date_time = Vevent::fromApi($api_data['date_time']);
     $competitors = empty($api_data['competitors']) ? NULL : $api_data['competitors'];
     $external_id = empty($api_data['external_id']) ? NULL : $api_data['external_id'];
-    // @todo resource_ids come back as classes which should really be resource properties of an
-    // event.  However since we don't yet have a 'teaser' schema, it'll have to wait.
+    // @todo resource_ids come back as classes which should really be resource
+    //   properties of an event.  However since we don't yet have a 'teaser'
+    //   schema, it'll have to wait.
     $resource_ids = NULL;
-    if (!empty($api_data['resource_ids'])){
+    if (!empty($api_data['resource_ids'])) {
       $resource_ids = array();
-      foreach ($api_data['resource_ids'] as $rid){
+      foreach ($api_data['resource_ids'] as $rid) {
         $resource_ids[] = $rid->uuid;
       }
     }
     return new self($api_data['uuid'], $api_data['groups'], $api_data['title'], $api_data['description'], $date_time,  $api_data['category'], $resource_ids, $competitors, $api_data['published'], $external_id);
   }
 
+  /**
+   *  Constructs new self from passed parameters
+   *
+   * @param string $uuid
+   *   Event uuid.
+   * @param array $groups
+   *   Event groups.
+   * @param string $title
+   *   Event title.
+   * @param string $description
+   *   Event description
+   * @param array $date_time
+   *   Event date_time
+   * @param string $category
+   *   Event category
+   * @param array $resource_ids
+   *   Array of resources this event is using
+   * @param array $competitors
+   *   Array of competitor groups and their information
+   * @param bool $published
+   *   Whether this event is published
+   * @param string $external_id
+   *   External relationship data
+   */
   public function __construct($uuid, $groups, $title, $description, $date_time, $category, $resource_ids, $competitors = NULL, $published = NULL, $external_id = NULL) {
     $this->uuid = $uuid;
     $this->groups = $groups;
@@ -90,15 +127,11 @@ class Event extends stdClass {
     $this->published = $published;
     $this->external_id = $external_id;
   }
-    /**
+  /**
    * Compares two objects against each other
    *
-   * @param $randomEvent
-   *   object comparing to
-   * @param $apiEvent
+   * @param Event $otherEvent
    *   object retrieved from API
-   * @param array $date_settings
-   *   Date settings that specified how this object was constructed
    *
    * @return array
    *   Returns a diff array
@@ -122,7 +155,7 @@ class Event extends stdClass {
         $diff['title'] = $otherEvent->title;
       }
       else {
-        // Check competitors
+        // Check competitors.
         $this_competitors = $this->competitors;
         $other_competitors = $otherEvent->competitors;
         foreach ($this_competitors as $r_comp) {
@@ -132,12 +165,13 @@ class Event extends stdClass {
             $found = 0;
             if ($r_comp['uuid'] == $api_comp['uuid']) {
               $found = 1;
-              // UUID matches, that means if there are labels or scores those should match too.
+              // UUID matches, that means if there are labels or scores those
+              // should match too.
               if ((!empty($r_comp['label']) && $r_comp['label'] != $api_comp['label']) ||
-                  (!empty($r_comp['score']) && $r_comp['score'] != $api_comp['score'])) {
+                 (!empty($r_comp['score']) && $r_comp['score'] != $api_comp['score'])) {
                 $found = 0;
               }
-              //Break the loop.
+              // Break the loop.
               break;
             }
           }
@@ -169,7 +203,7 @@ class Event extends stdClass {
     }
 
     if (!empty($this->resource_ids)) {
-      // Rebuild for comparison
+      // Rebuild for comparison.
       foreach ($this->resource_ids as $rid) {
         if (!in_array($rid, $otherEvent->resource_ids)) {
           $diff['resources'][] = $rid;
