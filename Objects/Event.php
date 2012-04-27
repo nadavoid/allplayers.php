@@ -132,22 +132,14 @@ class Event extends stdClass {
             $found = 0;
             if ($r_comp['uuid'] == $api_comp['uuid']) {
               $found = 1;
-            }
-            // UUID matches, that means if there are labels or scores those should match too.
-            if ($found == 1) {
-              if (!empty($r_comp['label']) && $r_comp['label'] != $api_comp['label']) {
-                // Labels don't match.
+              // UUID matches, that means if there are labels or scores those should match too.
+              if ((!empty($r_comp['label']) && $r_comp['label'] != $api_comp['label']) ||
+                  (!empty($r_comp['score']) && $r_comp['score'] != $api_comp['score'])) {
                 $found = 0;
-                break;
               }
-              if (!empty($r_comp['score']) && $r_comp['score'] != $api_comp['score']) {
-                $found = 0;
-                break;
-              }
-              // If we haven't failed by now, it all matches, break the loop.
+              //Break the loop.
               break;
             }
-          }
           // Check complete, check found and throw error by diff.
           if ($found == 0) {
             $diff['competitiors'][] = $r_comp['uuid'];
