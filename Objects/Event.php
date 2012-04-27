@@ -63,9 +63,6 @@ class Event extends stdClass {
   public $external_id;
 
   /**
-   * Public Functions
-   */
-  /**
    * Takes event data from api and creates new self
    *
    * @param array $api_data
