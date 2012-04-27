@@ -150,6 +150,48 @@ class Client extends HttpClient{
     return $this->get('products/' . $uuid);
   }
 
+
+  /**
+   * Create a product in a group
+   *
+   * @param string $type
+   *   The type of product to be created.
+   * @param string $group_uuid
+   *   UUID of the group that the product belongs to.
+   * @param integer $role_id
+   *   Numeric id of the role that the product is being created for.
+   * @param string $role_name
+   *   Name of the role that the product is being created for.
+   * @param boolean $installments_enabled
+   *   Whether or not installments should be enabled for this product.
+   * @param float $initial_payment
+   *   Price of the initial payment if purchased with installments.
+   * @param array $installments
+   *   Array of installment payments. Each payment should have a "due_date" and
+   *   "amount".
+   * @param float $total
+   *   Full price of the product if purchased without installments.
+   * @param string $sku
+   *   SKU for the new product, only required for "product" products.
+   * @param string $title
+   *   Title for the new product, only required for "product" products.
+   */
+  function productCreate($type, $group_uuid, $role_id, $role_name, $installments_enabled, $initial_payment, $installments, $total, $sku, $title) {
+    $params = array(
+      'type' => $type,
+      'group_uuid' => $group_uuid,
+      'role_id' => $role_id,
+      'role_name' => $role_name,
+      'installments_enabled' => $installments_enabled,
+      'initial_payment' => $initial_payment,
+      'installments' => $installments,
+      'total' => $total,
+      'sku' => $sku,
+      'title' => $title,
+    );
+    return $this->post('products', array_filter($params));
+  }
+
   /**
    * @musthave
    * Link to product base path.
