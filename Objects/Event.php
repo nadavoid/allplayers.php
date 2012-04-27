@@ -156,17 +156,17 @@ class Event extends stdClass {
         // Check competitors.
         $this_competitors = $this->competitors;
         $other_competitors = $otherEvent->competitors;
-        foreach ($this_competitors as $r_comp) {
-          $r_comp = (array) $r_comp;
-          foreach ($other_competitors as $api_comp) {
-            $api_comp = (array) $api_comp;
+        foreach ($this_competitors as $this_competitor) {
+          $this_competitor = (array) $this_competitor;
+          foreach ($other_competitors as $api_competitor) {
+            $api_competitor = (array) $api_competitor;
             $found = 0;
-            if ($r_comp['uuid'] == $api_comp['uuid']) {
+            if ($this_competitor['uuid'] == $api_competitor['uuid']) {
               $found = 1;
               // UUID matches, that means if there are labels or scores those
               // should match too.
-              $labels_dont_match = !empty($r_comp['label']) && $r_comp['label'] != $api_comp['label'];
-              $scores_dont_match = !empty($r_comp['score']) && $r_comp['score'] != $api_comp['score'];
+              $labels_dont_match = !empty($this_competitor['label']) && $this_competitor['label'] != $api_competitor['label'];
+              $scores_dont_match = !empty($this_competitor['score']) && $this_competitor['score'] != $api_competitor['score'];
               if ($labels_dont_match || $scores_dont_match) {
                 $found = 0;
               }
@@ -176,7 +176,7 @@ class Event extends stdClass {
           }
           // Check complete, check found and throw error by diff.
           if ($found == 0) {
-            $diff['competitiors'][] = $r_comp['uuid'];
+            $diff['competitiors'][] = $this_competitor['uuid'];
           }
         }
       }
