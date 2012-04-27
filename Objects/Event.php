@@ -167,8 +167,9 @@ class Event extends stdClass {
               $found = 1;
               // UUID matches, that means if there are labels or scores those
               // should match too.
-              if ((!empty($r_comp['label']) && $r_comp['label'] != $api_comp['label']) ||
-                 (!empty($r_comp['score']) && $r_comp['score'] != $api_comp['score'])) {
+              $labels_dont_match = !empty($r_comp['label']) && $r_comp['label'] != $api_comp['label'];
+              $scores_dont_match = !empty($r_comp['score']) && $r_comp['score'] != $api_comp['score'];
+              if ($labels_dont_match || $scores_dont_match) {
                 $found = 0;
               }
               // Break the loop.
