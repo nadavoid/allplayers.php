@@ -140,6 +140,7 @@ class Event extends stdClass {
               //Break the loop.
               break;
             }
+          }
           // Check complete, check found and throw error by diff.
           if ($found == 0) {
             $diff['competitiors'][] = $r_comp['uuid'];
