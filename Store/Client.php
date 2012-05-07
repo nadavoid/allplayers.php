@@ -258,4 +258,21 @@ class Client extends HttpClient{
     }
   }
 
+   /**
+   * Set the group payee.
+   * @param string $group_uuid
+   * @param string $payee_uuid
+   *   If not set, then use own payment configuration.
+   * @return bool
+   *   TRUE if succesfully added.
+   */
+  function groupPayeeSet($group_uuid, $payee_uuid = NULL) {
+    if (is_null($payee_uuid)) {
+      return $this->post('group_stores/' . $group_uuid . '/payee');
+    }
+    else {
+      return $this->post('group_stores/' . $group_uuid . '/payee', array('payee_uuid' => $payee_uuid));
+    }
+  }
+
 }
