@@ -232,6 +232,7 @@ class Client extends HttpClient{
 
   /**
    * Set the group payment methods.
+   *
    * @param string $group_uuid
    * @param string $method
    * @param array $method_info
@@ -244,6 +245,7 @@ class Client extends HttpClient{
 
   /**
    * Get the group payment methods.
+   *
    * @param string $group_uuid
    * @param string $method
    * @return Array
@@ -258,8 +260,9 @@ class Client extends HttpClient{
     }
   }
 
-   /**
+  /**
    * Set the group payee.
+   *
    * @param string $group_uuid
    * @param string $payee_uuid
    *   If not set, then use own payment configuration.
