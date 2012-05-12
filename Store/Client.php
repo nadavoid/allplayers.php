@@ -3,7 +3,7 @@ namespace AllPlayers\Store;
 
 use AllPlayers\Component\HttpClient;
 
-class Client extends HttpClient{
+class Client extends HttpClient {
   // @todo - This isn't configurable upstream.
   const ENDPOINT = '/api/v1/rest';
 
@@ -15,7 +15,7 @@ class Client extends HttpClient{
   public $base_url = NULL;
 
   /**
-   * @param string $url
+   * @param string $base_url
    *   e.g. "https://store.mercury.dev.allplayers.com"
    * @param Log $logger
    *   (Optional)
@@ -85,9 +85,9 @@ class Client extends HttpClient{
    */
   function usersCartAdd($user_uuid, $product_uuid, $for_user_uuid = NULL, $installment_plan = FALSE) {
     return $this->post('users/' . $user_uuid . '/add_to_cart', array(
-    	'product_uuid' => $product_uuid,
-    	'for_user_uuid' => $for_user_uuid,
-    	'installment_plan' => $installment_plan,
+      'product_uuid' => $product_uuid,
+      'for_user_uuid' => $for_user_uuid,
+      'installment_plan' => $installment_plan,
     ));
   }
 
@@ -119,7 +119,8 @@ class Client extends HttpClient{
   /**
    * @musthave
    * @todo - Initialize and enable a group store now.
-   * @todo - This will require different privileges? Or should we just expect the current user to have that?
+   * @todo - This will require different privileges? Or should we just expect
+   * the current user to have that?
    *
    * @param string $uuid
    *   Group UUID string.
@@ -142,8 +143,8 @@ class Client extends HttpClient{
    * @musthave
    * @todo - List group products, optionally by type.
    *
-   * @param unknown_type $group_uuid
-   * @param unknown_type $type
+   * @param string $group_uuid
+   * @param string $type
    * @return Array
    *   Array of product objects.
    */
@@ -188,7 +189,7 @@ class Client extends HttpClient{
   }
   /**
    * @nicetohave
-   * @param unknown_type $uuid
+   * @param string $uuid
    */
   function productGet($uuid) {
     return $this->get('products/' . $uuid);
@@ -250,9 +251,9 @@ class Client extends HttpClient{
    * Login via user endpoint. (Overriding)
    *
    * @param string $user
-   *  username
+   *   username
    * @param string $pass
-   *  password
+   *   password
    */
   public function userLogin($user, $pass) {
     // Changing login path to 'user/login' (was 'users/login').
