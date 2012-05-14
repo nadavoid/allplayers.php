@@ -143,6 +143,40 @@ class Client extends HttpClient{
   }
 
   /**
+   * Retrieve an order
+   */
+  function orderGet($order_uuid) {
+    return $this->get('orders/' . $uuid);
+  }
+
+  /**
+   * Create an order
+   *
+   * @param string $user_uuid
+   *   UUID of the owner of the order
+   * @param string $product_uuid
+   *   UUID of the product to place in the order
+   * @param string $order_status
+   *   Status of new order (invoice, shopping cart, etc)
+   * @param string $for_user_uuid
+   *   UUID of the user the product is being purchased for
+   * @param string $due_date
+   *   Due date. Applicable only if order_status is invoice.
+   *
+   * @return stdClass
+   *   Created object from api
+   */
+  function orderCreate($user_uuid, $product_uuid, $order_status = NULL, $for_user_uuid = NULL, $due_date = NULL) {
+    $params = array(
+      'user_uuid' => $user_uuid,
+      'product_uuid' => $product_uuid,
+      'order_status' => $order_status,
+      'for_user_uuid' => $for_user_uuid,
+      'due_date' => $due_date,
+    );
+    return $this->post('orders', array_filter($params));
+  }
+  /**
    * @nicetohave
    * @param unknown_type $uuid
    */
