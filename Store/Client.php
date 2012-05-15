@@ -187,7 +187,21 @@ class Client extends HttpClient {
     );
     return $this->post('orders', array_filter($params));
   }
+  /**
+  * Add Payment to an order.
+  *
+  * @param string $order_uuid
+  *   UUID of the order the payment is getting applied to
+  * @param string $payment_type
+  *   What type of payment is it (in_person, ad_hoc, etc)
+  * @param string $payment_amount
+  *   The amount of the payment
+  * @param array $payment_details
+  *   Additional details for payment_type
 
+  * @return bool
+  *   TRUE or string with payment instructions (for in_person payments)
+  */
   function orderAddPayment($order_uuid, $payment_type, $payment_amount, $payment_details = array()) {
     $params = array(
       'payment_type' => $payment_type,
