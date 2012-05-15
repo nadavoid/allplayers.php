@@ -187,6 +187,16 @@ class Client extends HttpClient {
     );
     return $this->post('orders', array_filter($params));
   }
+
+  function orderAddPayment($order_uuid, $payment_type, $payment_amount, $payment_details = array()) {
+    $params = array(
+      'payment_type' => $payment_type,
+      'payment_amount' => $payment_amount,
+      'payment_details' => $payment_details,
+    );
+    return $this->post('orders/' . $order_uuid . '/add_payment', array_filter($params));
+  }
+
   /**
    * @nicetohave
    * @param string $uuid
