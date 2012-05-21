@@ -206,13 +206,15 @@ class Client extends HttpClient {
    * @return stdClass
    *   Created object from api
    */
-  function orderCreate($user_uuid, $product_uuid, $order_status = NULL, $for_user_uuid = NULL, $due_date = NULL) {
+  function orderCreate($user_uuid, $product_uuid, $order_status = NULL, $for_user_uuid = NULL, $due_date = NULL, $billing_address = array(), $shipping_address = array()) {
     $params = array(
       'user_uuid' => $user_uuid,
       'product_uuid' => $product_uuid,
       'order_status' => $order_status,
       'for_user_uuid' => $for_user_uuid,
       'due_date' => $due_date,
+      'billing_address' => array_filter($billing_address),
+      'shipping_address' => array_filter($shipping_address),
     );
     return $this->post('orders', array_filter($params));
   }
