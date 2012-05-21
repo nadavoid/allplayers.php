@@ -330,6 +330,16 @@ class Client extends HttpClient {
   }
 
   /**
+   * Get the group payee.
+   *
+   * @param string $group_uuid
+   * @return string The groups payee uuid.
+   */
+  function groupPayeeGet($group_uuid) {
+    return $this->get('group_stores/' . $group_uuid . '/payee');
+  }
+
+  /**
    * Set the group payee.
    *
    * @param string $group_uuid
