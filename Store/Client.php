@@ -29,6 +29,32 @@ class Client extends HttpClient {
   }
 
   /**
+   * Returns the registration SKU.
+   *
+   * @param object $group_name The name of the group.
+   * @param number $role_id The role ID for the registration.
+   * @return string The SKU for the registration product.
+   */
+  public static function getRegistrationSKU($group_name, $role_id) {
+    return strtolower(substr(preg_replace('/[^A-Za-z0-9\_]/', '', str_replace(' ', '_', $group_name)), 0, 10)) . '-registration_fee-' . $role_id;
+  }
+
+  /**
+   * Returns the group registration product title.
+   *
+   * @param object $group_name The name of the group.
+   * @param string $role_name The role name.
+   * @return string The title of the registration product.
+   */
+  public static function getRegistrationProductTitle($group_name, $product_name, $role_name) {
+    return t('!role !product for !group', array(
+      '!role' => $role_name,
+      '!product' => $product_name,
+      '!group' => $group_name,
+    ));
+  }
+
+  /**
    * @musthave
    * Link to users cart.
    */
