@@ -181,6 +181,9 @@ class Client extends HttpClient {
 
   /**
    * Retrieve an order
+   *
+   * @param string $uuid
+   *   The uuid of the order to get
    */
   function orderGet($order_uuid) {
     return $this->get('orders/' . $uuid);
@@ -213,6 +216,7 @@ class Client extends HttpClient {
     );
     return $this->post('orders', array_filter($params));
   }
+
   /**
   * Add Payment to an order.
   *
