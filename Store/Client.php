@@ -1,6 +1,9 @@
 <?php
 namespace AllPlayers\Store;
 
+use DateTime;
+use DateTimeZone;
+
 use AllPlayers\Component\HttpClient;
 
 class Client extends HttpClient {
@@ -202,11 +205,26 @@ class Client extends HttpClient {
    *   UUID of the user the product is being purchased for
    * @param string $due_date
    *   Due date. Applicable only if order_status is invoice.
+   * @param array $billing_address
+   *   Billing address of the user.
+   * @param array $shipping_address
+   *   Shipping address of the user.
+   * @param DateTime $created
+   *   Created on date and time of the order as a UNIX timestamp. If omitted,
+   *   the current date and time will be used.
    *
    * @return stdClass
    *   Created object from api
    */
-  function orderCreate($user_uuid, $product_uuid, $order_status = NULL, $for_user_uuid = NULL, $due_date = NULL, $billing_address = array(), $shipping_address = array()) {
+  function orderCreate($user_uuid, $product_uuid, $order_status = NULL, $for_user_uuid = NULL, $due_date = NULL, $billing_address = array(), $shipping_address = array(), DateTime $created = NULL) {
+    // If a created on date and time was supplied then use it to generate a
+    // timestamp in the correct format.
+    $created_timestamp = NULL;
+    if (!empty($created)) {
+      $created->setTimezone(new DateTimeZone('UTC'));
+      $created_timestamp = $created->format('Y-m-d\TH:i:00');
+    }
+
     $params = array(
       'user_uuid' => $user_uuid,
       'product_uuid' => $product_uuid,
@@ -215,25 +233,27 @@ class Client extends HttpClient {
       'due_date' => $due_date,
       'billing_address' => array_filter($billing_address),
       'shipping_address' => array_filter($shipping_address),
+      'created' => $created_timestamp,
     );
+
     return $this->post('orders', array_filter($params));
   }
 
   /**
-  * Add Payment to an order.
-  *
-  * @param string $order_uuid
-  *   UUID of the order the payment is getting applied to
-  * @param string $payment_type
-  *   What type of payment is it (in_person, ad_hoc, etc)
-  * @param string $payment_amount
-  *   The amount of the payment
-  * @param array $payment_details
-  *   Additional details for payment_type
-
-  * @return bool
-  *   TRUE or string with payment instructions (for in_person payments)
-  */
+   * Add Payment to an order.
+   *
+   * @param string $order_uuid
+   *   UUID of the order the payment is getting applied to
+   * @param string $payment_type
+   *   What type of payment is it (in_person, ad_hoc, etc)
+   * @param string $payment_amount
+   *   The amount of the payment
+   * @param array $payment_details
+   *   Additional details for payment_type
+   *
+   * @return bool
+   *   TRUE or string with payment instructions (for in_person payments)
+   */
   function orderAddPayment($order_uuid, $payment_type, $payment_amount, $payment_details = array()) {
     $params = array(
       'payment_type' => $payment_type,
