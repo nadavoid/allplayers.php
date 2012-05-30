@@ -210,38 +210,26 @@ class Client extends HttpClient {
    * @param array $shipping_address
    *   Shipping address of the user.
    * @param DateTime $created
-   *   Created on date and time of the order as a UNIX timestamp. If omitted,
-   *   the current date and time will be used.
+   *   Created on date and time of the order. If omitted, the current date and
+   *   time will be used.
    *
    * @return stdClass
    *   Created object from api
    */
   function orderCreate($user_uuid, $product_uuid, $order_status = NULL, $for_user_uuid = NULL, DateTime $due_date = NULL, $billing_address = array(), $shipping_address = array(), DateTime $created = NULL) {
-    // If a created on date and time was supplied then use it to generate a
-    // timestamp in the correct format.
-    $created_timestamp = NULL;
-    if (!empty($created)) {
-      $created->setTimezone(new DateTimeZone('UTC'));
-      $created_timestamp = $created->format('Y-m-d\TH:i:00');
-    }
-
-    // If a due date was supplied then use it to generate a timestamp in the
-    // correct format.
-    $due_date_timestamp = NULL;
-    if (!empty($due_date)) {
-      $due_date->setTimezone(new DateTimeZone('UTC'));
-      $due_date_timestamp = $due_date->format('Y-m-d');
-    }
-
     $params = array(
       'user_uuid' => $user_uuid,
       'product_uuid' => $product_uuid,
       'order_status' => $order_status,
       'for_user_uuid' => $for_user_uuid,
-      'due_date' => $due_date_timestamp,
+      'due_date' => (!empty($due_date)
+        ? $due_date->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d\TH:i:00') 
+        : NULL),
       'billing_address' => array_filter($billing_address),
       'shipping_address' => array_filter($shipping_address),
-      'created' => $created_timestamp,
+      'created' => (!empty($created)
+        ? $created->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d\TH:i:00') 
+        : NULL),
     );
 
     return $this->post('orders', array_filter($params));
@@ -258,6 +246,9 @@ class Client extends HttpClient {
    *   The amount of the payment
    * @param array $payment_details
    *   Additional details for payment_type
+   * @param DateTime $created
+   *   Created on date and time of the payment. If omitted, the current date and
+   *   time will be used.
    *
    * @return bool
    *   TRUE or string with payment instructions (for in_person payments)
@@ -267,7 +258,11 @@ class Client extends HttpClient {
       'payment_type' => $payment_type,
       'payment_amount' => $payment_amount,
       'payment_details' => $payment_details,
+      'created' => (!empty($created)
+        ? $created->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d\TH:i:00') 
+        : NULL),
     );
+
     return $this->post('orders/' . $order_uuid . '/add_payment', array_filter($params));
   }
 
