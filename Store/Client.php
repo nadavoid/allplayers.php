@@ -7,6 +7,20 @@ use DateTimeZone;
 use AllPlayers\Component\HttpClient;
 
 class Client extends HttpClient {
+  /**
+   * Proper format for dates.
+   *
+   * @var string
+   */
+  const DATE_FORMAT = 'Y-m-d';
+
+  /**
+   * Proper format for dates with time.
+   *
+   * @var string
+   */
+  const DATETIME_FORMAT = 'Y-m-d\TH:i:00';
+
   // @todo - This isn't configurable upstream.
   const ENDPOINT = '/api/v1/rest';
 
@@ -223,12 +237,12 @@ class Client extends HttpClient {
       'order_status' => $order_status,
       'for_user_uuid' => $for_user_uuid,
       'due_date' => (!empty($due_date)
-        ? $due_date->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d\TH:i:00') 
+        ? $due_date->format(self::DATE_FORMAT) 
         : NULL),
       'billing_address' => array_filter($billing_address),
       'shipping_address' => array_filter($shipping_address),
       'created' => (!empty($created)
-        ? $created->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d\TH:i:00') 
+        ? $created->setTimezone(new DateTimeZone('UTC'))->format(self::DATETIME_FORMAT) 
         : NULL),
     );
 
@@ -259,7 +273,7 @@ class Client extends HttpClient {
       'payment_amount' => $payment_amount,
       'payment_details' => $payment_details,
       'created' => (!empty($created)
-        ? $created->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d\TH:i:00') 
+        ? $created->setTimezone(new DateTimeZone('UTC'))->format(self::DATETIME_FORMAT) 
         : NULL),
     );
 
@@ -292,15 +306,30 @@ class Client extends HttpClient {
    *   Price of the initial payment if purchased with installments.
    * @param array $installments
    *   Array of installment payments. Each payment should have a "due_date" and
-   *   "amount".
+   *   "amount". The due date should be an object of type DateTime.
    * @param float $total
    *   Full price of the product if purchased without installments.
    * @param string $sku
    *   SKU for the new product, only required for "product" products.
    * @param string $title
    *   Title for the new product, only required for "product" products.
+   *
+   * @return stdClass
+   *   The new product as returend by the API.
+   *
+   * @todo Accept a product object rather than all of these arguments.
    */
   function productCreate($type, $group_uuid, $role_id, $role_name, $installments_enabled, $initial_payment, $installments, $total, $sku, $title) {
+    // Iterate over all installments, setting their due dates to the appropriate
+    // format.
+    foreach ($installments as $delta => $installment) {
+      if (!($installment['due_date'] instanceof DateTime)) {
+        throw new InvalidArgumentException('Invalid argument: Installment due date must be an object of type DateTime.');
+      }
+
+      $installments[$delta]['due_date'] = $installment['due_date']->format(self::DATE_FORMAT);
+    }
+
     $params = array(
       'type' => $type,
       'group_uuid' => $group_uuid,
@@ -313,6 +342,7 @@ class Client extends HttpClient {
       'sku' => $sku,
       'title' => $title,
     );
+
     return $this->post('products', array_filter($params));
   }
 
