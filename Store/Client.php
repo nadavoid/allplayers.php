@@ -134,8 +134,15 @@ class Client extends HttpClient {
     ));
   }
 
-  function groupStoreIndex() {
-    return $this->get('group_stores');
+  /**
+   * Return the group stores.
+   *
+   * @param string $user_uuid Filter the results based on the membership of this user.
+   * @param boolean $is_admin Filter the results futher based on if user_uuid is an admin of those groups.
+   * @return type
+   */
+  function groupStoreIndex($user_uuid = '', $is_admin = FALSE) {
+    return $this->get('group_stores', array('user_uuid' => $user_uuid, 'is_admin' => $is_admin ? 1 : 0));
   }
 
   /**
