@@ -204,6 +204,20 @@ class Client extends HttpClient {
   }
 
   /**
+   * Line Items Index
+   */
+  function lineItemsIndex($originating_order_uuid = NULL, $product_uuid = NULL, $originating_product_uuid = NULL, $line_item_type = NULL, $user_uuid = NULL, $fields = NULL, $pagesize = 0, $page = 0) {
+    $params = array(
+      'originating_order_uuid' => $originating_order_uuid,
+      'originating_product_uuid' => $originating_product_uuid,
+      'line_item_type' => $line_item_type,
+      'product_uuid' => $product_uuid,
+      'user_uuid' => $user_uuid,
+    );
+
+    return $this->index('line_items', array_filter($params), $fields, $page, $pagesize);
+  }
+  /**
    * Retrieve an order
    *
    * @param string $uuid
@@ -237,19 +251,20 @@ class Client extends HttpClient {
    * @return stdClass
    *   Created object from api
    */
-  function orderCreate($user_uuid, $product_uuid, $order_status = NULL, $for_user_uuid = NULL, DateTime $due_date = NULL, $billing_address = array(), $shipping_address = array(), DateTime $created = NULL) {
+  function orderCreate($user_uuid, $product_uuid, $order_status = NULL, $for_user_uuid = NULL, DateTime $due_date = NULL, $billing_address = array(), $shipping_address = array(), $installment_plan = 0, DateTime $created = NULL) {
     $params = array(
       'user_uuid' => $user_uuid,
       'product_uuid' => $product_uuid,
       'order_status' => $order_status,
       'for_user_uuid' => $for_user_uuid,
       'due_date' => (!empty($due_date)
-        ? $due_date->format(self::DATE_FORMAT) 
+        ? $due_date->format(self::DATE_FORMAT)
         : NULL),
       'billing_address' => array_filter($billing_address),
       'shipping_address' => array_filter($shipping_address),
+      'installment_plan' => $installment_plan,
       'created' => (!empty($created)
-        ? $created->setTimezone(new DateTimeZone('UTC'))->format(self::DATETIME_FORMAT) 
+        ? $created->setTimezone(new DateTimeZone('UTC'))->format(self::DATETIME_FORMAT)
         : NULL),
     );
 
@@ -280,7 +295,7 @@ class Client extends HttpClient {
       'payment_amount' => $payment_amount,
       'payment_details' => $payment_details,
       'created' => (!empty($created)
-        ? $created->setTimezone(new DateTimeZone('UTC'))->format(self::DATETIME_FORMAT) 
+        ? $created->setTimezone(new DateTimeZone('UTC'))->format(self::DATETIME_FORMAT)
         : NULL),
     );
 
