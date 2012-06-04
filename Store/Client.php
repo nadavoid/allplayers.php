@@ -289,7 +289,7 @@ class Client extends HttpClient {
    * @return bool
    *   TRUE or string with payment instructions (for in_person payments)
    */
-  function orderAddPayment($order_uuid, $payment_type, $payment_amount, $payment_details = array()) {
+  function orderAddPayment($order_uuid, $payment_type, $payment_amount, $payment_details = array(), DateTime $created) {
     $params = array(
       'payment_type' => $payment_type,
       'payment_amount' => $payment_amount,
