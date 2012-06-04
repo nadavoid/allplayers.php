@@ -141,8 +141,12 @@ class Client extends HttpClient {
    * @param boolean $is_admin Filter the results futher based on if user_uuid is an admin of those groups.
    * @return type
    */
-  function groupStoreIndex($user_uuid = '', $is_admin = FALSE) {
-    return $this->get('group_stores', array('user_uuid' => $user_uuid, 'is_admin' => $is_admin ? 1 : 0));
+  function groupStoreIndex($user_uuid = '', $is_admin = FALSE, $accepts_payment = FALSE) {
+    return $this->get('group_stores', array(
+      'user_uuid' => $user_uuid,
+      'is_admin' => $is_admin ? 1 : 0,
+      'accepts_payment' => $accepts_payment ? 1 : 0,
+    ));
   }
 
   /**
