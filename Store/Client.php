@@ -139,6 +139,7 @@ class Client extends HttpClient {
    *
    * @param string $user_uuid Filter the results based on the membership of this user.
    * @param boolean $is_admin Filter the results futher based on if user_uuid is an admin of those groups.
+   * @param boolean $accepts_payment Filter the results futher based on if the user is an admin of a group that accepts their own payments.
    * @return type
    */
   function groupStoreIndex($user_uuid = '', $is_admin = FALSE, $accepts_payment = FALSE) {
