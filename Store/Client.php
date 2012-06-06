@@ -382,7 +382,6 @@ class Client extends HttpClient {
       }
     }
 
-
     $params = array(
       'type' => $type,
       'group_uuid' => $group_uuid,
