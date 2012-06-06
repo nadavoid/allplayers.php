@@ -369,7 +369,7 @@ class Client extends HttpClient {
    *
    * @todo Accept a product object rather than all of these arguments.
    */
-  function productCreate($type, $group_uuid, $role_id, $role_name, $installments_enabled, $initial_payment, $installments, $total, $sku, $title) {
+  function productCreate($type, $group_uuid, $role_id = NULL, $role_name = NULL, $installments_enabled = 0, $initial_payment = 0, $installments = array(), $total = 0, $sku = NULL, $title = NULL) {
     // Iterate over all installments, setting their due dates to the appropriate
     // format.
     if (!empty($installments)) {
