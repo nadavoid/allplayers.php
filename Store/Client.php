@@ -252,11 +252,13 @@ class Client extends HttpClient {
    * @param DateTime $created
    *   Created on date and time of the order. If omitted, the current date and
    *   time will be used.
+   * @param int $initial_payment_only
+   *   Whether to generate automatically the installments
    *
    * @return stdClass
    *   Created object from api
    */
-  function orderCreate($user_uuid, $product_uuid, $order_status = NULL, $for_user_uuid = NULL, DateTime $due_date = NULL, $billing_address = array(), $shipping_address = array(), $installment_plan = 0, DateTime $created = NULL) {
+  function orderCreate($user_uuid, $product_uuid, $order_status = NULL, $for_user_uuid = NULL, DateTime $due_date = NULL, $billing_address = array(), $shipping_address = array(), $installment_plan = 0, DateTime $created = NULL, $initial_payment_only = 0) {
     $params = array(
       'user_uuid' => $user_uuid,
       'product_uuid' => $product_uuid,
@@ -271,6 +273,7 @@ class Client extends HttpClient {
       'created' => (!empty($created)
         ? $created->setTimezone(new DateTimeZone('UTC'))->format(self::DATETIME_FORMAT)
         : NULL),
+      'initial_payment_only' => $initial_payment_only,
     );
 
     return $this->post('orders', array_filter($params));
@@ -307,6 +310,26 @@ class Client extends HttpClient {
     return $this->post('orders/' . $order_uuid . '/add_payment', array_filter($params));
   }
 
+  /**
+   *
+   * @param string $order_uuid
+   *   UUID of the order.
+   * @param int $series_id
+   *   Which installment to create an invoice for. Use numbers 0 through number of installments - 1.
+   * @param DateTime $created
+   *   When the invoice was created
+   * @return stdClass
+   *   Object from api
+   */
+  function orderAddInstallmentInvoice($order_uuid, $series_id, DateTime $created) {
+    $params = array(
+      'series_id' => $series_id,
+      'created' => (!empty($created)
+          ? $created->setTimezone(new DateTimeZone('UTC'))->format(self::DATETIME_FORMAT)
+          : NULL),
+    );
+    return $this->post('orders/' . $order_uuid . '/add_installment_invoice', $params);
+  }
   /**
    * @nicetohave
    * @param string $uuid
