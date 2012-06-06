@@ -349,13 +349,16 @@ class Client extends HttpClient {
   function productCreate($type, $group_uuid, $role_id, $role_name, $installments_enabled, $initial_payment, $installments, $total, $sku, $title) {
     // Iterate over all installments, setting their due dates to the appropriate
     // format.
-    foreach ($installments as $delta => $installment) {
-      if (!($installment['due_date'] instanceof DateTime)) {
-        throw new InvalidArgumentException('Invalid argument: Installment due date must be an object of type DateTime.');
-      }
+    if (!empty($installments)) {
+      foreach ($installments as $delta => $installment) {
+        if (!($installment['due_date'] instanceof DateTime)) {
+          throw new InvalidArgumentException('Invalid argument: Installment due date must be an object of type DateTime.');
+        }
 
-      $installments[$delta]['due_date'] = $installment['due_date']->format(self::DATE_FORMAT);
+        $installments[$delta]['due_date'] = $installment['due_date']->format(self::DATE_FORMAT);
+      }
     }
+
 
     $params = array(
       'type' => $type,
