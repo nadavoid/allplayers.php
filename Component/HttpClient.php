@@ -116,7 +116,7 @@ class HttpClient {
     $url = $this->urlPrefix . "/" . $path;
 
     if (!empty($query)) {
-      $url .= '?' . http_build_query($query);
+      $url .= '?' . http_build_query($query, 0, '&');
     }
 
     $this->rest->createRequest($url, $verb, NULL, $allow_redirects);
