@@ -1,6 +1,7 @@
 <?php
 namespace AllPlayers\Store;
 
+use Log;
 use DateTime;
 use DateTimeZone;
 
