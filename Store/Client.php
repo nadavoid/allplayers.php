@@ -6,6 +6,7 @@ use DateTime;
 use DateTimeZone;
 
 use AllPlayers\Component\HttpClient;
+use InvalidArgumentException;
 
 class Client extends HttpClient {
   /**
