@@ -269,8 +269,8 @@ class Client extends HttpClient {
       'due_date' => (!empty($due_date)
         ? $due_date->format(self::DATE_FORMAT)
         : NULL),
-      'billing_address' => array_filter($billing_address),
-      'shipping_address' => array_filter($shipping_address),
+      'billing_address' => empty($billing_address) ? NULL : array_filter($billing_address),
+      'shipping_address' => empty($shipping_address) ? NULL : array_filter($shipping_address),
       'installment_plan' => $installment_plan,
       'created' => (!empty($created)
         ? $created->setTimezone(new DateTimeZone('UTC'))->format(self::DATETIME_FORMAT)
