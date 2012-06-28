@@ -1,0 +1,7 @@
+{
+  "name": "AllPlayers/AllPlayers-PHP",
+  "autoload": {
+    "psr-0": { "AllPlayers": "" }
+  },
+  "target-dir": "AllPlayers"
+}
