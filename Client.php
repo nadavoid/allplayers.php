@@ -529,6 +529,44 @@ class Client extends HttpClient {
   }
 
   /**
+   * Create a notifier
+   *
+   * @param string $title
+   *   The title of the notifier node.
+   * @param string $body
+   *   The body of the notifier, which will be displayed to users.
+   * @param array $optional_config
+   *   Contains optional notifier configuration. Possible keys
+   *    $type - The type of notifier: error, warning, success, or info.
+   *    $users - An array of usernames (not UID) that the notifier is directed to.
+   *    $groups - An array of group NIDs that the notifier is directed to.
+   *    $identifier - An identifier value to uniquely identify this notifier.
+   *    $visibility - The visibility of the notifier: group members or anyone.
+   *      Only applies to notifiers in group space.
+   *    $global_notifier - Specifies if the notifier is global in either group
+   *      or user space.
+   *    $group_filter - Specifies if the notifier is directed to admins or
+   *      non-admins. Only useful if the global notifier is set to group space.
+   *
+   * @return object
+   *   Notifier node.
+   */
+  public function notifiersCreateNotifier($title, $body, $optional_config) {
+    $params = array(
+      'title' => $title,
+      'body' => $body,
+      'type' => isset($optional_config['type']) ? $optional_config['type'] : 'warning',
+      'users' => isset($optional_config['users']) ? $optional_config['users'] : array(),
+      'groups' => isset($optional_config['groups']) ? $optional_config['groups'] : array(),
+      'identifier' => isset($optional_config['identifier']) ? $optional_config['identifier'] : '',
+      'visibility' => isset($optional_config['visibility']) ? $optional_config['visibility'] : 'group members',
+      'global_notifier' => isset($optional_config['global_notifier']) ? $optional_config['global_notifier'] : NULL,
+      'group_filter' => isset($optional_config['group_filter']) ? $optional_config['group_filter'] : NULL,
+    );
+    return $this->post("notifier", array_filter($params));
+  }
+
+  /**
    * Returns a specific album's photos based on parameters
    *
    * @param int $uuid
@@ -556,7 +594,7 @@ class Client extends HttpClient {
    *  photo id that should be retrieved
    *
    * @param string $fields
-   *  Optional comma seperated list of fields to return.
+   *  Optional comma separated list of fields to return.
    */
   public function photosGetPhoto($pid, $fields = NULL) {
     //compile path
