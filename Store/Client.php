@@ -124,15 +124,18 @@ class Client extends HttpClient {
    * @param boolean $installment_plan
    *   Whether or not an installment plan should be used to purchase the
    *   product.
+   * @param integer $role_id
+   *   Role id to associate this purchase with for registration.
    *
    * @return bool
    *   TRUE if succesfully added.
    */
-  function usersCartAdd($user_uuid, $product_uuid, $for_user_uuid = NULL, $installment_plan = FALSE) {
+  function usersCartAdd($user_uuid, $product_uuid, $for_user_uuid = NULL, $installment_plan = FALSE, $role_id = NULL) {
     return $this->post('users/' . $user_uuid . '/add_to_cart', array(
       'product_uuid' => $product_uuid,
       'for_user_uuid' => $for_user_uuid,
       'installment_plan' => $installment_plan,
+      'role_id' => $role_id,
     ));
   }
 
