@@ -59,7 +59,7 @@ class Client extends HttpClient {
    * @param string $val
    *   e.g. "Chrome"
    */
-  public function addHeader ($key, $val) {
+  public function addHeader($key, $val) {
     $this->headers[$key] = $val;
   }
 
