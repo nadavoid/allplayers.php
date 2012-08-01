@@ -516,6 +516,7 @@ class Client extends HttpClient {
     if (!empty($uuid)) {
       $path .= '/' . $uuid;
     }
+
     return $this->index($path);
   }
 
