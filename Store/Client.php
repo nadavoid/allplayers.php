@@ -275,11 +275,13 @@ class Client extends HttpClient {
    *   time will be used.
    * @param int $initial_payment_only
    *   Whether to generate automatically the installments
+   * @param integer $role_id
+   *   Role id to associate this purchase with if used for registration.
    *
    * @return stdClass
    *   Created object from api
    */
-  function orderCreate($user_uuid, $product_uuid, $order_status = NULL, $for_user_uuid = NULL, DateTime $due_date = NULL, $billing_address = array(), $shipping_address = array(), $installment_plan = 0, DateTime $created = NULL, $initial_payment_only = 0) {
+  function orderCreate($user_uuid, $product_uuid, $order_status = NULL, $for_user_uuid = NULL, DateTime $due_date = NULL, $billing_address = array(), $shipping_address = array(), $installment_plan = 0, DateTime $created = NULL, $initial_payment_only = 0, $role_id = NULL) {
     $params = array(
       'user_uuid' => $user_uuid,
       'product_uuid' => $product_uuid,
@@ -295,6 +297,7 @@ class Client extends HttpClient {
         ? $created->setTimezone(new DateTimeZone('UTC'))->format(self::DATETIME_FORMAT)
         : NULL),
       'initial_payment_only' => $initial_payment_only,
+      'role_id' => $role_id,
     );
 
     return $this->post('orders', array_filter($params), $this->headers);
