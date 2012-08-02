@@ -506,15 +506,18 @@ class Client extends HttpClient {
 
   /**
    * List roles belonging to a group (group_uuid), optionally targeting a
-   * specific user (uuid).
+   * specific user (user_uuid).
    *
    * @param string $group_uuid
-   * @param string $uuid
+   *   UUID of group from which to get roles.
+   *
+   * @param string $user_uuid
+   *   UUID of user in group.
    */
-  public function groupsGetRoles($group_uuid, $uuid = NULL) {
+  public function groupsGetRoles($group_uuid, $user_uuid = NULL) {
     $path = 'groups/' . $group_uuid . '/roles';
-    if (!empty($uuid)) {
-      $path .= '/' . $uuid;
+    if (!empty($user_uuid)) {
+      $path .= '/' . $user_uuid;
     }
 
     return $this->index($path);
