@@ -140,20 +140,20 @@ class Client extends HttpClient {
    * @param boolean $installment_plan
    *   Whether or not an installment plan should be used to purchase the
    *   product.
-   * @param integer $role_id
-   *   Role id to associate this purchase with for registration.
+   * @param string $role_uuid
+   *   UUID of a role to associate this purchase with for registration.
    * @param string $sold_by_uuid
    *   UUID of the group selling the product.
    *
-   * @return bool
+   * @return boolean
    *   TRUE if succesfully added.
    */
-  function usersCartAdd($user_uuid, $product_uuid, $for_user_uuid = NULL, $installment_plan = FALSE, $role_id = NULL, $sold_by_uuid = NULL) {
+  function usersCartAdd($user_uuid, $product_uuid, $for_user_uuid = NULL, $installment_plan = FALSE, $role_uuid = NULL, $sold_by_uuid = NULL) {
     return $this->post('users/' . $user_uuid . '/add_to_cart', array(
       'product_uuid' => $product_uuid,
       'for_user_uuid' => $for_user_uuid,
       'installment_plan' => $installment_plan,
-      'role_id' => $role_id,
+      'role_uuid' => $role_uuid,
       'sold_by_uuid' => $sold_by_uuid,
     ), $this->headers);
   }
@@ -278,15 +278,15 @@ class Client extends HttpClient {
    *   time will be used.
    * @param int $initial_payment_only
    *   Whether to generate automatically the installments
-   * @param integer $role_id
-   *   Role id to associate this purchase with if used for registration.
+   * @param string $role_uuid
+   *   UUID of a role to associate this purchase with if used for registration.
    * @param string $sold_by_uuid
    *   UUID of the group selling the product.
    *
    * @return stdClass
    *   Created object from api
    */
-  function orderCreate($user_uuid, $product_uuid, $order_status = NULL, $for_user_uuid = NULL, DateTime $due_date = NULL, $billing_address = array(), $shipping_address = array(), $installment_plan = 0, DateTime $created = NULL, $initial_payment_only = 0, $role_id = NULL, $sold_by_uuid = NULL) {
+  function orderCreate($user_uuid, $product_uuid, $order_status = NULL, $for_user_uuid = NULL, DateTime $due_date = NULL, $billing_address = array(), $shipping_address = array(), $installment_plan = 0, DateTime $created = NULL, $initial_payment_only = 0, $role_uuid = NULL, $sold_by_uuid = NULL) {
     $params = array(
       'user_uuid' => $user_uuid,
       'product_uuid' => $product_uuid,
@@ -302,7 +302,7 @@ class Client extends HttpClient {
         ? $created->setTimezone(new DateTimeZone('UTC'))->format(self::DATETIME_FORMAT)
         : NULL),
       'initial_payment_only' => $initial_payment_only,
-      'role_id' => $role_id,
+      'role_uuid' => $role_uuid,
       'sold_by_uuid' => $sold_by_uuid,
     );
 
