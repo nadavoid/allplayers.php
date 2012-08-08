@@ -32,7 +32,7 @@ class Client extends HttpClient
      *
      * @var string
      */
-    public $base_url = NULL;
+    public $base_url = null;
 
     /**
      * @param string $base_url
@@ -40,7 +40,7 @@ class Client extends HttpClient
      * @param Log $logger
      *   (Optional)
      */
-    public function __construct($base_url, Log $logger = NULL)
+    public function __construct($base_url, Log $logger = null)
     {
         if (empty($base_url)) {
             throw new InvalidArgumentException('Invalid argument 1: base_url must be a base URL to the Store.');
@@ -70,11 +70,14 @@ class Client extends HttpClient
      */
     public static function getRegistrationProductTitle($group_name, $product_name, $role_name)
     {
-        return t('!role !product for !group', array(
-            '!role' => $role_name,
-            '!product' => $product_name,
-            '!group' => $group_name,
-        ));
+        return t(
+            '!role !product for !group',
+            array(
+                '!role' => $role_name,
+                '!product' => $product_name,
+                '!group' => $group_name,
+            )
+        );
     }
 
     /**
@@ -141,15 +144,19 @@ class Client extends HttpClient
      * @return boolean
      *   TRUE if succesfully added.
      */
-    public function usersCartAdd($user_uuid, $product_uuid, $for_user_uuid = NULL, $installment_plan = FALSE, $role_uuid = NULL, $sold_by_uuid = NULL)
+    public function usersCartAdd($user_uuid, $product_uuid, $for_user_uuid = null, $installment_plan = false, $role_uuid = null, $sold_by_uuid = null)
     {
-        return $this->post('users/' . $user_uuid . '/add_to_cart', array(
-            'product_uuid' => $product_uuid,
-            'for_user_uuid' => $for_user_uuid,
-            'installment_plan' => $installment_plan,
-            'role_uuid' => $role_uuid,
-            'sold_by_uuid' => $sold_by_uuid,
-        ), $this->headers);
+        return $this->post(
+            'users/' . $user_uuid . '/add_to_cart',
+            array(
+                'product_uuid' => $product_uuid,
+                'for_user_uuid' => $for_user_uuid,
+                'installment_plan' => $installment_plan,
+                'role_uuid' => $role_uuid,
+                'sold_by_uuid' => $sold_by_uuid,
+            ),
+            $this->headers
+        );
     }
 
     /**
@@ -160,13 +167,16 @@ class Client extends HttpClient
      * @param boolean $accepts_payment Filter the results futher based on if the user is an admin of a group that accepts their own payments.
      * @return type
      */
-    public function groupStoreIndex($user_uuid = '', $is_admin = FALSE, $accepts_payment = FALSE)
+    public function groupStoreIndex($user_uuid = '', $is_admin = false, $accepts_payment = false)
     {
-        return $this->get('group_stores', array(
-            'user_uuid' => $user_uuid,
-            'is_admin' => $is_admin ? 1 : 0,
-            'accepts_payment' => $accepts_payment ? 1 : 0,
-        ));
+        return $this->get(
+            'group_stores',
+            array(
+                'user_uuid' => $user_uuid,
+                'is_admin' => $is_admin ? 1 : 0,
+                'accepts_payment' => $accepts_payment ? 1 : 0,
+            )
+        );
     }
 
     /**
@@ -212,7 +222,7 @@ class Client extends HttpClient
      * @param string $uuid
      * @param boolean $admins_only
      */
-    public function groupStoreSyncUsers($uuid, $admins_only = TRUE, $og_role = NULL)
+    public function groupStoreSyncUsers($uuid, $admins_only = true, $og_role = null)
     {
         return $this->post('group_stores/' . $uuid . '/sync_users', array('admins_only' => $admins_only, 'og_role' => $og_role));
     }
@@ -226,7 +236,7 @@ class Client extends HttpClient
      * @return Array
      *   Array of product objects.
      */
-    public function groupStoreProductsIndex($group_uuid, $type = NULL)
+    public function groupStoreProductsIndex($group_uuid, $type = null)
     {
         $params = ($type) ? array('type' => $type) : array();
 
@@ -236,7 +246,7 @@ class Client extends HttpClient
     /**
      * Line Items Index
      */
-    public function lineItemsIndex($originating_order_uuid = NULL, $product_uuid = NULL, $originating_product_uuid = NULL, $line_item_type = NULL, $user_uuid = NULL, $fields = NULL, $pagesize = 0, $page = 0)
+    public function lineItemsIndex($originating_order_uuid = null, $product_uuid = null, $originating_product_uuid = null, $line_item_type = null, $user_uuid = null, $fields = null, $pagesize = 0, $page = 0)
     {
         $params = array(
             'originating_order_uuid' => $originating_order_uuid,
@@ -290,7 +300,7 @@ class Client extends HttpClient
      * @return stdClass
      *   Created object from api
      */
-    public function orderCreate($user_uuid, $product_uuid, $order_status = NULL, $for_user_uuid = NULL, DateTime $due_date = NULL, $billing_address = array(), $shipping_address = array(), $installment_plan = 0, DateTime $created = NULL, $initial_payment_only = 0, $role_uuid = NULL, $sold_by_uuid = NULL)
+    public function orderCreate($user_uuid, $product_uuid, $order_status = null, $for_user_uuid = null, DateTime $due_date = null, $billing_address = array(), $shipping_address = array(), $installment_plan = 0, DateTime $created = null, $initial_payment_only = 0, $role_uuid = null, $sold_by_uuid = null)
     {
         $params = array(
             'user_uuid' => $user_uuid,
@@ -299,13 +309,13 @@ class Client extends HttpClient
             'for_user_uuid' => $for_user_uuid,
             'due_date' => (!empty($due_date)
                 ? $due_date->format(self::DATE_FORMAT)
-                : NULL),
-            'billing_address' => empty($billing_address) ? NULL : array_filter($billing_address),
-            'shipping_address' => empty($shipping_address) ? NULL : array_filter($shipping_address),
+                : null),
+            'billing_address' => empty($billing_address) ? null : array_filter($billing_address),
+            'shipping_address' => empty($shipping_address) ? null : array_filter($shipping_address),
             'installment_plan' => $installment_plan,
             'created' => (!empty($created)
                 ? $created->setTimezone(new DateTimeZone('UTC'))->format(self::DATETIME_FORMAT)
-                : NULL),
+                : null),
             'initial_payment_only' => $initial_payment_only,
             'role_uuid' => $role_uuid,
             'sold_by_uuid' => $sold_by_uuid,
@@ -332,7 +342,7 @@ class Client extends HttpClient
      * @return bool
      *   TRUE or string with payment instructions (for in_person payments)
      */
-    public function orderAddPayment($order_uuid, $payment_type, $payment_amount, $payment_details = array(), DateTime $created)
+    public function orderAddPayment($order_uuid, $payment_type, $payment_amount, $payment_details = array(), DateTime $created = null)
     {
         $params = array(
             'payment_type' => $payment_type,
@@ -340,7 +350,7 @@ class Client extends HttpClient
             'payment_details' => $payment_details,
             'created' => (!empty($created)
                 ? $created->setTimezone(new DateTimeZone('UTC'))->format(self::DATETIME_FORMAT)
-                : NULL),
+                : null),
         );
 
         return $this->post('orders/' . $order_uuid . '/add_payment', array_filter($params));
@@ -362,8 +372,8 @@ class Client extends HttpClient
         $params = array(
             'series_id' => $series_id,
             'created' => (!empty($created)
-                    ? $created->setTimezone(new DateTimeZone('UTC'))->format(self::DATETIME_FORMAT)
-                    : NULL),
+                ? $created->setTimezone(new DateTimeZone('UTC'))->format(self::DATETIME_FORMAT)
+                : null),
         );
 
         return $this->post('orders/' . $order_uuid . '/add_installment_invoice', $params, $this->headers);
@@ -408,7 +418,7 @@ class Client extends HttpClient
      *
      * @todo Accept a product object rather than all of these arguments.
      */
-    public function productCreate($type, $group_uuid, $role_id = NULL, $role_name = NULL, $installments_enabled = 0, $initial_payment = 0, $installments = array(), $total = 0, $sku = NULL, $title = NULL)
+    public function productCreate($type, $group_uuid, $role_id = null, $role_name = null, $installments_enabled = 0, $initial_payment = 0, $installments = array(), $total = 0, $sku = null, $title = null)
     {
         // Iterate over all installments, setting their due dates to the appropriate
         // format.
@@ -502,7 +512,7 @@ class Client extends HttpClient
      * @return Array
      *   Array of payment methods.
      */
-    public function groupPaymentMethodGet($group_uuid, $method = NULL)
+    public function groupPaymentMethodGet($group_uuid, $method = null)
     {
         if (is_null($method)) {
             return $this->get('group_stores/' . $group_uuid . '/payment_methods', array(), $this->headers);
@@ -531,7 +541,7 @@ class Client extends HttpClient
      * @return bool
      *   TRUE if succesfully added.
      */
-    public function groupPayeeSet($group_uuid, $payee_uuid = NULL)
+    public function groupPayeeSet($group_uuid, $payee_uuid = null)
     {
         if (is_null($payee_uuid)) {
             return $this->post('group_stores/' . $group_uuid . '/payee');

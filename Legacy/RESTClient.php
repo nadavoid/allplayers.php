@@ -29,7 +29,7 @@ class RESTClient
         return true;
     }
 
-    public function createRequest($url, $method, $arr = null, $allow_redirects = TRUE)
+    public function createRequest($url, $method, $arr = null, $allow_redirects = true)
     {
         $this->curr_url = $url;
         $this->method = $method;
@@ -89,16 +89,16 @@ class RESTClient
     /**
      * @deprecated sessid key should be session name, not 'sessid'.
      */
-    public function addSessCookie($sessid,$session_name)
+    public function addSessCookie($sessid, $session_name)
     {
-        $this->req->addCookie("sessid",$sessid);
-//        $this->req->addCookie("session_name",$session_name);
-        $this->req->addCookie($session_name,$sessid);
+        $this->req->addCookie("sessid", $sessid);
+        // $this->req->addCookie("session_name",$session_name);
+        $this->req->addCookie($session_name, $sessid);
     }
 
-    public function addHeader ($key,$val)
+    public function addHeader ($key, $val)
     {
-        $this->req->addHeader($key,$val);
+        $this->req->addHeader($key, $val);
     }
 
     public function sendRequest()

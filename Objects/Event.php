@@ -76,12 +76,12 @@ class Event extends stdClass
             $api_data = (array) $api_data;
         }
         $date_time = Vevent::fromApi($api_data['date_time']);
-        $competitors = empty($api_data['competitors']) ? NULL : $api_data['competitors'];
-        $external_id = empty($api_data['external_id']) ? NULL : $api_data['external_id'];
+        $competitors = empty($api_data['competitors']) ? null : $api_data['competitors'];
+        $external_id = empty($api_data['external_id']) ? null : $api_data['external_id'];
         // @todo resource_ids come back as classes which should really be resource
         // properties of an event. However since we don't yet have a 'teaser'
         // schema, it'll have to wait.
-        $resource_ids = NULL;
+        $resource_ids = null;
         if (!empty($api_data['resource_ids'])) {
             $resource_ids = array();
             foreach ($api_data['resource_ids'] as $rid) {
@@ -116,7 +116,7 @@ class Event extends stdClass
      * @param string $external_id
      *   External relationship data
      */
-    public function __construct($uuid, $groups, $title, $description, $date_time, $category, $resource_ids, $competitors = NULL, $published = NULL, $external_id = NULL)
+    public function __construct($uuid, $groups, $title, $description, $date_time, $category, $resource_ids, $competitors = null, $published = null, $external_id = null)
     {
         $this->uuid = $uuid;
         $this->groups = $groups;
@@ -141,7 +141,7 @@ class Event extends stdClass
      */
     public function diff($otherEvent)
     {
-        $accuracy = TRUE;
+        $accuracy = true;
         // @todo camelcase
         $properties = get_object_vars($this);
         $simple_compare = array();

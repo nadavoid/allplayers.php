@@ -25,7 +25,7 @@ class HttpClient
      *
      * @var string
      */
-    public $urlPrefix = NULL;
+    public $urlPrefix = null;
 
     /**
      * Format string
@@ -43,7 +43,7 @@ class HttpClient
      *
      * @var RESTClient
      */
-    public $rest = NULL;
+    public $rest = null;
 
     /**
      * Control wheter or not to print debug information.
@@ -51,21 +51,21 @@ class HttpClient
      *
      * @var bool
      */
-    public $debug = FALSE;
+    public $debug = false;
 
     /**
      * Log instance to control log information generated during a request.
      *
      * @var Log
      */
-    public $logger = NULL;
+    public $logger = null;
 
     /**
      * HTTP Response code of last request.
      *
      * @var int
      */
-    public $responseCode = NULL;
+    public $responseCode = null;
 
     /**
      * Cookies to be reused between requests.
@@ -87,7 +87,7 @@ class HttpClient
      * @param Log $logger
      *   (optional)
      */
-    public function __construct($url_prefix, Log $logger = NULL)
+    public function __construct($url_prefix, Log $logger = null)
     {
         // Validate $url argument
         if (!filter_var($url_prefix, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
@@ -132,7 +132,7 @@ class HttpClient
      * @return
      *   array or object from decodeResponse().
      */
-    private function httpRequest($verb, $path, $query = array(), $params = NULL, $headers = array(), $allow_redirects = TRUE)
+    private function httpRequest($verb, $path, $query = array(), $params = null, $headers = array(), $allow_redirects = true)
     {
         $url = $this->urlPrefix . "/" . $path;
 
@@ -140,10 +140,10 @@ class HttpClient
             $url .= '?' . http_build_query($query, 0, '&');
         }
 
-        $this->rest->createRequest($url, $verb, NULL, $allow_redirects);
+        $this->rest->createRequest($url, $verb, null, $allow_redirects);
         $this->rest->setBody(json_encode($params));
-        $this->rest->addHeader("Cache-Control",'no-cache, must-revalidate, post-check=0, pre-check=0');
-        $this->rest->addHeader("Accept",'application/json');
+        $this->rest->addHeader("Cache-Control", 'no-cache, must-revalidate, post-check=0, pre-check=0');
+        $this->rest->addHeader("Accept", 'application/json');
         $this->rest->addHeader('Content-Type', 'application/json');
         $headers = array_merge($this->headers, $headers);
         foreach ($headers as $key => $value) {
@@ -158,7 +158,7 @@ class HttpClient
         $this->responseBody = $this->rest->getResponse();
         if ((int) $this->responseCode >= 400) {
             if ($this->debug) {
-                $this->logger->debug(print_r($this->rest, TRUE));
+                $this->logger->debug(print_r($this->rest, true));
             }
             $this->logger->err("HTTP $this->responseCode from $url");
             throw new ErrorException('HTTP ' . $this->responseCode . ' ' . $this->responseBody, $this->responseCode);
@@ -182,9 +182,9 @@ class HttpClient
      * @return
      *   array from process_response().
      */
-    public function get($path, $query = array(), $headers = array(), $allow_redirects = TRUE)
+    public function get($path, $query = array(), $headers = array(), $allow_redirects = true)
     {
-        return $this->httpRequest('GET', $path, $query, NULL, $headers, $allow_redirects);
+        return $this->httpRequest('GET', $path, $query, null, $headers, $allow_redirects);
     }
 
     /**
@@ -202,7 +202,7 @@ class HttpClient
      */
     public function post($path, $params = array(), $headers = array())
     {
-        return $this->httpRequest('POST', $path, NULL, $params, $headers);
+        return $this->httpRequest('POST', $path, null, $params, $headers);
     }
 
     /**
@@ -220,7 +220,7 @@ class HttpClient
      */
     public function put($path, $params = array(), $headers = array())
     {
-        return $this->httpRequest('PUT', $path, NULL, $params, $headers);
+        return $this->httpRequest('PUT', $path, null, $params, $headers);
     }
 
     /**
@@ -238,7 +238,7 @@ class HttpClient
      */
     public function delete($path, $query = array(), $headers = array())
     {
-        return $this->httpRequest('DELETE', $path, $query, NULL, $headers);
+        return $this->httpRequest('DELETE', $path, $query, null, $headers);
     }
 
     /**
@@ -252,7 +252,7 @@ class HttpClient
         switch ($this->format) {
             case 'json':
             default:
-                return json_decode($this->rest->getResponse(), FALSE);
+                return json_decode($this->rest->getResponse(), false);
         }
     }
 
@@ -304,7 +304,7 @@ class HttpClient
      * @return array
      *   Array containing the stdObjects the index lists.
      */
-    public function index($path, $query = array(), $fields = NULL, $page = 0, $page_size = 20)
+    public function index($path, $query = array(), $fields = null, $page = 0, $page_size = 20)
     {
         $query['fields'] = $fields;
         $query['page'] = $page;
@@ -331,7 +331,9 @@ class HttpClient
             // Merge into overall result.
             $results = array_merge($results, (array) $page_results);
             $query['page']++;
-        } while (count($page_results) == $query['pagesize']); // If the result count != to pagesize, we are on the last page and stop looping.
+
+            // If the result count != to pagesize, we are on the last page and stop looping.
+        } while (count($page_results) == $query['pagesize']);
 
         return $results;
     }
@@ -348,11 +350,11 @@ class HttpClient
     {
         $this->cookies[] = array('name' => $cookie_name, 'value' => $cookie);
 
-        $this->get($auth_path, array(), array(), FALSE);
+        $this->get($auth_path, array(), array(), false);
         $this->storeCookies();
     }
 
-    public function authSessionInit($username = NULL, $password = NULL)
+    public function authSessionInit($username = null, $password = null)
     {
         $this->userLogin($username, $password);
     }

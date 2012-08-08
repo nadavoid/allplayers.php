@@ -43,7 +43,7 @@ class MockClient extends Client
      */
     public function usersCartAdd($product_uuid)
     {
-        return TRUE;
+        return true;
     }
 
     public function groupStoreIndex()
@@ -121,7 +121,7 @@ class MockClient extends Client
      * @return Array
      *   Array of product objects.
      */
-    public function groupStoreProductsIndex($group_uuid, $type = NULL)
+    public function groupStoreProductsIndex($group_uuid, $type = null)
     {
         //$params = ($type) ? array('type' => $type) : array();
         //return $this->index('group_stores/' . $group_uuid . '/products', $params);

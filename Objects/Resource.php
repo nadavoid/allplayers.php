@@ -35,19 +35,19 @@ class Resource extends stdClass
         if (!is_array($api_data)) {
             $api_data = (array) $api_data;
         }
-        $availability = NULL;
+        $availability = null;
         if (!empty($api_data['availability'])) {
             $availability = array();
             foreach ($api_data['availability'] as $av_uuid => $av) {
                 $availability[$av_uuid] = Vevent::fromApi($av);
             }
         }
-        $external_id = empty($api_data['external_id']) ? NULL : $api_data['external_id'];
+        $external_id = empty($api_data['external_id']) ? null : $api_data['external_id'];
 
         return new self($api_data['uuid'], $api_data['title'], $api_data['location'], $api_data['groups'], $availability, $external_id);
     }
 
-    public function __construct($uuid, $title, $location, $groups, $availability = NULL, $external_id = NULL)
+    public function __construct($uuid, $title, $location, $groups, $availability = null, $external_id = null)
     {
         $this->uuid = $uuid;
         $this->title = $title;
@@ -106,7 +106,8 @@ class Resource extends stdClass
                     $diff_data = array();
                     $count = 0;
                     foreach ($otherResource->availability as $otherAvailability) {
-                        $date_diff = $availability->diff($otherAvailability);//RandomDate::compare($availability, $apiAvailability);
+                        // RandomDate::compare($availability, $apiAvailability);
+                        $date_diff = $availability->diff($otherAvailability);
                         if (empty($date_diff)) {
                             $success++;
                             unset($diff_data[$count]);

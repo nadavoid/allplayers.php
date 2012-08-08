@@ -30,7 +30,7 @@ class Vevent extends stdClass
         $api_data = (array) $api_data;
         if (!empty($api_data['repeat_info'])) {
             $repeat = (array) $api_data['repeat_info'];
-            $repeat['until'] = empty($repeat['until']) ? NULL : new DateTime('@' . strtotime($repeat['until']));
+            $repeat['until'] = empty($repeat['until']) ? null : new DateTime('@' . strtotime($repeat['until']));
             if (!empty($repeat['exdate'])) {
                 foreach ($repeat['exdate'] as $key => $exdate) {
                     $repeat['exdate'][$key] = new DateTime('@' . strtotime($exdate));
@@ -66,16 +66,16 @@ class Vevent extends stdClass
         $this->start = $start;
         $this->end = $end;
         if (!empty($repeat)) {
-            $this->interval = empty($repeat['interval']) ? NULL : $repeat['interval'];
-            $this->freq = empty($repeat['freq']) ? NULL : $repeat['freq'];
-            $this->until = empty($repeat['until']) ? NULL : $repeat['until'];
-            $this->byMonth = empty($repeat['bymonth']) ? NULL : $repeat['bymonth'];
-            $this->byDay = empty($repeat['byday']) ? NULL : $repeat['byday'];
-            $this->byMonthDay = empty($repeat['bymonthday']) ? NULL : $repeat['bymonthday'];
-            $this->exDate = empty($repeat['exdate']) ? NULL : $repeat['exdate'];
-            $this->rDate = empty($repeat['rdate']) ? NULL : $repeat['rdate'];
+            $this->interval = empty($repeat['interval']) ? null : $repeat['interval'];
+            $this->freq = empty($repeat['freq']) ? null : $repeat['freq'];
+            $this->until = empty($repeat['until']) ? null : $repeat['until'];
+            $this->byMonth = empty($repeat['bymonth']) ? null : $repeat['bymonth'];
+            $this->byDay = empty($repeat['byday']) ? null : $repeat['byday'];
+            $this->byMonthDay = empty($repeat['bymonthday']) ? null : $repeat['bymonthday'];
+            $this->exDate = empty($repeat['exdate']) ? null : $repeat['exdate'];
+            $this->rDate = empty($repeat['rdate']) ? null : $repeat['rdate'];
         }
-        $this->setTimezone(NULL, 'UTC');
+        $this->setTimezone(null, 'UTC');
     }
 
     /**
@@ -87,7 +87,7 @@ class Vevent extends stdClass
      * @param string $timezone_name
      *   The name of the timezone the dates need to be converted to
      */
-    public function setTimezone($properties = NULL, $timezone_name = 'UTC')
+    public function setTimezone($properties = null, $timezone_name = 'UTC')
     {
         // If there are properties modify, else run the whole object.
         if (empty($properties)) {
@@ -107,19 +107,19 @@ class Vevent extends stdClass
      */
     public function buildSettings()
     {
-        $this->setTimezone(NULL, 'UTC');
+        $this->setTimezone(null, 'UTC');
         $vevent = array(
             'start' => $this->toApi($this->start),
             'end' => $this->toApi($this->end),
             'repeat' => array(
-                'interval' => empty($this->interval) ? NULL : $this->interval,
-                'freq' => empty($this->freq) ? NULL : $this->freq,
-                'until' => empty($this->until) ? NULL : $this->toApi($this->until, 'until'),
-                'bymonth' => empty($this->byMonth) ? NULL : $this->byMonth,
-                'byday' => empty($this->byDay) ? NULL : $this->byDay,
-                'bymonthday' => empty($this->byMonthDay) ? NULL : $this->byMonthDay,
-                'exdate' => empty($this->exDate) ? NULL : $this->toApi($this->exDate, 'exdate'),
-                'rdate' => empty($this->rDate) ? NULL : $this->toApi($this->rDate, 'rdate'),
+                'interval' => empty($this->interval) ? null : $this->interval,
+                'freq' => empty($this->freq) ? null : $this->freq,
+                'until' => empty($this->until) ? null : $this->toApi($this->until, 'until'),
+                'bymonth' => empty($this->byMonth) ? null : $this->byMonth,
+                'byday' => empty($this->byDay) ? null : $this->byDay,
+                'bymonthday' => empty($this->byMonthDay) ? null : $this->byMonthDay,
+                'exdate' => empty($this->exDate) ? null : $this->toApi($this->exDate, 'exdate'),
+                'rdate' => empty($this->rDate) ? null : $this->toApi($this->rDate, 'rdate'),
             ),
         );
         $vevent['repeat'] = array_filter($vevent['repeat']);
