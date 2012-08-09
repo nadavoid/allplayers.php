@@ -114,7 +114,7 @@ class Resource extends stdClass
             $diff['groups'] = 'groups';
         }
         // randomResource's availability should match at least one.
-        // @todo fix.
+        // TODO: Fix.
         if (!empty($this->availability)) {
             foreach ($this->availability as $availability) {
                 // Availability could actually be empty here, in case an update decided to clear it out.

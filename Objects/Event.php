@@ -71,6 +71,10 @@ class Event extends stdClass
      *   Data returned from api.
      *
      * @return Event
+     *
+     * @todo Resource_ids come back as classes which should really be resource
+     * properties of an event. However since we don't yet have a 'teaser'
+     * schema, it will have to wait.
      */
     public static function fromApi($api_data)
     {
@@ -80,9 +84,7 @@ class Event extends stdClass
         $date_time = Vevent::fromApi($api_data['date_time']);
         $competitors = empty($api_data['competitors']) ? null : $api_data['competitors'];
         $external_id = empty($api_data['external_id']) ? null : $api_data['external_id'];
-        // @todo resource_ids come back as classes which should really be resource
-        // properties of an event. However since we don't yet have a 'teaser'
-        // schema, it'll have to wait.
+
         $resource_ids = null;
         if (!empty($api_data['resource_ids'])) {
             $resource_ids = array();
@@ -161,11 +163,12 @@ class Event extends stdClass
      *
      * @return array
      *   Returns a diff array.
+     *
+     * @todo Fix camel case.
      */
     public function diff($otherEvent)
     {
         $accuracy = true;
-        // @todo camelcase
         $properties = get_object_vars($this);
         $simple_compare = array();
         $diff = array();

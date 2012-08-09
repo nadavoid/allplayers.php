@@ -80,10 +80,11 @@ class MockClient extends Client
 
     /**
      * @musthave
-     * @todo - Get information about a group store if it exists.
      *
      * @param string $uuid
      *   Group UUID string.
+     *
+     * @todo Get information about a group store if it exists.
      */
     public function groupStoreGet($uuid)
     {
@@ -99,11 +100,13 @@ class MockClient extends Client
 
     /**
      * @musthave
-     * @todo - Initialize and enable a group store now.
-     * @todo - This will require different privileges? Or should we just expect the current user to have that?
      *
      * @param string $uuid
      *   Group UUID string.
+     *
+     * @todo Initialize and enable a group store now.
+     * @todo This will require different privileges? Or should we just expect
+     * the current user to have that?
      */
     public function groupStoreActivate($uuid)
     {
@@ -118,13 +121,14 @@ class MockClient extends Client
 
     /**
      * @musthave
-     * @todo - List group products, optionally by type.
      *
      * @param string $group_uuid
      * @param string $type
      *
      * @return array
      *   Array of product objects.
+     *
+     * @todo List group products, optionally by type.
      */
     public function groupStoreProductsIndex($group_uuid, $type = null)
     {

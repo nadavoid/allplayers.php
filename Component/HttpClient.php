@@ -8,8 +8,8 @@ use InvalidArgumentException;
 use Log;
 
 /**
- * @todo - Replace dependency on Request-bcm and RESTClient with HttpRequest2
- *   or similar.
+ * @todo Replace dependency on Request-bcm and RESTClient with HttpRequest2
+ * or similar.
  */
 require_once dirname(__FILE__) . '/../Legacy/Request-bcm.php';
 require_once dirname(__FILE__) . '/../Legacy/RESTClient.php';
@@ -28,19 +28,21 @@ class HttpClient
 
     /**
      * Format string.
-     * @todo - Make this a mime-type.
      *
      * @var string
+     *
+     * @todo Make this a mime-type.
      */
     public $format = 'json';
 
     /**
      * RESTClient object.
      *
-     * @todo
-     * @deprecated - This should be wrapped/extended by the main class.
+     * @deprecated
      *
      * @var RESTClient
+     * 
+     * @todo This should be wrapped/extended by the main class.
      */
     public $rest = null;
 
@@ -85,6 +87,8 @@ class HttpClient
      *   e.g. https://www.allplayers.com/api/v1/rest.
      * @param Log $logger
      *   (optional)
+     *
+     * @todo Just extend a REST Class in the future.
      */
     public function __construct($url_prefix, Log $logger = null)
     {
@@ -96,7 +100,7 @@ class HttpClient
         }
         $this->urlPrefix = $url_prefix;
 
-        // @todo - Just extend a REST Class in the future.
+        // TODO: Just extend a REST Class in the future.
         $this->rest = new RESTClient();
 
         // Handle $logger argument.
@@ -186,11 +190,13 @@ class HttpClient
      * @param array $query
      *   Items to append to path as a query string.
      * @param array $headers
-     *   Additional headers. @todo - this isn't used.
+     *   Additional headers.
      * @param boolean $allow_redirects
      *
      * @return array
      *   Array from process_response().
+     *
+     * @todo $headers is not used.
      */
     public function get($path, $query = array(), $headers = array(), $allow_redirects = true)
     {
@@ -205,10 +211,12 @@ class HttpClient
      * @param array $params
      *   Parameters to post.
      * @param array $headers
-     *   Additional headers. @todo - this isn't used.
+     *   Additional headers.
      *
      * @return array
      *   Array from process_response().
+     *
+     * @todo $headers is not used.
      */
     public function post($path, $params = array(), $headers = array())
     {
@@ -223,10 +231,12 @@ class HttpClient
      * @param array $params
      *   Parameters to put.
      * @param array $headers
-     *   Additional headers. @todo - this isn't used.
+     *   Additional headers.
      *
      * @return array
      *   Array from process_response().
+     *
+     * @todo $headers is not used.
      */
     public function put($path, $params = array(), $headers = array())
     {
@@ -241,10 +251,12 @@ class HttpClient
      * @param array $query
      *   Items to append to path as a query string.
      * @param array $headers
-     *   Additional headers. @todo - this isn't used.
+     *   Additional headers.
      *
      * @return
      *   Array from process_response().
+     *
+     * @todo $headers is not used.
      */
     public function delete($path, $query = array(), $headers = array())
     {
@@ -282,7 +294,7 @@ class HttpClient
     /**
      * Store cookies from last response.
      *
-     * @todo - Review proper cookie handling.
+     * @todo Review proper cookie handling.
      */
     public function storeCookies()
     {
@@ -349,12 +361,13 @@ class HttpClient
     }
 
     /**
-     * @todo - Choose a path to hit.
      * $_COOKIE['CHOCOLATECHIP']
      *
      * @param string $cookie_name
      * @param string $cookie
      * @param string $auth_path
+     *
+     * @todo Choose a path to hit.
      */
     public function ssoSessionInit($cookie_name, $cookie, $auth_path = 'group_stores')
     {

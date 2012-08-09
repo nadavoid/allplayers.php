@@ -107,6 +107,8 @@ class Vevent extends stdClass
 
     /**
      * Builds an array of dates for api creation.
+     *
+     * @todo Do this as a callback to array_filter.
      */
     public function buildSettings()
     {
@@ -126,7 +128,7 @@ class Vevent extends stdClass
             ),
         );
         $vevent['repeat'] = array_filter($vevent['repeat']);
-        // @todo do this as a callback to array_filter
+
         return array_filter($vevent);
     }
 
@@ -186,8 +188,10 @@ class Vevent extends stdClass
      * Compares Two Vevents.
      *
      * @param Vevent $otherVevent
+     *
+     * @todo Use dateTime -> diff for diffing.
+     * @todo Fix camel case.
      */
-    // @todo - use dateTime -> diff for diffing
     public function diff($otherVevent)
     {
         $diff = array();
@@ -204,7 +208,7 @@ class Vevent extends stdClass
         if (empty($this->repeat) || empty($otherVevent->repeat)) {
             return $diff;
         }
-        // @todo fix camelcase
+
         $self_r_keys = array_keys($this->repeat);
         $other_r_keys = array_keys($otherVevent->repeat);
         $repeat_diff = array_diff($self_r_keys, $other_r_keys);

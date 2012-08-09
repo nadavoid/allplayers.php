@@ -28,8 +28,9 @@ class Client extends HttpClient
      * Endpoint for the REST API.
      *
      * @var string
+     *
+     * @todo This isn't configurable upstream.
      */
-    // @todo - This isn't configurable upstream.
     const ENDPOINT = '/api/v1/rest';
 
     /**
@@ -249,10 +250,11 @@ class Client extends HttpClient
 
     /**
      * @musthave
-     * @todo - Get information about a group store if it exists.
      *
      * @param string $uuid
      *   Group UUID string.
+     *
+     * @todo Get information about a group store if it exists.
      */
     public function groupStoreGet($uuid)
     {
@@ -261,12 +263,13 @@ class Client extends HttpClient
 
     /**
      * @musthave
-     * @todo - Initialize and enable a group store now.
-     * @todo - This will require different privileges? Or should we just expect
-     * the current user to have that?
      *
      * @param string $uuid
      *   Group UUID string.
+     *
+     * @todo Initialize and enable a group store now.
+     * @todo This will require different privileges? Or should we just expect
+     * the current user to have that?
      */
     public function groupStoreActivate($uuid)
     {
@@ -293,13 +296,14 @@ class Client extends HttpClient
 
     /**
      * @musthave
-     * @todo - List group products, optionally by type.
      *
      * @param string $group_uuid
      * @param string $type
      *
      * @return array
      *   Array of product objects.
+     *
+     * @todo List group products, optionally by type.
      */
     public function groupStoreProductsIndex($group_uuid, $type = null)
     {

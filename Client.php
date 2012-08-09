@@ -99,6 +99,8 @@ class Client extends HttpClient
      *
      * @return stdClass
      *   User object.
+     *
+     * @todo Create seperate Exception for captcha to simplify this code.
      */
     public function userCreateUser($firstname, $lastname, $email, $gender, $birthday, $password = null)
     {
@@ -121,7 +123,6 @@ class Client extends HttpClient
             }
 
             // Retry if captcha error.
-            // @todo - Create seperate Exception for captcha to simplify this code.
             if (isset($messageParts->captcha_error)) {
                 $answer = $this->captchaSolve($messageParts->captcha_error->captcha_problem);
                 $headers = array(
@@ -845,8 +846,9 @@ class Client extends HttpClient
      *
      * @return stdClass
      *   Resource object.
+     *
+     * @todo Why is this taking a node?
      */
-    // @todo why is this taking a node?
     public function resourceCreate($groups, $title, $location, $availability = null, $external_id = null)
     {
         $params = array(
@@ -879,8 +881,9 @@ class Client extends HttpClient
      *
      * @return stdClass
      *   Resource object.
+     *
+     * @todo Why is this taking a node?
      */
-    // @todo why is this taking a node?
     public function resourceUpdate(
         $uuid,
         $groups = null,
@@ -910,10 +913,11 @@ class Client extends HttpClient
      *   passed, the API will default to type = "thread".
      * @param string $fields
      *   Optional comma seperated list of fields to return.
+     *
+     * @todo $type = null or thread?
      */
     public function messagesGetMessageOrThread($id, $type = null, $fields = null)
     {
-        // @todo type = null or thread?
         //compile path
         $path = 'messages/' . $id;
         $query = array();
@@ -939,10 +943,11 @@ class Client extends HttpClient
      *   How many messages to retrieve per page.
      * @param integer $page
      *   Page of items to return, up to 20 per page.
+     *
+     * @todo $type = null or thread?
      */
     public function messagesGetBox($box = null, $fields = null, $pagesize = null, $page = 0)
     {
-        // @todo type = null or thread?
         //compile path
         $path = 'messages';
         $parameters = array();
