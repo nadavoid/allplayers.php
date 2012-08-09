@@ -28,8 +28,6 @@ class Resource extends stdClass
      */
     public $uuid;
 
-    /*Public Functions*/
-
     /**
      * @param stdClass|array $api_data
      *
@@ -113,12 +111,14 @@ class Resource extends stdClass
         } else {
             $diff['groups'] = 'groups';
         }
-        // randomResource's availability should match at least one.
+
+        // $otherResource's availability should match at least one.
         // TODO: Fix.
         if (!empty($this->availability)) {
             foreach ($this->availability as $availability) {
-                // Availability could actually be empty here, in case an update decided to clear it out.
-                // So to prevent failure we won't run if empty
+                // Availability could actually be empty here, in case an update
+                // decided to clear it out. To prevent failure we will not run
+                // if empty.
                 if (!empty($availability)) {
                     $success = 0;
                     $diff_data = array();

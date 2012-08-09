@@ -194,8 +194,8 @@ class Event extends stdClass
                         $found = 0;
                         if ($this_competitor['uuid'] == $api_competitor['uuid']) {
                             $found = 1;
-                            // UUID matches, that means if there are labels or scores those
-                            // should match too.
+                            // UUID matches, that means if there are labels or
+                            // scores those should match too.
                             $labels_dont_match = (
                                 !empty($this_competitor['label'])
                                 && $this_competitor['label'] != $api_competitor['label']
@@ -207,25 +207,30 @@ class Event extends stdClass
                             if ($labels_dont_match || $scores_dont_match) {
                                 $found = 0;
                             }
+
                             // Break the loop.
                             break;
                         }
                     }
+
                     // Check complete, check found and throw error by diff.
                     if ($found == 0) {
                         $diff['competitiors'][] = $this_competitor['uuid'];
                     }
                 }
             }
+
             // Make sure to unset title from $simple_compare or it will fail.
             unset($simple_compare['title']);
         }
+
         foreach ($simple_compare as $name => $value) {
             if (empty($otherEvent->$name) || $otherEvent->$name != $value) {
                 $diff[$name] = $value;
                 break;
             }
         }
+
         if (!empty($this->groups)) {
             foreach ($this->groups as $group) {
                 if (!in_array($group, $otherEvent->groups)) {
@@ -245,6 +250,7 @@ class Event extends stdClass
                 }
             }
         }
+
         // Last but definitely not least, compare the dates.
         $diff_date = $this->date_time->diff($otherEvent->date_time);
         if (!empty($diff_date)) {

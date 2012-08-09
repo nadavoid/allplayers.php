@@ -14,7 +14,6 @@ class MockClient extends Client
      */
     public function usersCartIndex()
     {
-        //return $this->index('users/mycart');
         $return = array();
 
         $line_item = new stdClass();
@@ -88,7 +87,6 @@ class MockClient extends Client
      */
     public function groupStoreGet($uuid)
     {
-        //$this->get('group_stores/' . $uuid);
         $group = new stdClass();
         $group->store_status = '1';
         $group->title = 'The test group';
@@ -110,7 +108,6 @@ class MockClient extends Client
      */
     public function groupStoreActivate($uuid)
     {
-        //return $this->post('group_stores', array('uuid' => $uuid));
         $group_store = new stdClass();
         $group_store->uuid = $uuid;
         $group_store->title = 'The test group';
@@ -132,8 +129,6 @@ class MockClient extends Client
      */
     public function groupStoreProductsIndex($group_uuid, $type = null)
     {
-        //$params = ($type) ? array('type' => $type) : array();
-        //return $this->index('group_stores/' . $group_uuid . '/products', $params);
         return array(
             $this->productGet(0),
             $this->productGet(1),
@@ -146,7 +141,6 @@ class MockClient extends Client
      */
     public function productGet($uuid)
     {
-        //return $this->get('products/' . $uuid);
         $product = new stdClass();
         if ($uuid == 1) {
             $product->title = 'Registration for Player';

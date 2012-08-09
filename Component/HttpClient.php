@@ -92,7 +92,7 @@ class HttpClient
      */
     public function __construct($url_prefix, Log $logger = null)
     {
-        // Validate $url argument
+        // Validate $url argument.
         if (!filter_var($url_prefix, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
             throw new InvalidArgumentException(
                 'Invalid argument 1: url_prefix must be a full URL, including path to an API endpoint.'
@@ -332,7 +332,8 @@ class HttpClient
         $query['page'] = $page;
         $query['pagesize'] = (isset($page_size)) ? $page_size : 20;
 
-        // "limit" was renamed to "pagesize", maintain both for backwards compatibility.
+        // "limit" was renamed to "pagesize", maintain both for backwards
+        // compatibility.
         $query['limit'] = $query['pagesize'];
 
         // Page specified, get only that page.
@@ -348,13 +349,15 @@ class HttpClient
 
         // Index loop.
         do {
-            // Get current page
+            // Get current page.
             $page_results = $this->get($path, array_filter($query));
+
             // Merge into overall result.
             $results = array_merge($results, (array) $page_results);
             $query['page']++;
 
-            // If the result count != to pagesize, we are on the last page and stop looping.
+            // If the result count != to pagesize, we are on the last page and
+            // stop looping.
         } while (count($page_results) == $query['pagesize']);
 
         return $results;

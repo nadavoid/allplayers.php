@@ -538,8 +538,8 @@ class Client extends HttpClient
         $sku = null,
         $title = null
     ) {
-        // Iterate over all installments, setting their due dates to the appropriate
-        // format.
+        // Iterate over all installments, setting their due dates to the
+        // appropriate format.
         if (!empty($installments)) {
             foreach ($installments as $delta => $installment) {
                 if (!($installment['due_date'] instanceof DateTime)) {

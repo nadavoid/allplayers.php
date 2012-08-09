@@ -20,7 +20,6 @@ class Vevent extends stdClass
      */
     public $end;
 
-    /* Public Functions */
     /**
      * From Api.
      *
@@ -96,7 +95,9 @@ class Vevent extends stdClass
         if (empty($properties)) {
             $properties = get_object_vars($this);
         }
-        // We have properties ready, either entire object or just select few.    Convert em.
+
+        // We have properties ready, either entire object or just select few.
+        // Convert them.
         $timezone = new DateTimeZone($timezone_name);
         foreach ($properties as $prop_name => $prop) {
             if (!empty($prop) && ($prop instanceof DateTime || is_array($prop))) {
@@ -131,10 +132,6 @@ class Vevent extends stdClass
 
         return array_filter($vevent);
     }
-
-    /**
-     * Private Methods
-     */
 
     /**
      * Sets a timezone for a given property.
@@ -217,7 +214,7 @@ class Vevent extends stdClass
         }
         foreach ($self_r_keys as $key) {
             if (is_array($this->repeat[$key])) {
-                // recurse down
+                // Recurse down.
                 foreach ($this->repeat[$key] as $r_item) {
                     if (empty($otherVevent->repeat[$key]) || !in_array($r_item, $otherVevent->repeat[$key])) {
                         $diff[$key][]= $r_item;
