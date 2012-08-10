@@ -75,6 +75,11 @@ class HttpClient {
   public $cookies = array();
 
   /**
+   * Headers variable for setting on an http request
+   */
+  protected $headers = array();
+
+  /**
    * @param string $url
    *   e.g. https://www.allplayers.com/api/v1/rest
    * @param Log $logger
@@ -102,6 +107,17 @@ class HttpClient {
   }
 
   /**
+   * Adds headers to the http request.
+   * @param string $key
+   *   e.g. "User-Agent"
+   * @param string $val
+   *   e.g. "Chrome"
+   */
+  public function addHeader($key, $val) {
+    $this->headers[$key] = $val;
+  }
+
+  /**
    * Handle all RESTful requests.
    *
    * @param string $verb
@@ -124,6 +140,7 @@ class HttpClient {
     $this->rest->addHeader("Cache-Control",'no-cache, must-revalidate, post-check=0, pre-check=0');
     $this->rest->addHeader("Accept",'application/json');
     $this->rest->addHeader('Content-Type', 'application/json');
+    $headers = array_merge($this->headers, $headers);
     foreach ($headers as $key => $value) {
       $this->rest->addHeader($key, $value);
     }

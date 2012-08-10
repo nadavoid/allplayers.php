@@ -34,11 +34,6 @@ class Client extends HttpClient {
   public $base_url = NULL;
 
   /**
-   * Headers variable for setting on an http request
-   */
-  private $headers = array();
-
-  /**
    * @param string $base_url
    *   e.g. "https://store.mercury.dev.allplayers.com"
    * @param Log $logger
@@ -50,17 +45,6 @@ class Client extends HttpClient {
     }
     $this->base_url = $base_url;
     parent::__construct($base_url . self::ENDPOINT, $logger);
-  }
-
-  /**
-   * Adds headers to the http request.
-   * @param string $key
-   *   e.g. "User-Agent"
-   * @param string $val
-   *   e.g. "Chrome"
-   */
-  public function addHeader($key, $val) {
-    $this->headers[$key] = $val;
   }
 
   /**
@@ -192,7 +176,7 @@ class Client extends HttpClient {
    *   Group UUID string.
    */
   function groupStoreGet($uuid) {
-    return $this->get('group_stores/' . $uuid, array(), $this->headers);
+    return $this->get('group_stores/' . $uuid);
   }
 
   /**
@@ -205,7 +189,7 @@ class Client extends HttpClient {
    *   Group UUID string.
    */
   function groupStoreActivate($uuid) {
-    return $this->post('group_stores', array('uuid' => $uuid), $this->headers);
+    return $this->post('group_stores', array('uuid' => $uuid));
   }
 
   /**
@@ -215,7 +199,7 @@ class Client extends HttpClient {
    * @param boolean $admins_only
    */
   function groupStoreSyncUsers($uuid, $admins_only = TRUE, $og_role = NULL) {
-    return $this->post('group_stores/' . $uuid . '/sync_users', array('admins_only' => $admins_only, 'og_role' => $og_role), $this->headers);
+    return $this->post('group_stores/' . $uuid . '/sync_users', array('admins_only' => $admins_only, 'og_role' => $og_role));
   }
 
   /**
@@ -253,7 +237,7 @@ class Client extends HttpClient {
    *   The uuid of the order to get
    */
   function orderGet($order_uuid) {
-    return $this->get('orders/' . $uuid, array(), $this->headers);
+    return $this->get('orders/' . $uuid);
   }
 
   /**
@@ -306,7 +290,7 @@ class Client extends HttpClient {
       'sold_by_uuid' => $sold_by_uuid,
     );
 
-    return $this->post('orders', array_filter($params), $this->headers);
+    return $this->post('orders', array_filter($params));
   }
 
   /**
@@ -337,7 +321,7 @@ class Client extends HttpClient {
         : NULL),
     );
 
-    return $this->post('orders/' . $order_uuid . '/add_payment', array_filter($params), $this->headers);
+    return $this->post('orders/' . $order_uuid . '/add_payment', array_filter($params));
   }
 
   /**
@@ -365,7 +349,7 @@ class Client extends HttpClient {
    * @param string $uuid
    */
   function productGet($uuid) {
-    return $this->get('products/' . $uuid, array(), $this->headers);
+    return $this->get('products/' . $uuid);
   }
 
 
@@ -425,7 +409,7 @@ class Client extends HttpClient {
       'title' => $title,
     );
 
-    return $this->post('products', array_filter($params), $this->headers);
+    return $this->post('products', array_filter($params));
   }
 
   /**
@@ -476,7 +460,7 @@ class Client extends HttpClient {
    *   Array of payment methods.
    */
   function groupPaymentMethodSet($group_uuid, $method, $method_info = array()) {
-    return $this->post('group_stores/' . $group_uuid . '/payment_method', array('method' => $method, 'method_info' => $method_info), $this->headers);
+    return $this->post('group_stores/' . $group_uuid . '/payment_method', array('method' => $method, 'method_info' => $method_info));
   }
 
   /**
@@ -492,7 +476,7 @@ class Client extends HttpClient {
       return $this->get('group_stores/' . $group_uuid . '/payment_methods', array(), $this->headers);
     }
     else {
-      return $this->get('group_stores/' . $group_uuid . '/payment_methods', array('method' => $method), $this->headers);
+      return $this->get('group_stores/' . $group_uuid . '/payment_methods', array('method' => $method));
     }
   }
 
@@ -503,7 +487,7 @@ class Client extends HttpClient {
    * @return string The groups payee uuid.
    */
   function groupPayeeGet($group_uuid) {
-    return $this->get('group_stores/' . $group_uuid . '/payee', array(), $this->headers);
+    return $this->get('group_stores/' . $group_uuid . '/payee');
   }
 
   /**
@@ -517,10 +501,10 @@ class Client extends HttpClient {
    */
   function groupPayeeSet($group_uuid, $payee_uuid = NULL) {
     if (is_null($payee_uuid)) {
-      return $this->post('group_stores/' . $group_uuid . '/payee', array(), $this->headers);
+      return $this->post('group_stores/' . $group_uuid . '/payee');
     }
     else {
-      return $this->post('group_stores/' . $group_uuid . '/payee', array('payee_uuid' => $payee_uuid), $this->headers);
+      return $this->post('group_stores/' . $group_uuid . '/payee', array('payee_uuid' => $payee_uuid));
     }
   }
 
