@@ -44,7 +44,14 @@ class Resource extends stdClass
         }
         $external_id = empty($api_data['external_id']) ? null : $api_data['external_id'];
 
-        return new self($api_data['uuid'], $api_data['title'], $api_data['location'], $api_data['groups'], $availability, $external_id);
+        return new self(
+            $api_data['uuid'],
+            $api_data['title'],
+            $api_data['location'],
+            $api_data['groups'],
+            $availability,
+            $external_id
+        );
     }
 
     public function __construct($uuid, $title, $location, $groups, $availability = null, $external_id = null)

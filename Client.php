@@ -61,8 +61,16 @@ class Client extends HttpClient
      * @return object
      *   user object
      */
-    public function userUpdateUser($uuid, $firstname, $lastname, $email, $gender, $birthday, $password = null, $last_modified = null)
-    {
+    public function userUpdateUser(
+        $uuid,
+        $firstname,
+        $lastname,
+        $email,
+        $gender,
+        $birthday,
+        $password = null,
+        $last_modified = null
+    ) {
         $params = array(
             'firstname' => $firstname,
             'lastname' => $lastname,
@@ -633,9 +641,15 @@ class Client extends HttpClient
             'users' => isset($optional_config['users']) ? $optional_config['users'] : array(),
             'groups' => isset($optional_config['groups']) ? $optional_config['groups'] : array(),
             'identifier' => isset($optional_config['identifier']) ? $optional_config['identifier'] : '',
-            'visibility' => isset($optional_config['visibility']) ? $optional_config['visibility'] : 'group members',
-            'global_notifier' => isset($optional_config['global_notifier']) ? $optional_config['global_notifier'] : null,
-            'group_filter' => isset($optional_config['group_filter']) ? $optional_config['group_filter'] : null,
+            'visibility' => isset($optional_config['visibility'])
+                ? $optional_config['visibility']
+                : 'group members',
+            'global_notifier' => isset($optional_config['global_notifier'])
+                ? $optional_config['global_notifier']
+                : null,
+            'group_filter' => isset($optional_config['group_filter'])
+                ? $optional_config['group_filter']
+                : null,
         );
 
         return $this->post("notifier", array_filter($params));
@@ -726,8 +740,17 @@ class Client extends HttpClient
      * @return object
      *   user object
      */
-    public function eventsCreateEvent($groups, $title, $description, $date_time, $category = null, $resources = null, $competitors = null, $published = true, $external_id = null)
-    {
+    public function eventsCreateEvent(
+        $groups,
+        $title,
+        $description,
+        $date_time,
+        $category = null,
+        $resources = null,
+        $competitors = null,
+        $published = true,
+        $external_id = null
+    ) {
         $params = array(
             'groups' => $groups,
             'title' => $title,
@@ -786,8 +809,18 @@ class Client extends HttpClient
      * @return object
      *   user object
      */
-    public function eventsUpdateEvent($event_uuid, $groups = null, $title = null, $description = null, $date_time = null, $category = null, $resources = null, $competitors = null, $published = true, $external_id = null)
-    {
+    public function eventsUpdateEvent(
+        $event_uuid,
+        $groups = null,
+        $title = null,
+        $description = null,
+        $date_time = null,
+        $category = null,
+        $resources = null,
+        $competitors = null,
+        $published = true,
+        $external_id = null
+    ) {
         $params = array(
             'groups' => $groups,
             'title' => $title,
@@ -896,8 +929,14 @@ class Client extends HttpClient
      *   resource object
      */
     // @todo why is this taking a node?
-    public function resourceUpdate($uuid, $groups = null, $title = null, $location = null, $availability = null, $external_id = null)
-    {
+    public function resourceUpdate(
+        $uuid,
+        $groups = null,
+        $title = null,
+        $location = null,
+        $availability = null,
+        $external_id = null
+    ) {
         $params = array(
             'groups' => $groups,
             'title' => $title,

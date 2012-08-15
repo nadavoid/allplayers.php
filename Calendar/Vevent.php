@@ -165,7 +165,9 @@ class Vevent extends stdClass
      */
     protected function toApi($date, $type = '')
     {
-        $format = ($type == 'until' || $type == 'exdate' || $type == 'rdate') ? 'Y-m-d\T\0\0\:\0\0\:\0\0' : 'Y-m-d\TH:i:\0\0';
+        $format = ($type == 'until' || $type == 'exdate' || $type == 'rdate')
+            ? 'Y-m-d\T\0\0\:\0\0\:\0\0'
+            : 'Y-m-d\TH:i:\0\0';
         $return = array();
         if (!is_array($date)) {
             $date = array($date);

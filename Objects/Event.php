@@ -89,7 +89,18 @@ class Event extends stdClass
             }
         }
 
-        return new self($api_data['uuid'], $api_data['groups'], $api_data['title'], $api_data['description'], $date_time,    $api_data['category'], $resource_ids, $competitors, $api_data['published'], $external_id);
+        return new self(
+            $api_data['uuid'],
+            $api_data['groups'],
+            $api_data['title'],
+            $api_data['description'],
+            $date_time,
+            $api_data['category'],
+            $resource_ids,
+            $competitors,
+            $api_data['published'],
+            $external_id
+        );
     }
 
     /**
@@ -116,8 +127,18 @@ class Event extends stdClass
      * @param string $external_id
      *   External relationship data
      */
-    public function __construct($uuid, $groups, $title, $description, $date_time, $category, $resource_ids, $competitors = null, $published = null, $external_id = null)
-    {
+    public function __construct(
+        $uuid,
+        $groups,
+        $title,
+        $description,
+        $date_time,
+        $category,
+        $resource_ids,
+        $competitors = null,
+        $published = null,
+        $external_id = null
+    ) {
         $this->uuid = $uuid;
         $this->groups = $groups;
         $this->title = $title;
@@ -170,8 +191,14 @@ class Event extends stdClass
                             $found = 1;
                             // UUID matches, that means if there are labels or scores those
                             // should match too.
-                            $labels_dont_match = !empty($this_competitor['label']) && $this_competitor['label'] != $api_competitor['label'];
-                            $scores_dont_match = !empty($this_competitor['score']) && $this_competitor['score'] != $api_competitor['score'];
+                            $labels_dont_match = (
+                                !empty($this_competitor['label'])
+                                && $this_competitor['label'] != $api_competitor['label']
+                            );
+                            $scores_dont_match = (
+                                !empty($this_competitor['score'])
+                                && $this_competitor['score'] != $api_competitor['score']
+                            );
                             if ($labels_dont_match || $scores_dont_match) {
                                 $found = 0;
                             }

@@ -368,7 +368,10 @@ class HTTP_Request
 
         // Proxy authentication (see bug #5913)
         if (!empty($this->_proxy_user)) {
-            $this->addHeader('Proxy-Authorization', 'Basic ' . base64_encode($this->_proxy_user . ':' . $this->_proxy_pass));
+            $this->addHeader(
+                'Proxy-Authorization',
+                'Basic ' . base64_encode($this->_proxy_user . ':' . $this->_proxy_pass)
+            );
         }
 
         // Use gzip encoding if possible
@@ -391,7 +394,11 @@ class HTTP_Request
         } elseif ($this->_url->port != 443 AND strcasecmp($this->_url->protocol, 'https') == 0) {
             $host = $this->_url->host . ':' . $this->_url->port;
 
-        } elseif ($this->_url->port == 443 AND strcasecmp($this->_url->protocol, 'https') == 0 AND strpos($this->_url->url, ':443') !== false) {
+        } elseif (
+            $this->_url->port == 443 
+            AND strcasecmp($this->_url->protocol, 'https') == 0
+            AND strpos($this->_url->url, ':443') !== false
+        ) {
             $host = $this->_url->host . ':' . $this->_url->port;
 
         } else {
@@ -1064,7 +1071,8 @@ if ( ( HTTP_REQUEST_METHOD_PUT == $this->_method  )
                         $type     = is_array($value['type'])? @$value['type'][$key]: $value['type'];
 
                         $postdata .= '--' . $boundary . "\r\n";
-                        $postdata .= 'Content-Disposition: form-data; name="' . $varname . '"; filename="' . $basename . '"';
+                        $postdata .= 'Content-Disposition: form-data; ';
+                        $postdata .= 'name="' . $varname . '"; filename="' . $basename . '"';
                         $postdata .= "\r\nContent-Type: " . $type;
                         $postdata .= "\r\n\r\n" . $data . "\r\n";
                     }

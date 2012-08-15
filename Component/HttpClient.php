@@ -91,7 +91,9 @@ class HttpClient
     {
         // Validate $url argument
         if (!filter_var($url_prefix, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
-            throw new InvalidArgumentException('Invalid argument 1: url_prefix must be a full URL, including path to an API endpoint.');
+            throw new InvalidArgumentException(
+                'Invalid argument 1: url_prefix must be a full URL, including path to an API endpoint.'
+            );
         }
         $this->urlPrefix = $url_prefix;
 
@@ -132,8 +134,14 @@ class HttpClient
      * @return
      *   array or object from decodeResponse().
      */
-    private function httpRequest($verb, $path, $query = array(), $params = null, $headers = array(), $allow_redirects = true)
-    {
+    private function httpRequest(
+        $verb,
+        $path,
+        $query = array(),
+        $params = null,
+        $headers = array(),
+        $allow_redirects = true
+    ) {
         $url = $this->urlPrefix . "/" . $path;
 
         if (!empty($query)) {
