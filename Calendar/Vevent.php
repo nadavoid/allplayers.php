@@ -22,7 +22,11 @@ class Vevent extends stdClass
 
     /* Public Functions */
     /**
-     * From Api
+     * From Api.
+     *
+     * @param stdClass|array
+     *
+     * @return Vevent
      */
     public static function fromApi($api_data)
     {
@@ -50,16 +54,16 @@ class Vevent extends stdClass
     }
 
     /**
-     * APDateInst Constructor
+     * APDateInst Constructor.
      *
      * @param DateTime $start
-     *   A DateTime object specifying the start of the event. Will be converted to UTC
-     *
+     *   A DateTime object specifying the start of the event. Will be converted
+     *   to UTC.
      * @param DateTime $end
-     *   A DateTime object specifying the end of the event. Will be converted to UTC
-     *
+     *   A DateTime object specifying the end of the event. Will be converted to
+     *   UTC.
      * @param array $repeat
-     *   An array of repeat settings and DateTime objects
+     *   An array of repeat settings and DateTime objects.
      */
     public function __construct(DateTime $start, DateTime $end, $repeat = array())
     {
@@ -82,10 +86,9 @@ class Vevent extends stdClass
      * Sets timezone for the whole object.
      *
      * @param array $properties
-     *   array of DateTime objects and the keys must be valid property names
-     *
+     *   Array of DateTime objects and the keys must be valid property names.
      * @param string $timezone_name
-     *   The name of the timezone the dates need to be converted to
+     *   The name of the timezone the dates need to be converted to.
      */
     public function setTimezone($properties = null, $timezone_name = 'UTC')
     {
@@ -103,7 +106,7 @@ class Vevent extends stdClass
     }
 
     /**
-     * Builds an array of dates for api creation
+     * Builds an array of dates for api creation.
      */
     public function buildSettings()
     {
@@ -132,13 +135,13 @@ class Vevent extends stdClass
      */
 
     /**
-     * Sets a timezone for a given property
+     * Sets a timezone for a given property.
      *
      * @param mixed $property
-     *   an object property that can either be an array of DateTime objects or a single one
-     *
-     * @param string $timezone
-     *   A DateTimeZone object to convert the dates to
+     *   An object property that can either be an array of DateTime objects or a
+     *   single one.
+     * @param DateTimeZone $timezone
+     *   A DateTimeZone object to convert the dates to.
      *
      * @return mixed
      *   Either an array of DateTime objects or a single one.
@@ -161,7 +164,7 @@ class Vevent extends stdClass
     }
 
     /**
-     * Formats an array of date objects for API input
+     * Formats an array of date objects for API input.
      */
     protected function toApi($date, $type = '')
     {
@@ -180,7 +183,9 @@ class Vevent extends stdClass
     }
 
     /**
-     * Compares Two Vevents
+     * Compares Two Vevents.
+     *
+     * @param Vevent $otherVevent
      */
     // @todo - use dateTime -> diff for diffing
     public function diff($otherVevent)

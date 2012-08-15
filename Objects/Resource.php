@@ -30,6 +30,11 @@ class Resource extends stdClass
 
     /*Public Functions*/
 
+    /**
+     * @param stdClass|array $api_data
+     *
+     * @return Resource
+     */
     public static function fromApi($api_data)
     {
         if (!is_array($api_data)) {
@@ -54,6 +59,16 @@ class Resource extends stdClass
         );
     }
 
+    /**
+     * Constructor.
+     *
+     * @param string $uuid
+     * @param string $title
+     * @param array $location
+     * @param array $groups
+     * @param array $availability
+     * @param string $external_id
+     */
     public function __construct($uuid, $title, $location, $groups, $availability = null, $external_id = null)
     {
         $this->uuid = $uuid;
@@ -65,17 +80,13 @@ class Resource extends stdClass
     }
 
     /**
-     * Compares two resources against each other
+     * Compares two resources against each other.
      *
-     * @param $randomResource
-     *   The resource being compared
-     * @param $apiResource
-     *   The resource being compared to
-     * @param $av_settings
-     *   The settings that determenied how availabilities were constructed
+     * @param Resource $otherResource
+     *   The resource being compared.
      *
      * @return array
-     *   Returns a diff array
+     *   Returns a diff array.
      */
     public function diff($otherResource)
     {

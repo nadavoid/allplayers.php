@@ -24,6 +24,11 @@ class Client extends HttpClient
      */
     const DATETIME_FORMAT = 'Y-m-d\TH:i:00';
 
+    /**
+     * Endpoint for the REST API.
+     *
+     * @var string
+     */
     // @todo - This isn't configurable upstream.
     const ENDPOINT = '/api/v1/rest';
 
@@ -35,8 +40,15 @@ class Client extends HttpClient
     public $base_url = null;
 
     /**
+     * Headers variable for setting on an http request.
+     *
+     * @var arrary
+     */
+    private $headers = array();
+
+    /**
      * @param string $base_url
-     *   e.g. "https://store.mercury.dev.allplayers.com"
+     *   e.g. "https://store.mercury.dev.allplayers.com".
      * @param Log $logger
      *   (Optional)
      */
@@ -50,11 +62,28 @@ class Client extends HttpClient
     }
 
     /**
+     * Adds headers to the http request.
+     *
+     * @param string $key
+     *   e.g. "User-Agent".
+     * @param string $val
+     *   e.g. "Chrome".
+     */
+    public function addHeader($key, $val)
+    {
+        $this->headers[$key] = $val;
+    }
+
+    /**
      * Returns the registration SKU.
      *
-     * @param object $group_name The name of the group.
-     * @param number $role_id The role ID for the registration.
-     * @return string The SKU for the registration product.
+     * @param string $group_name
+     *   The name of the group.
+     * @param integer $role_id
+     *   The role ID for the registration.
+     *
+     * @return string
+     *   The SKU for the registration product.
      */
     public static function getRegistrationSKU($group_name, $role_id)
     {
@@ -74,9 +103,15 @@ class Client extends HttpClient
     /**
      * Returns the group registration product title.
      *
-     * @param object $group_name The name of the group.
-     * @param string $role_name The role name.
-     * @return string The title of the registration product.
+     * @param string $group_name
+     *   The name of the group.
+     * @param string $product_name
+     *   The name of the product.
+     * @param string $role_name
+     *   The role name.
+     *
+     * @return string
+     *   The title of the registration product.
      */
     public static function getRegistrationProductTitle($group_name, $product_name, $role_name)
     {
@@ -124,7 +159,7 @@ class Client extends HttpClient
      * @param string $user_uuid
      *   User UUID string.
      *
-     * @return Array
+     * @return array
      *   Array of cart line item objects.
      */
     public function usersCartIndex($user_uuid)
@@ -178,10 +213,16 @@ class Client extends HttpClient
     /**
      * Return the group stores.
      *
-     * @param string $user_uuid Filter the results based on the membership of this user.
-     * @param boolean $is_admin Filter the results futher based on if user_uuid is an admin of those groups.
-     * @param boolean $accepts_payment Filter the results futher based on if the user is an admin of a group that accepts their own payments.
-     * @return type
+     * @param string $user_uuid
+     *   Filter the results based on the membership of this user.
+     * @param boolean $is_admin 
+     *   Filter the results futher based on if user_uuid is an admin of those
+     *   groups.
+     * @param boolean $accepts_payment
+     *   Filter the results futher based on if the user is an admin of a group
+     *   that accepts their own payments.
+     *
+     * @return array
      */
     public function groupStoreIndex($user_uuid = '', $is_admin = false, $accepts_payment = false)
     {
@@ -237,6 +278,7 @@ class Client extends HttpClient
      *
      * @param string $uuid
      * @param boolean $admins_only
+     * @param string $og_role
      */
     public function groupStoreSyncUsers($uuid, $admins_only = true, $og_role = null)
     {
@@ -255,7 +297,8 @@ class Client extends HttpClient
      *
      * @param string $group_uuid
      * @param string $type
-     * @return Array
+     *
+     * @return array
      *   Array of product objects.
      */
     public function groupStoreProductsIndex($group_uuid, $type = null)
@@ -266,7 +309,16 @@ class Client extends HttpClient
     }
 
     /**
-     * Line Items Index
+     * Line Items Index.
+     * 
+     * @param string $originating_order_uuid
+     * @param string $product_uuid
+     * @param string $originating_product_uuid
+     * @param string $line_item_type
+     * @param string $user_uuid
+     * @param string $fields
+     * @param integer $pagesize
+     * @param integer $page
      */
     public function lineItemsIndex(
         $originating_order_uuid = null,
@@ -290,10 +342,10 @@ class Client extends HttpClient
     }
 
     /**
-     * Retrieve an order
+     * Retrieve an order.
      *
      * @param string $uuid
-     *   The uuid of the order to get
+     *   The uuid of the order to get.
      */
     public function orderGet($order_uuid)
     {
@@ -301,34 +353,38 @@ class Client extends HttpClient
     }
 
     /**
-     * Create an order
+     * Create an order.
      *
      * @param string $user_uuid
-     *   UUID of the owner of the order
+     *   UUID of the owner of the order.
      * @param string $product_uuid
-     *   UUID of the product to place in the order
+     *   UUID of the product to place in the order.
      * @param string $order_status
-     *   Status of new order (invoice, shopping cart, etc)
+     *   Status of new order (invoice, shopping cart, etc).
      * @param string $for_user_uuid
-     *   UUID of the user the product is being purchased for
+     *   UUID of the user the product is being purchased for.
      * @param DateTime $due_date
      *   Due date. Applicable only if order_status is invoice.
      * @param array $billing_address
      *   Billing address of the user.
      * @param array $shipping_address
      *   Shipping address of the user.
+     * @param integer $installment_plan
+     *   Whether or not an installment plan should be used to purchase the
+     *   product.
      * @param DateTime $created
      *   Created on date and time of the order. If omitted, the current date and
      *   time will be used.
-     * @param int $initial_payment_only
-     *   Whether to generate automatically the installments
+     * @param integer $initial_payment_only
+     *   Whether to generate automatically the installments.
      * @param string $role_uuid
-     *   UUID of a role to associate this purchase with if used for registration.
+     *   UUID of a role to associate this purchase with if used for
+     *   registration.
      * @param string $sold_by_uuid
      *   UUID of the group selling the product.
      *
      * @return stdClass
-     *   Created object from api
+     *   Created object from api.
      */
     public function orderCreate(
         $user_uuid,
@@ -370,19 +426,19 @@ class Client extends HttpClient
      * Add Payment to an order.
      *
      * @param string $order_uuid
-     *   UUID of the order the payment is getting applied to
+     *   UUID of the order the payment is getting applied to.
      * @param string $payment_type
-     *   What type of payment is it (in_person, ad_hoc, etc)
+     *   What type of payment is it (in_person, ad_hoc, etc).
      * @param string $payment_amount
-     *   The amount of the payment
+     *   The amount of the payment.
      * @param array $payment_details
-     *   Additional details for payment_type
+     *   Additional details for payment_type.
      * @param DateTime $created
      *   Created on date and time of the payment. If omitted, the current date and
      *   time will be used.
      *
-     * @return bool
-     *   TRUE or string with payment instructions (for in_person payments)
+     * @return boolean|string
+     *   TRUE or string with payment instructions (for in_person payments).
      */
     public function orderAddPayment(
         $order_uuid,
@@ -404,15 +460,16 @@ class Client extends HttpClient
     }
 
     /**
-     *
      * @param string $order_uuid
      *   UUID of the order.
-     * @param int $series_id
-     *   Which installment to create an invoice for. Use numbers 0 through number of installments - 1.
+     * @param integer $series_id
+     *   Which installment to create an invoice for. Use numbers 0 through
+     *   number of installments - 1.
      * @param DateTime $created
-     *   When the invoice was created
+     *   When the invoice was created.
+     *
      * @return stdClass
-     *   Object from api
+     *   Object from api.
      */
     public function orderAddInstallmentInvoice($order_uuid, $series_id, DateTime $created)
     {
@@ -436,7 +493,7 @@ class Client extends HttpClient
     }
 
     /**
-     * Create a product in a group
+     * Create a product in a group.
      *
      * @param string $type
      *   The type of product to be created.
@@ -451,8 +508,8 @@ class Client extends HttpClient
      * @param float $initial_payment
      *   Price of the initial payment if purchased with installments.
      * @param array $installments
-     *   Array of installment payments. Each payment should have a "due_date" and
-     *   "amount". The due date should be an object of type DateTime.
+     *   Array of installment payments. Each payment should have a "due_date"
+     *   and "amount". The due date should be an object of type DateTime.
      * @param float $total
      *   Full price of the product if purchased without installments.
      * @param string $sku
@@ -522,9 +579,9 @@ class Client extends HttpClient
      * Login via user endpoint. (Overriding)
      *
      * @param string $user
-     *   username
+     *   Username.
      * @param string $pass
-     *   password
+     *   Password.
      */
     public function userLogin($user, $pass)
     {
@@ -541,6 +598,7 @@ class Client extends HttpClient
      *
      * @param string $uuid
      *   UUID of the group with a group store.
+     *
      * @return string
      *   HTML embed snip. Requires JS on the client.
      */
@@ -555,7 +613,8 @@ class Client extends HttpClient
      * @param string $group_uuid
      * @param string $method
      * @param array $method_info
-     * @return Array
+     *
+     * @return array
      *   Array of payment methods.
      */
     public function groupPaymentMethodSet($group_uuid, $method, $method_info = array())
@@ -574,7 +633,8 @@ class Client extends HttpClient
      *
      * @param string $group_uuid
      * @param string $method
-     * @return Array
+     *
+     * @return array
      *   Array of payment methods.
      */
     public function groupPaymentMethodGet($group_uuid, $method = null)
@@ -597,7 +657,9 @@ class Client extends HttpClient
      * Get the group payee.
      *
      * @param string $group_uuid
-     * @return string The groups payee uuid.
+     *
+     * @return string
+     *   The group's payee uuid.
      */
     public function groupPayeeGet($group_uuid)
     {
@@ -610,7 +672,8 @@ class Client extends HttpClient
      * @param string $group_uuid
      * @param string $payee_uuid
      *   If not set, then use own payment configuration.
-     * @return bool
+     *
+     * @return boolean
      *   TRUE if succesfully added.
      */
     public function groupPayeeSet($group_uuid, $payee_uuid = null)

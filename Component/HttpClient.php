@@ -20,15 +20,14 @@ require_once dirname(__FILE__) . '/../Legacy/RESTClient.php';
 class HttpClient
 {
     /**
-     * AllPlayers.com endpoint URL.
-     *   e.g. https://www.allplayers.com/api/v1/rest
+     * AllPlayers.com endpoint URL. e.g. https://www.allplayers.com/api/v1/rest.
      *
      * @var string
      */
     public $urlPrefix = null;
 
     /**
-     * Format string
+     * Format string.
      * @todo - Make this a mime-type.
      *
      * @var string
@@ -46,8 +45,8 @@ class HttpClient
     public $rest = null;
 
     /**
-     * Control wheter or not to print debug information.
-     * Use with care, may dump sensetive information.
+     * Control wheter or not to print debug information. Use with care, may dump
+     * sensetive information.
      *
      * @var bool
      */
@@ -83,7 +82,7 @@ class HttpClient
 
     /**
      * @param string $url
-     *   e.g. https://www.allplayers.com/api/v1/rest
+     *   e.g. https://www.allplayers.com/api/v1/rest.
      * @param Log $logger
      *   (optional)
      */
@@ -131,8 +130,10 @@ class HttpClient
      * @param array $query
      * @param mixed $params
      * @param array $headers
-     * @return
-     *   array or object from decodeResponse().
+     * @param boolean $allow_redirects
+     *
+     * @return array|stdClass
+     *   Array or object from decodeResponse().
      */
     private function httpRequest(
         $verb,
@@ -186,9 +187,10 @@ class HttpClient
      *   Items to append to path as a query string.
      * @param array $headers
      *   Additional headers. @todo - this isn't used.
+     * @param boolean $allow_redirects
      *
-     * @return
-     *   array from process_response().
+     * @return array
+     *   Array from process_response().
      */
     public function get($path, $query = array(), $headers = array(), $allow_redirects = true)
     {
@@ -201,12 +203,12 @@ class HttpClient
      * @param string $path
      *   Path to append to base to form the URI.
      * @param array $params
-     *   Parameters to
+     *   Parameters to post.
      * @param array $headers
      *   Additional headers. @todo - this isn't used.
      *
-     * @return
-     *   array from process_response().
+     * @return array
+     *   Array from process_response().
      */
     public function post($path, $params = array(), $headers = array())
     {
@@ -219,12 +221,12 @@ class HttpClient
      * @param string $path
      *   Path to append to base to form the URI.
      * @param array $params
-     *   Parameters to
+     *   Parameters to put.
      * @param array $headers
      *   Additional headers. @todo - this isn't used.
      *
-     * @return
-     *   array from process_response().
+     * @return array
+     *   Array from process_response().
      */
     public function put($path, $params = array(), $headers = array())
     {
@@ -242,7 +244,7 @@ class HttpClient
      *   Additional headers. @todo - this isn't used.
      *
      * @return
-     *   array from process_response().
+     *   Array from process_response().
      */
     public function delete($path, $query = array(), $headers = array())
     {
@@ -293,18 +295,18 @@ class HttpClient
      * @param string $path
      *   Relative path to the endpoint. (e.g. /users).
      * @param array $query
-     *   (Optional) URL Query parameters.    Many endpoints take filters in
+     *   (Optional) URL Query parameters. Many endpoints take filters in 
      *   'parameters' array.
      * @param string $fields
-     *   (Optional) Specify fields you'd like the resource to return
-     *   (e.g. title, status).
+     *   (Optional) Specify fields you'd like the resource to return (e.g.
+     *   title, status).
      * @param integer|string $page
      *   (Optional) Numeric page number or '*' to fetch all pages. Default to 0.
      *   NOTE: The '*' parameter is a simple helper for basic CLI usage, using
      *   this loop is not recommended as it could easily cause a timeout or
      *   out-of-memory error.
      * @param integer $page_size
-     *   (Optional) Limit the number of results returned per page.    If not set,
+     *   (Optional) Limit the number of results returned per page. If not set,
      *   then we default to 20.
      *   NOTE: This does not limit the overall return set when using the '*'
      *   page parameter.
@@ -362,6 +364,10 @@ class HttpClient
         $this->storeCookies();
     }
 
+    /**
+     * @param string $username
+     * @param string $password
+     */
     public function authSessionInit($username = null, $password = null)
     {
         $this->userLogin($username, $password);

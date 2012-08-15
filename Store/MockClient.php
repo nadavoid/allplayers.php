@@ -1,13 +1,15 @@
 <?php
 namespace AllPlayers\Store;
 
+use stdClass;
+
 class MockClient extends Client
 {
     /**
      * @nicetohave
      * Line items in the cart services users cart.
      *
-     * @return Array
+     * @return array
      *   Array of cart line item objects.
      */
     public function usersCartIndex()
@@ -15,7 +17,7 @@ class MockClient extends Client
         //return $this->index('users/mycart');
         $return = array();
 
-        $line_item = new \stdClass();
+        $line_item = new stdClass();
         $line_item->quantity = 2;
         $line_item->title = 'Foo';
         $line_item->unit_price = '$100.00';
@@ -23,7 +25,7 @@ class MockClient extends Client
         $line_item->group_name = 'Test Group';
         $return[] = $line_item;
 
-        $line_item = new \stdClass();
+        $line_item = new stdClass();
         $line_item->quantity = 1;
         $line_item->title = 'Bar';
         $line_item->unit_price = '$50.00';
@@ -38,7 +40,9 @@ class MockClient extends Client
      * @musthave
      * Add items to the services users cart.
      *
-     * @return bool
+     * @param string $product_uuid
+     *
+     * @return boolean
      *   TRUE if succesfully added.
      */
     public function usersCartAdd($product_uuid)
@@ -50,21 +54,21 @@ class MockClient extends Client
     {
         $return = array();
 
-        $group = new \stdClass();
+        $group = new stdClass();
         $group->uuid = '1234';
         $group->store_status = '0';
         $group->title = 'Test Title';
         $group->uri = $this->base_url . '/something/' . $group->uuid;
         $return[] = $group;
 
-        $group = new \stdClass();
+        $group = new stdClass();
         $group->uuid = '2222';
         $group->store_status = '0';
         $group->title = 'Inactive Store';
         $group->uri = $this->base_url . '/something/' . $group->uuid;
         $return[] = $group;
 
-        $group = new \stdClass();
+        $group = new stdClass();
         $group->uuid = '3334';
         $group->store_status = '1';
         $group->title = 'Another Test Store';
@@ -84,7 +88,7 @@ class MockClient extends Client
     public function groupStoreGet($uuid)
     {
         //$this->get('group_stores/' . $uuid);
-        $group = new \stdClass();
+        $group = new stdClass();
         $group->store_status = '1';
         $group->title = 'The test group';
         $group->uri = $this->base_url . '/something/' . $uuid;
@@ -104,7 +108,7 @@ class MockClient extends Client
     public function groupStoreActivate($uuid)
     {
         //return $this->post('group_stores', array('uuid' => $uuid));
-        $group_store = new \stdClass();
+        $group_store = new stdClass();
         $group_store->uuid = $uuid;
         $group_store->title = 'The test group';
         $group_store->uri = $this->base_url.'/store/1';
@@ -116,9 +120,10 @@ class MockClient extends Client
      * @musthave
      * @todo - List group products, optionally by type.
      *
-     * @param unknown_type $group_uuid
-     * @param unknown_type $type
-     * @return Array
+     * @param string $group_uuid
+     * @param string $type
+     *
+     * @return array
      *   Array of product objects.
      */
     public function groupStoreProductsIndex($group_uuid, $type = null)
@@ -133,12 +138,12 @@ class MockClient extends Client
 
     /**
      * @nicetohave
-     * @param unknown_type $uuid
+     * @param string $uuid
      */
     public function productGet($uuid)
     {
         //return $this->get('products/' . $uuid);
-        $product = new \stdClass();
+        $product = new stdClass();
         if ($uuid == 1) {
             $product->title = 'Registration for Player';
             $product->uuid = '11cf8960-ef54-11e0-be50-0800200c9a66';

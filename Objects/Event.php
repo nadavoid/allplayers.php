@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Handles event objects within the AllPlayers API
+ * Handles event objects within the AllPlayers API.
  */
 
 namespace AllPlayers\Objects;
@@ -65,10 +65,12 @@ class Event extends stdClass
     public $external_id;
 
     /**
-     * Takes event data from api and creates new self
+     * Takes event data from api and creates new self.
      *
-     * @param array $api_data
-     *   Data returned from api
+     * @param stdClass|array $api_data
+     *   Data returned from api.
+     *
+     * @return Event
      */
     public static function fromApi($api_data)
     {
@@ -104,7 +106,7 @@ class Event extends stdClass
     }
 
     /**
-     * Constructs new self from passed parameters
+     * Constructs new self from passed parameters.
      *
      * @param string $uuid
      *   Event uuid.
@@ -113,19 +115,19 @@ class Event extends stdClass
      * @param string $title
      *   Event title.
      * @param string $description
-     *   Event description
+     *   Event description.
      * @param array $date_time
-     *   Event date_time
+     *   Event date_time.
      * @param string $category
-     *   Event category
+     *   Event category.
      * @param array $resource_ids
-     *   Array of resources this event is using
+     *   Array of resources this event is using.
      * @param array $competitors
-     *   Array of competitor groups and their information
-     * @param bool $published
-     *   Whether this event is published
+     *   Array of competitor groups and their information.
+     * @param boolean $published
+     *   Whether this event is published.
      * @param string $external_id
-     *   External relationship data
+     *   External relationship data.
      */
     public function __construct(
         $uuid,
@@ -152,13 +154,13 @@ class Event extends stdClass
     }
 
     /**
-     * Compares two objects against each other
+     * Compares two objects against each other.
      *
      * @param Event $otherEvent
-     *   object retrieved from API
+     *   Object retrieved from API.
      *
      * @return array
-     *   Returns a diff array
+     *   Returns a diff array.
      */
     public function diff($otherEvent)
     {
