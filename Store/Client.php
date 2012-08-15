@@ -41,13 +41,6 @@ class Client extends HttpClient
     public $base_url = null;
 
     /**
-     * Headers variable for setting on an http request.
-     *
-     * @var arrary
-     */
-    private $headers = array();
-
-    /**
      * @param string $base_url
      *   e.g. "https://store.mercury.dev.allplayers.com".
      * @param Log $logger
@@ -60,19 +53,6 @@ class Client extends HttpClient
         }
         $this->base_url = $base_url;
         parent::__construct($base_url . self::ENDPOINT, $logger);
-    }
-
-    /**
-     * Adds headers to the http request.
-     *
-     * @param string $key
-     *   e.g. "User-Agent".
-     * @param string $val
-     *   e.g. "Chrome".
-     */
-    public function addHeader($key, $val)
-    {
-        $this->headers[$key] = $val;
     }
 
     /**
