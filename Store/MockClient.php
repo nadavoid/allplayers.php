@@ -57,21 +57,21 @@ class MockClient extends Client
         $group->uuid = '1234';
         $group->store_status = '0';
         $group->title = 'Test Title';
-        $group->uri = $this->base_url . '/something/' . $group->uuid;
+        $group->uri = "$this->base_url/something/$group->uuid";
         $return[] = $group;
 
         $group = new stdClass();
         $group->uuid = '2222';
         $group->store_status = '0';
         $group->title = 'Inactive Store';
-        $group->uri = $this->base_url . '/something/' . $group->uuid;
+        $group->uri = "$this->base_url/something/$group->uuid";
         $return[] = $group;
 
         $group = new stdClass();
         $group->uuid = '3334';
         $group->store_status = '1';
         $group->title = 'Another Test Store';
-        $group->uri = $this->base_url . '/something/' . $group->uuid;
+        $group->uri = "$this->base_url/something/$group->uuid";
         $return[] = $group;
 
         return $return;
@@ -90,7 +90,7 @@ class MockClient extends Client
         $group = new stdClass();
         $group->store_status = '1';
         $group->title = 'The test group';
-        $group->uri = $this->base_url . '/something/' . $uuid;
+        $group->uri = "$this->base_url/something/$uuid";
         $group->uuid = $uuid;
 
         return $group;
@@ -164,7 +164,7 @@ class MockClient extends Client
             $product->roleName = 'Coach';
             $product->title = 'Registration for Coach';
             $product->type = 'registration_fee';
-            $product->uri = $this->base_url . '/something/' . $uuid;
+            $product->uri = "$this->base_url/something/$uuid";
             $product->uuid = '275e7cf0-ef54-11e0-be50-0800200c9a66';
         }
 

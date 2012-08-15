@@ -147,7 +147,7 @@ class HttpClient
         $headers = array(),
         $allow_redirects = true
     ) {
-        $url = $this->urlPrefix . "/" . $path;
+        $url = "$this->urlPrefix/$path";
 
         if (!empty($query)) {
             $url .= '?' . http_build_query($query, 0, '&');
@@ -155,8 +155,8 @@ class HttpClient
 
         $this->rest->createRequest($url, $verb, null, $allow_redirects);
         $this->rest->setBody(json_encode($params));
-        $this->rest->addHeader("Cache-Control", 'no-cache, must-revalidate, post-check=0, pre-check=0');
-        $this->rest->addHeader("Accept", 'application/json');
+        $this->rest->addHeader('Cache-Control', 'no-cache, must-revalidate, post-check=0, pre-check=0');
+        $this->rest->addHeader('Accept', 'application/json');
         $this->rest->addHeader('Content-Type', 'application/json');
         $headers = array_merge($this->headers, $headers);
         foreach ($headers as $key => $value) {
@@ -174,7 +174,7 @@ class HttpClient
                 $this->logger->debug(print_r($this->rest, true));
             }
             $this->logger->err("HTTP $this->responseCode from $url");
-            throw new ErrorException('HTTP ' . $this->responseCode . ' ' . $this->responseBody, $this->responseCode);
+            throw new ErrorException("HTTP $this->responseCode $this->responseBody", $this->responseCode);
         }
 
         $this->logger->info("HTTP $this->responseCode from $url");
