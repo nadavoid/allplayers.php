@@ -16,12 +16,12 @@ abstract class User extends stdClass {
   /**
    * @var string
    */
-  public $first_name;
+  public $firstname;
 
   /**
    * @var string
    */
-  public $last_name;
+  public $lastname;
 
   /**
    * @var string
@@ -31,5 +31,5 @@ abstract class User extends stdClass {
   /**
    * @var DateTime
    */
-  public $birthdate;
+  public $birthday;
 }
