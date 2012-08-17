@@ -6,18 +6,11 @@ use Guzzle\Service\Client;
 use Guzzle\Service\Inspector;
 use Guzzle\Service\Description\ServiceDescription;
 use Guzzle\Http\Plugin\CurlAuthPlugin;
+use Guzzle\Http\Plugin\OauthPlugin;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class AllPlayersClient extends Client
-{
-    /**
-    * @var string Username
-    */
-    protected $username;
+class AllPlayersClient extends Client {
 
-    /**
-     * @var string Password
-     */
-    protected $password;
     /**
      * Factory method to create a new AllPlayersClient.
      *
@@ -26,22 +19,26 @@ class AllPlayersClient extends Client
      *
      * @return AllPlayersClient
      */
-    public static function factory($config = array())
-    {
+    public static function factory($config = array()) {
         $default = array(
+            'auth' => 'basic',
             'base_url' => '{scheme}://{host}/api/v{version}/rest',
             'scheme' => 'https',
             'host' => 'www.allplayers.com',
             'version' => '1'
         );
-        $required = array('username', 'password', 'base_url');
+        $required = array('base_url');
         $config = Inspector::prepareConfig($config, $default, $required);
-
-        $client = new self(
-            $config->get('base_url'),
-            $config->get('username'),
-            $config->get('password')
-        );
+        $auth_method = $config->get('auth');
+        switch ($auth_method) {
+            case 'basic':
+                $auth = new CurlAuthPlugin($config->get('username'), $config->get('password'));
+                break;
+            case 'oauth':
+                $auth = new OauthPlugin($config->get('oauth'));
+                break;
+        }
+        $client = new self($config->get('base_url'), $auth);
         $client->setConfig($config);
         return $client;
     }
@@ -50,16 +47,13 @@ class AllPlayersClient extends Client
      * Client constructor
      *
      * @param string $baseUrl Base URL of the web service
-     * @param string $username API username
-     * @param string $password API password
+     * @param object $auth  Authentication object
      */
-    public function __construct($baseUrl, $username, $password) {
+    public function __construct($baseUrl, EventSubscriberInterface $auth) {
         parent::__construct($baseUrl);
-        $this->username = $username;
-        $this->password = $password;
-        $authPlugin = new CurlAuthPlugin($this->username, $this->password);
 
         // Add the auth plugin to the client object
-        $this->addSubscriber($authPlugin);
+        $this->addSubscriber($auth);
     }
+
 }
