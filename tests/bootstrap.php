@@ -37,7 +37,7 @@ Guzzle\Tests\GuzzleTestCase::setMockBasePath(__DIR__ . DIRECTORY_SEPARATOR . 'mo
 require_once 'Objects/User.php';
 require_once 'User/Fixtures/RandomUser.php';
 
-Guzzle\Tests\GuzzleTestCase::setServiceBuilder(Guzzle\Service\Builder\ServiceBuilder::factory(array(
+$service_builder = Guzzle\Tests\GuzzleTestCase::setServiceBuilder(Guzzle\Service\Builder\ServiceBuilder::factory(array(
     'test.allplayers' => array(
         'class' => 'Guzzle.AllPlayers.AllPlayersClient',
         'params' => array(

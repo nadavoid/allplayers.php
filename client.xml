@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<client>
+    <commands>
+        <command name="get_users" method="GET" uri="users">
+            <doc>Get a list of users</doc>
+        </command>
+        <command name="get_user" method="GET" uri="users/{{uuid}}.json">
+            <doc>Get a user</doc>
+            <param name="uuid" type="string" required="true" />
+        </command>
+        <command name="get_groups" method="GET" uri="groups.json">
+            <doc>Get a list of the users groups</doc>
+        </command>
+    </commands>
+</client>

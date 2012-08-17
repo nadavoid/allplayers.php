@@ -52,6 +52,8 @@ class AllPlayersClient extends Client {
     public function __construct($baseUrl, EventSubscriberInterface $auth) {
         parent::__construct($baseUrl);
 
+        $description = ServiceDescription::factory('client.xml');
+        $this->setDescription($description);
         // Add the auth plugin to the client object
         $this->addSubscriber($auth);
     }
