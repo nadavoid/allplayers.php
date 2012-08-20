@@ -278,18 +278,29 @@ class Client extends HttpClient
      * @musthave
      *
      * @param string $group_uuid
+     *   UUID of the group to retrieve the products for.
      * @param string $type
+     *   Optional type of products to retrieve.
+     * @param boolean $available_for_sale
+     *   Whether or not to return all products available for sale by the group.
      *
      * @return array
      *   Array of product objects.
      *
      * @todo List group products, optionally by type.
      */
-    public function groupStoreProductsIndex($group_uuid, $type = null)
+    public function groupStoreProductsIndex($group_uuid, $type = null, $available_for_sale = false)
     {
         $params = ($type) ? array('type' => $type) : array();
 
-        return $this->index("group_stores/$group_uuid/products", $params);
+        // If the user wants all products available for sale then we need to
+        // append that to the path.
+        $path = "group_stores/$group_uuid/products";
+        if ($available_for_sale) {
+            $path .= '/available_for_sale';
+        }
+
+        return $this->index($path, $params);
     }
 
     /**
