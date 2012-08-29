@@ -1,5 +1,5 @@
 {
-  "name": "AllPlayers/AllPlayers-PHP",
+  "name": "allplayers/allplayers-php",
   "autoload": {
     "psr-0": { "AllPlayers": "" }
   },
