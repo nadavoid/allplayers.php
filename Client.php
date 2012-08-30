@@ -217,6 +217,29 @@ class Client extends HttpClient
     }
 
     /**
+     * List users who have the designated relationship to the user.
+     *
+     * @param string $user_uuid
+     *   UUID of user.
+     *
+     * @param string $relationship
+     *   Relationship to use for getting other users, such as 'guardian'.
+     *
+     * @return array
+     *   Array of users who have the designated relationship to the user.
+     */
+    public function userGetRelationship($user_uuid, $relationship)
+    {
+        if ($relationship == 'guardian') {
+            $path = 'users/' . $user_uuid . '/guardians';
+            return $this->index($path);
+        }
+        else {
+            return array();
+        }
+    }
+
+    /**
      * List user's friend requests based on parameters.
      *
      * @param string $uuid
