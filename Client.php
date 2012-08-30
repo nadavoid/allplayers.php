@@ -211,7 +211,6 @@ class Client extends HttpClient
     public function userGetFriends($uuid, $fields = null, $page = 0, $pagesize = null)
     {
         return $this->userGetUsersByRelationship($uuid, 'friend', $parameters = null, $fields, $page, $pagesize);
-        return $this->index($path, $parameters = null, $fields, $page, $pagesize);
     }
 
     /**
