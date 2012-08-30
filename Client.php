@@ -210,7 +210,7 @@ class Client extends HttpClient
      */
     public function userGetFriends($uuid, $fields = null, $page = 0, $pagesize = null)
     {
-        return $this->userGetRelationship($uuid, 'friend', $parameters = null, $fields, $page, $pagesize);
+        return $this->userGetUsersByRelationship($uuid, 'friend', $parameters = null, $fields, $page, $pagesize);
         return $this->index($path, $parameters = null, $fields, $page, $pagesize);
     }
 
@@ -221,12 +221,13 @@ class Client extends HttpClient
      *   UUID of user.
      *
      * @param string $relationship
-     *   Relationship to use for getting other users, such as 'guardian'.
+     *   Relationship to use for getting other users, such as 'guardian' or
+     *   'friend'.
      *
      * @return array
      *   Array of users who have the designated relationship to the user.
      */
-    public function userGetRelationship($user_uuid, $relationship, $fields = null, $page = 0, $pagesize = null)
+    public function userGetUsersByRelationship($user_uuid, $relationship, $fields = null, $page = 0, $pagesize = null)
     {
         switch ($relationship) {
             case 'guardian':
