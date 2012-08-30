@@ -210,9 +210,7 @@ class Client extends HttpClient
      */
     public function userGetFriends($uuid, $fields = null, $page = 0, $pagesize = null)
     {
-        // Compile path.
-        $path = "users/$uuid/friends";
-
+        return $this->userGetRelationship($uuid, 'friend', $parameters = null, $fields, $page, $pagesize);
         return $this->index($path, $parameters = null, $fields, $page, $pagesize);
     }
 
@@ -228,14 +226,16 @@ class Client extends HttpClient
      * @return array
      *   Array of users who have the designated relationship to the user.
      */
-    public function userGetRelationship($user_uuid, $relationship)
+    public function userGetRelationship($user_uuid, $relationship, $fields = null, $page = 0, $pagesize = null)
     {
-        if ($relationship == 'guardian') {
-            $path = 'users/' . $user_uuid . '/guardians';
-            return $this->index($path);
+        switch ($relationship) {
+            case 'guardian':
+                $path = 'users/' . $user_uuid . '/guardians';
+            case 'friend':
+                $path = 'users/' . $user_uuid . '/friends';
         }
-        else {
-            return array();
+        if (!empty($path)) {
+            return $this->index($path, $parameters = null, $fields, $page, $pagesize);
         }
     }
 
