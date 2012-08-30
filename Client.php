@@ -218,10 +218,15 @@ class Client extends HttpClient
      *
      * @param string $user_uuid
      *   UUID of user.
-     *
      * @param string $relationship
      *   Relationship to use for getting other users, such as 'guardian' or
      *   'friend'.
+     * @param string $fields
+     *   Comma separated string of fields to retrieve.
+     * @param integer $page
+     *   Which page to call.
+     * @param integer $pagesize
+     *   How many results to return per page.
      *
      * @return array
      *   Array of users who have the designated relationship to the user.
