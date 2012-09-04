@@ -192,11 +192,30 @@ class Client extends HttpClient
     }
 
     /**
+     * Sync roles for a user.
+     *
+     * @param string $user_uuid
+     *   User UUID string.
+     * @param string $og_role
+     *   Name of role to sync, such as guardian or friend.
+     *
+     * @return boolean
+     *   TRUE if succesfully added.
+     */
+    public function usersRelationshipsSync($user_uuid, $og_role) {
+      return $this->post(
+        'users/' . $user_uuid . '/sync_relationships',
+        array('og_role' => $og_role),
+        $this->headers
+      );
+    }
+
+    /**
      * Return the group stores.
      *
      * @param string $user_uuid
      *   Filter the results based on the membership of this user.
-     * @param boolean $is_admin 
+     * @param boolean $is_admin
      *   Filter the results futher based on if user_uuid is an admin of those
      *   groups.
      * @param boolean $accepts_payment
@@ -305,7 +324,7 @@ class Client extends HttpClient
 
     /**
      * Line Items Index.
-     * 
+     *
      * @param string $originating_order_uuid
      * @param string $product_uuid
      * @param string $originating_product_uuid
