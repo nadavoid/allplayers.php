@@ -1,6 +1,6 @@
 <?php
 
-namespace Guzzle\AllPlayers\Command;
+namespace AllPlayers\Command;
 
 use Guzzle\Tests\GuzzleTestCase;
 
@@ -9,7 +9,7 @@ class CreateNotifierTest extends GuzzleTestCase
     public function testCreateNotifier()
     {
         $client = $this->getServiceBuilder()->get('test.allplayers');
-        $command = $client->getCommand('CreateNotifier', array(
+        $command = $client->getCommand('create_notifier', array(
             'title' => 'test',
             'body' => 'testing'
             )

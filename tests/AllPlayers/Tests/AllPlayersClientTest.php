@@ -1,8 +1,8 @@
 <?php
 
-namespace Guzzle\AllPlayers\Tests;
+namespace AllPlayers\Tests;
 
-use Guzzle\AllPlayers\AllPlayersClient;
+use AllPlayers\AllPlayersClient;
 use Guzzle\Http\Client;
 use Guzzle\Common\Log\ClosureLogAdapter;
 use Guzzle\Http\Plugin\LogPlugin;
@@ -24,6 +24,6 @@ class AllPlayersClientTest extends \Guzzle\Tests\GuzzleTestCase
     public function testBuilderCreatesClient()
     {
         $client = $this->getServiceBuilder()->get('test.allplayers');
-        $this->assertInstanceOf('Guzzle\AllPlayers\AllPlayersClient', $client);
+        $this->assertInstanceOf('AllPlayers\AllPlayersClient', $client);
     }
 }

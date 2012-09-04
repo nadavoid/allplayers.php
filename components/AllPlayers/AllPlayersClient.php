@@ -1,6 +1,6 @@
 <?php
 
-namespace Guzzle\AllPlayers;
+namespace AllPlayers;
 
 use Guzzle\Service\Client;
 use Guzzle\Service\Inspector;
@@ -9,8 +9,8 @@ use Guzzle\Http\Plugin\CurlAuthPlugin;
 use Guzzle\Http\Plugin\OauthPlugin;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class AllPlayersClient extends Client {
-
+class AllPlayersClient extends Client
+{
     /**
      * Factory method to create a new AllPlayersClient.
      *
@@ -19,7 +19,8 @@ class AllPlayersClient extends Client {
      *
      * @return AllPlayersClient
      */
-    public static function factory($config = array()) {
+    public static function factory($config = array())
+    {
         $default = array(
             'auth' => 'basic',
             'base_url' => '{scheme}://{host}/api/v{version}/rest',
@@ -40,6 +41,7 @@ class AllPlayersClient extends Client {
         }
         $client = new self($config->get('base_url'), $auth);
         $client->setConfig($config);
+
         return $client;
     }
 
@@ -47,12 +49,13 @@ class AllPlayersClient extends Client {
      * Client constructor
      *
      * @param string $baseUrl Base URL of the web service
-     * @param object $auth  Authentication object
+     * @param object $auth    Authentication object
      */
-    public function __construct($baseUrl, EventSubscriberInterface $auth) {
+    public function __construct($baseUrl, EventSubscriberInterface $auth)
+    {
         parent::__construct($baseUrl);
 
-        $description = ServiceDescription::factory('client.xml');
+        $description = ServiceDescription::factory(__DIR__ . DIRECTORY_SEPARATOR . 'client.xml');
         $this->setDescription($description);
         // Add the auth plugin to the client object
         $this->addSubscriber($auth);

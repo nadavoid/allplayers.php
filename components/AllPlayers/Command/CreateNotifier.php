@@ -1,6 +1,6 @@
 <?php
 
-namespace Guzzle\AllPlayers\Command;
+namespace AllPlayers\Command;
 use Guzzle\Service\Command\AbstractCommand;
 
 /**

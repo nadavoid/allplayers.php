@@ -1,5 +1,5 @@
 {
-    "name": "guzzle/guzzle-allplayers",
+    "name": "allplayers/allplayers-php",
     "type": "library",
     "description": "AllPlayers PHP Client",
     "require": {
@@ -7,6 +7,6 @@
         "guzzle/guzzle": "*"
     },
     "autoload": {
-        "psr-0": { "Guzzle\\AllPlayers": "src/" }
+        "psr-0": { "AllPlayers": "components/" }
     }
 }

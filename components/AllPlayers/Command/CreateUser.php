@@ -1,6 +1,6 @@
 <?php
 
-namespace Guzzle\AllPlayers\Command;
+namespace AllPlayers\Command;
 use Guzzle\Service\Command\AbstractCommand;
 
 /**
@@ -30,6 +30,7 @@ class CreateUser extends AbstractCommand
         foreach ($params as $key => $value) {
             $this->setParams($params);
         }
+
         return $this->getAll($params);
     }
 
