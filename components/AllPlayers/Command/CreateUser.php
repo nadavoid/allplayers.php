@@ -36,6 +36,6 @@ class CreateUser extends AbstractCommand
 
     protected function build()
     {
-        $this->request = $this->client->post('users.json', NULL, $this->data);
+        $this->request = $this->client->post('users', NULL, $this->data);
     }
 }

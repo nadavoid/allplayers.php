@@ -37,6 +37,6 @@ class CreateNotifier extends AbstractCommand
 
     protected function build()
     {
-        $this->request = $this->client->post('notifier.json', NULL, $this->data);
+        $this->request = $this->client->post('notifier', NULL, $this->data);
     }
 }
