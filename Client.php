@@ -236,8 +236,10 @@ class Client extends HttpClient
         switch ($relationship) {
             case 'guardian':
                 $path = 'users/' . $user_uuid . '/guardians';
+                break;
             case 'friend':
                 $path = 'users/' . $user_uuid . '/friends';
+                break;
         }
         if (!empty($path)) {
             return $this->index($path, $parameters = null, $fields, $page, $pagesize);
