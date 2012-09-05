@@ -231,7 +231,7 @@ class Client extends HttpClient
      * @return array
      *   Array of users who have the designated relationship to the user.
      */
-    public function userGetUsersByRelationship($user_uuid, $relationship, $fields = null, $page = 0, $pagesize = null)
+    public function userGetUsersByRelationship($user_uuid, $relationship, $parameters = null, $fields = null, $page = 0, $pagesize = null)
     {
         switch ($relationship) {
             case 'guardian':
@@ -242,7 +242,7 @@ class Client extends HttpClient
                 break;
         }
         if (!empty($path)) {
-            return $this->index($path, $parameters = null, $fields, $page, $pagesize);
+            return $this->index($path, $parameters, $fields, $page, $pagesize);
         }
     }
 
