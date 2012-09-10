@@ -5,15 +5,8 @@
         <command name="get_users" method="GET" uri="users">
             <doc>Get a list of users</doc>
         </command>
-        <command name="get_user" method="GET" uri="users/{{uuid}}">
-            <doc>Get a user</doc>
-            <param name="uuid" type="string" required="true" />
-        </command>
         <command name="get_groups" method="GET" uri="groups">
             <doc>Get a list of all site groups</doc>
-        </command>
-        <command name="get_user_groups" method="GET" uri="users/current/groups">
-            <doc>Get a list of all the current logged in user's groups</doc>
         </command>
     </commands>
 </client>

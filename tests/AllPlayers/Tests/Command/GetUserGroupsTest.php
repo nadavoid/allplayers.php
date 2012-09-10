@@ -10,8 +10,16 @@ class GetUserGroupsTest extends GuzzleTestCase
     public function testGetUserGroups()
     {
         $client = $this->getServiceBuilder()->get('test.allplayers');
-        $command = $client->getCommand('get_user_groups');
-        $client->execute($command);
-        $response = json_decode($command->getResponse()->getBody());
+        $command = $client->getCommand('GetUserGroups');
+        $groups = $client->getIterator($command);
+        foreach ($groups as $group)
+        {
+            if (is_array($group))
+            {
+                // TODO: Actually check if group is an object. Additionally,
+                // assume that logged in user has groups associated.
+                assert(is_string($group['uuid']));
+            }
+        }
     }
 }

@@ -25,6 +25,8 @@ class GetUser extends AbstractCommand
 
     protected function build()
     {
-        $this->request = $this->client->get(array('users/{uuid}', $this->data));
+        $this->request = $this->client->get(array('users/{uuid}', array(
+            'uuid' => ($this->get('uuid')) ? $this->get('uuid') : 'current'
+        )));
     }
 }
