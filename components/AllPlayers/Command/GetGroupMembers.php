@@ -29,6 +29,11 @@ class GetGroupMembers extends AbstractCommand
         return $this->set('limit', $limit);
     }
 
+    public function setAdminsOnly($admins_only) {
+        $this->params = array('admins_only' => $admins_only);
+        return $this;
+    }
+
     /**
      * Set the uuid to retrieve members from.
      *
