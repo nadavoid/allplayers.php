@@ -4,7 +4,7 @@ namespace AllPlayers\Command;
 use Guzzle\Service\Command\AbstractCommand;
 
 /**
- * Sends a simple API request to an example web service
+ * Gets all the user's (specified or current) groups.
  *
  * @guzzle uuid doc="The uuid of the user to retrieve groups for"
  * @guzzle headers doc="Headers to set on the request" type="class:Guzzle\Common\Collection"
