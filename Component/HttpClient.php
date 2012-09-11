@@ -41,7 +41,7 @@ class HttpClient
      * @deprecated
      *
      * @var RESTClient
-     * 
+     *
      * @todo This should be wrapped/extended by the main class.
      */
     public $rest = null;
@@ -274,7 +274,13 @@ class HttpClient
         switch ($this->format) {
             case 'json':
             default:
-                return json_decode($this->rest->getResponse(), false);
+                $ret = json_decode($this->rest->getResponse(), false);
+                // Bubble up decode errors.
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                  $this->logger->info('Invalid JSON: ' . $this->rest->getResponse());
+                  throw new ErrorException('Failed to decode JSON response.', json_last_error());
+                }
+                return $ret;
         }
     }
 
@@ -307,7 +313,7 @@ class HttpClient
      * @param string $path
      *   Relative path to the endpoint. (e.g. /users).
      * @param array $query
-     *   (Optional) URL Query parameters. Many endpoints take filters in 
+     *   (Optional) URL Query parameters. Many endpoints take filters in
      *   'parameters' array.
      * @param string $fields
      *   (Optional) Specify fields you'd like the resource to return (e.g.
