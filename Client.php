@@ -610,6 +610,21 @@ class Client extends HttpClient
     }
 
     /**
+     * Notify a group about an order.
+     *
+     * @param string $group_uuid
+     * @param array $order
+     *   Order data including a $line_items array.
+     *
+     * @return boolean
+     *   Whether the notification was received.
+     */
+    public function groupsNotifyOrder($group_uuid, $order)
+    {
+        return $this->post("groups/$group_uuid/ordernotify", $order);
+    }
+
+    /**
      * Create a notifier.
      *
      * @param string $title
