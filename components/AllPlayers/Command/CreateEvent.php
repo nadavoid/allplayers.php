@@ -37,6 +37,8 @@ class CreateEvent extends AbstractCommand
 
     protected function build()
     {
-        $this->request = $this->client->post('events', NULL, $this->data);
+        $params = $this->getAll(array('groups', 'title', 'description', 'date_time', 'category', 'resources', 'competitors', 'published', 'external_id'));
+        $this->request = $this->client->post('events');
+        $this->request->setBody(json_encode($params), 'application/json');
     }
 }
