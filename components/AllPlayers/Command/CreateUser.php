@@ -4,7 +4,7 @@ namespace AllPlayers\Command;
 use Guzzle\Service\Command\AbstractCommand;
 
 /**
- * Sends a simple API request to an example web service
+ * Sends an API request to create a user.
  *
  * @guzzle firstname doc="User first name." required="true"
  * @guzzle lastname doc="User last name." required="true"
