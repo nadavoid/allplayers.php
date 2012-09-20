@@ -166,6 +166,9 @@ class Client extends HttpClient
      *   UUID of a role to associate this purchase with for registration.
      * @param string $sold_by_uuid
      *   UUID of the group selling the product.
+     * @param boolean $force_invoice
+     *   Whether or not to force the product to be invoiced, regardless of the
+     *   product's type and settings.
      *
      * @return boolean
      *   TRUE if succesfully added.
@@ -176,7 +179,8 @@ class Client extends HttpClient
         $for_user_uuid = null,
         $installment_plan = false,
         $role_uuid = null,
-        $sold_by_uuid = null
+        $sold_by_uuid = null,
+        $force_invoice = false
     ) {
         return $this->post(
             "users/$user_uuid/add_to_cart",
@@ -186,6 +190,7 @@ class Client extends HttpClient
                 'installment_plan' => $installment_plan,
                 'role_uuid' => $role_uuid,
                 'sold_by_uuid' => $sold_by_uuid,
+                'force_invoice' => $force_invoice,
             ),
             $this->headers
         );
