@@ -33,7 +33,7 @@ class HttpClient
      *
      * @todo Make this a mime-type.
      */
-    public $format = 'json';
+    public $format = 'application/json';
 
     /**
      * RESTClient object.
@@ -156,8 +156,8 @@ class HttpClient
         $this->rest->createRequest($url, $verb, null, $allow_redirects);
         $this->rest->setBody(json_encode($params));
         $this->rest->addHeader('Cache-Control', 'no-cache, must-revalidate, post-check=0, pre-check=0');
-        $this->rest->addHeader('Accept', 'application/json');
-        $this->rest->addHeader('Content-Type', 'application/json');
+        $this->rest->addHeader('Accept', $this->format);
+        $this->rest->addHeader('Content-Type', $this->format);
         $headers = array_merge($this->headers, $headers);
         foreach ($headers as $key => $value) {
             $this->rest->addHeader($key, $value);
@@ -272,16 +272,19 @@ class HttpClient
     public function decodeResponse()
     {
         switch ($this->format) {
-            case 'json':
-            default:
+            case 'application/json':
                 $ret = json_decode($this->rest->getResponse(), false);
                 // Bubble up decode errors.
                 if (json_last_error() !== JSON_ERROR_NONE) {
-                  $this->logger->info('Invalid JSON: ' . $this->rest->getResponse());
-                  throw new ErrorException('Failed to decode JSON response.', json_last_error());
+                    $this->logger->info('Invalid JSON: ' . $this->rest->getResponse());
+                    throw new ErrorException('Failed to decode JSON response.', json_last_error());
                 }
-                return $ret;
+                break;
+            default:
+                $ret = $this->rest->getResponse();
+
         }
+        return $ret;
     }
 
     /**
