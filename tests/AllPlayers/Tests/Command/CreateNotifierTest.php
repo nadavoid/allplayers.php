@@ -12,8 +12,7 @@ class CreateNotifierTest extends GuzzleTestCase
         $command = $client->getCommand('create_notifier', array(
             'title' => 'test',
             'body' => 'testing'
-            )
-        );
+        ));
         $client->execute($command);
 
         $response = json_decode($command->getResponse()->getBody());

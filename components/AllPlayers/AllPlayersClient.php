@@ -62,5 +62,4 @@ class AllPlayersClient extends Client
         // Add the auth plugin to the client object
         $this->addSubscriber($auth);
     }
-
 }

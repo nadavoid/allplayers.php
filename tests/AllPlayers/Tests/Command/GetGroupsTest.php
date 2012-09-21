@@ -6,7 +6,6 @@ use Guzzle\Tests\GuzzleTestCase;
 
 class GetGroupsTest extends GuzzleTestCase
 {
-
     public function testGetGroups()
     {
         $client = $this->getServiceBuilder()->get('test.allplayers');
