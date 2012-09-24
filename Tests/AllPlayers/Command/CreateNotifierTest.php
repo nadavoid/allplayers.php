@@ -13,9 +13,7 @@ class CreateNotifierTest extends GuzzleTestCase
             'title' => 'test',
             'body' => 'testing'
         ));
-        $client->execute($command);
-
-        $response = json_decode($command->getResponse()->getBody());
-        $this->assertContainsIns('node', $response->uri);
+        $notifier = $client->execute($command);
+        $this->assertContainsIns('node', $notifier['uri']);
     }
 }

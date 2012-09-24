@@ -20,17 +20,14 @@ class GetUserTest extends GuzzleTestCase
         $client = $this->getServiceBuilder()->get('test.allplayers');
         $random_user = new RandomUser();
         $command = $client->getCommand('CreateUser', (array) $random_user);
-        $client->execute($command);
-        $this->user = json_decode($command->getResponse()->getBody());
-        $user = $this->user;
+        $this->user = $client->execute($command);
     }
 
     public function testGetUser()
     {
         $client = $this->getServiceBuilder()->get('test.allplayers');
-        $command = $client->getCommand('GetUser', array('uuid' => $this->user->uuid));
-        $client->execute($command);
-        $response = json_decode($command->getResponse()->getBody());
-        $this->assertEquals($response->uuid, $this->user->uuid);
+        $command = $client->getCommand('GetUser', array('uuid' => $this->user['uuid']));
+        $user_retrieved = $client->execute($command);
+        $this->assertEquals($user_retrieved, $this->user);
     }
 }

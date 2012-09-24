@@ -10,7 +10,7 @@ class GetGroupsTest extends GuzzleTestCase
     {
         $client = $this->getServiceBuilder()->get('test.allplayers');
         $command = $client->getCommand('get_groups');
-        $client->execute($command);
-        $response = json_decode($command->getResponse()->getBody());
+        $groups = $client->execute($command);
+        // @TODO: Actually do something, i.e. check that these groups belong to user.
     }
 }

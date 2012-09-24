@@ -1,11 +1,11 @@
 <?php
-
 namespace AllPlayers\Tests;
 
 use AllPlayers\AllPlayersClient;
 
 class AllPlayersClientTest extends \Guzzle\Tests\GuzzleTestCase
 {
+
     // Test for creating an AllPlayers client.
     // Use phpunit.xml file to set _SERVER params for user and password.
     public function testBuilderCreatesClient()

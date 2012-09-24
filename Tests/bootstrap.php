@@ -15,9 +15,9 @@ spl_autoload_register(function($class) {
     if (0 === strpos($class, 'AllPlayers')) {
         $class = str_replace('AllPlayers', '', $class);
         if ('\\' != DIRECTORY_SEPARATOR) {
-            $class = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'AllPlayers' . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
+            $class = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'AllPlayers' . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
         } else {
-            $class = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'components' . DIRECTORY_SEPARATOR . 'AllPlayers' . DIRECTORY_SEPARATOR . $class . '.php';
+            $class = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'AllPlayers' . DIRECTORY_SEPARATOR . $class . '.php';
         }
         if (file_exists($class)) {
             require $class;
