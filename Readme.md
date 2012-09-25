@@ -11,7 +11,7 @@ To start, clone this repository using git clone <repo url> and run <code>curl -s
 To test using phpunit, create a phpunit.xml file under main directory and let phpunit know to autoload dependencies and use your credentials:
 
 ----
-    <phpunit bootstrap="./tests/bootstrap.php" colors="true">
+    <phpunit bootstrap="./Tests/bootstrap.php" colors="true">
         <php>
             <server name="API_USER" value="<user>" />
             <server name="API_PASSWORD" value="<password>" />

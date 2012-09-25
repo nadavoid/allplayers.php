@@ -26,8 +26,7 @@ class AllPlayersClient extends Client
             'base_url' => '{scheme}://{host}/api/v{version}/rest',
             'scheme' => 'https',
             'host' => 'www.allplayers.com',
-            'version' => '1',
-            'response-type' => 'application/json'
+            'version' => '1'
         );
         $required = array('base_url');
         $config = Inspector::prepareConfig($config, $default, $required);
@@ -41,7 +40,6 @@ class AllPlayersClient extends Client
                 break;
         }
         $client = new self($config->get('base_url'), $auth);
-        $client->setDefaultHeaders(array('Accept' => $config->get('response-type')));
         $client->setConfig($config);
 
         return $client;
@@ -57,7 +55,7 @@ class AllPlayersClient extends Client
     {
         parent::__construct($baseUrl);
 
-        $description = ServiceDescription::factory(__DIR__ . DIRECTORY_SEPARATOR . 'client.xml');
+        $description = ServiceDescription::factory(__DIR__ . DIRECTORY_SEPARATOR . 'client.json');
         $this->setDescription($description);
         // Add the auth plugin to the client object
         $this->addSubscriber($auth);

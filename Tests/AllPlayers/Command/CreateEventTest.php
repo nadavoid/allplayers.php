@@ -21,7 +21,7 @@ class CreateEventTest extends GuzzleTestCase
             ),
             'external_id' => 'CLIENT_TEST'
         );
-        $command = $client->getCommand('CreateEvent', $random_event);
+        $command = $client->getCommand('create_event', $random_event);
         $event = $client->execute($command);
         $this->assertEquals($event['title'], $random_event['title']);
     }

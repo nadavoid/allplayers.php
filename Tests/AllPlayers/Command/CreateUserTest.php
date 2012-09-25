@@ -11,7 +11,7 @@ class CreateUserTest extends GuzzleTestCase
     {
         $client = $this->getServiceBuilder()->get('test.allplayers');
         $random_user = new RandomUser();
-        $command = $client->getCommand('CreateUser', (array) $random_user);
+        $command = $client->getCommand('create_user', (array) $random_user);
         $user = $client->execute($command);
         $this->assertEquals($user['firstname'], $random_user->firstname);
         $this->assertEquals($user['lastname'], $random_user->lastname);
