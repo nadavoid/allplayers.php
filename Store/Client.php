@@ -307,13 +307,21 @@ class Client extends HttpClient
      *   Optional type of products to retrieve.
      * @param boolean $available_for_sale
      *   Whether or not to return all products available for sale by the group.
+     * @param integer|string $page
+     *   (Optional) Numeric page number or '*' to fetch all pages.
+     *   Default to '*'.
+     * @param integer $page_size
+     *   (Optional) Limit the number of results returned per page. If not set,
+     *   then we default to 20.
+     *   NOTE: This does not limit the overall return set when using the '*'
+     *   page parameter.
      *
      * @return array
      *   Array of product objects.
      *
      * @todo List group products, optionally by type.
      */
-    public function groupStoreProductsIndex($group_uuid, $type = null, $available_for_sale = false)
+    public function groupStoreProductsIndex($group_uuid, $type = null, $available_for_sale = false, $page = '*', $page_size = 20)
     {
         $params = ($type) ? array('type' => $type) : array();
 
@@ -324,7 +332,7 @@ class Client extends HttpClient
             $path .= '/available_for_sale';
         }
 
-        return $this->index($path, $params, NULL, '*', 500);
+        return $this->index($path, $params, NULL, $page, $page_size);
     }
 
     /**
