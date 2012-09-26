@@ -324,7 +324,7 @@ class Client extends HttpClient
             $path .= '/available_for_sale';
         }
 
-        return $this->index($path, $params, NULL, '*');
+        return $this->index($path, $params, NULL, '*', 500);
     }
 
     /**
