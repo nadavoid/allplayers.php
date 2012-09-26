@@ -319,9 +319,10 @@ class Client extends HttpClient
      * @return array
      *   Array of product objects.
      *
+     * @todo Look into change $page default to 0.
      * @todo List group products, optionally by type.
      */
-    public function groupStoreProductsIndex($group_uuid, $type = null, $available_for_sale = false, $page = '*', $page_size = 20)
+    public function groupStoreProductsIndex($group_uuid, $type = null, $available_for_sale = false, $page = '*', $page_size = 100)
     {
         $params = ($type) ? array('type' => $type) : array();
 
