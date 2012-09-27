@@ -25,7 +25,7 @@ class AllPlayersClient extends Client
             'auth' => 'basic',
             'base_url' => '{scheme}://{host}/api/v{version}/rest',
             'scheme' => 'https',
-            'host' => 'www.allplayers.com',
+            'host' => 'www.pdup.allplayers.com',
             'version' => '1'
         );
         $required = array('base_url');
