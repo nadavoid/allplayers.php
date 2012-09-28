@@ -1,5 +1,5 @@
 {
-    "name": "allplayers/allplayers-php",
+    "name": "allplayers/allplayers.php",
     "type": "library",
     "description": "AllPlayers PHP Client",
     "require": {
