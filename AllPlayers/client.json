@@ -1,0 +1,220 @@
+{
+    "commands": {
+        "default": {
+            "class": "AllPlayers\\Command\\AllPlayersCommand",
+            "params": {
+                "response_type": {
+                    "type": "string",
+                    "default": "application/json"
+                }
+            }
+        },
+        "get_user": {
+            "doc": "Sends a request to get a User using uuid.",
+            "extends": "default",
+            "uri": "users/{uuid}",
+            "method": "GET",
+            "params": {
+                "uuid": {
+                    "doc": "UUID of user to get, defaults to current.",
+                    "type": "string",
+                    "default": "current"
+                }
+            }
+        },
+        "create_user": {
+            "doc": "Sends an API request to create a user.",
+            "extends": "default",
+            "uri": "users",
+            "method": "POST",
+            "params": {
+                "firstname": {
+                    "doc": "User first name.",
+                    "type": "string",
+                    "required": true,
+                    "location": "body_array"
+                },
+                "lastname": {
+                    "doc": "User last name.",
+                    "type": "string",
+                    "required": true,
+                    "location": "body_array"
+                },
+                "email": {
+                    "doc": "Valid User's Email Address.",
+                    "type": "string",
+                    "required": true,
+                    "location": "body_array"
+                },
+                "gender": {
+                    "doc": "User gender (m or f).",
+                    "type": "string",
+                    "required": true,
+                    "location": "body_array"
+                },
+                "birthday": {
+                    "doc": "Birthday passed in the form of YYYY-MM-DD.",
+                    "type": "date",
+                    "required": true,
+                    "location": "body_array"
+                },
+                "password": {
+                    "doc": "Password for the user; if not passed: automatically generated.",
+                    "type": "string",
+                    "location": "body_array"
+                },
+                "external_id": {
+                    "doc": "External ID up to 72 characters to be used for relating to external content.",
+                    "type": "string",
+                    "location": "body_array"
+                },
+                "notification": {
+                    "doc": "Message to be appended to the notification email sent to the user.",
+                    "type": "string",
+                    "location": "body_array"
+                }
+            }
+        },
+        "create_event": {
+            "doc": "Sends an API request to create an event.",
+            "extends": "default",
+            "uri": "events",
+            "method": "POST",
+            "params": {
+                "groups": {
+                    "doc": "Groups(uuids) involved in event.",
+                    "type": "array",
+                    "required": true,
+                    "location": "body_array"
+                },
+                "title": {
+                    "doc": "Title of event.",
+                    "type": "string",
+                    "required": true,
+                    "location": "body_array"
+                },
+                "description": {
+                    "doc": "Description of event.",
+                    "type": "string",
+                    "required": true,
+                    "location": "body_array"
+                },
+                "date_time": {
+                    "doc": "Date and time of start and end of event, e.g. date_time[start] 2012-03-30T19:54:00.",
+                    "type": "array",
+                    "required": true,
+                    "location": "body_array"
+                },
+                "category": {
+                    "doc": "Category of the event, e.g. game.",
+                    "type": "string",
+                    "location": "body_array"
+                },
+                "resources": {
+                    "doc": "Resources(uuids) where this event takes place.",
+                    "type": "array",
+                    "location": "body_array"
+                },
+                "competitors": {
+                    "doc": "Associative array of competitor gid : competitor label : competitor score.",
+                    "type": "array",
+                    "location": "body_array"
+                },
+                "published": {
+                    "doc": "Published status, e.g. TRUE.",
+                    "type": "string",
+                    "location": "body_array"
+                },
+                "external_id": {
+                    "doc": "External ID up to 72 characters to be used for relating to external content.",
+                    "type": "string",
+                    "location": "body_array"
+                }
+            }
+        },
+        "update_event": {
+            "doc": "Sends an API request to update an event.",
+            "extends": "default",
+            "uri": "events/{uuid}",
+            "method": "PUT",
+            "params": {
+                "uuid": {
+                    "doc": "Set the event UUID for the event you're gonna update.",
+                    "type": "string",
+                    "required": true
+                },
+                "groups": {
+                    "doc": "Groups(uuids) involved in event.",
+                    "type": "array",
+                    "location": "body_array"
+                },
+                "title": {
+                    "doc": "Title of event.",
+                    "type": "string",
+                    "location": "body_array"
+                },
+                "description": {
+                    "doc": "Description of event.",
+                    "type": "string",
+                    "location": "body_array"
+                },
+                "date_time": {
+                    "doc": "Date and time of start and end of event, e.g. date_time[start] 2012-03-30T19:54:00.",
+                    "type": "array",
+                    "location": "body_array"
+                },
+                "category": {
+                    "doc": "Category of the event, e.g. game.",
+                    "type": "string",
+                    "location": "body_array"
+                },
+                "resources": {
+                    "doc": "Resources(uuids) where this event takes place.",
+                    "type": "array",
+                    "location": "body_array"
+                },
+                "competitors": {
+                    "doc": "Associative array of competitor gid : competitor label : competitor score.",
+                    "type": "array",
+                    "location": "body_array"
+                },
+                "published": {
+                    "doc": "Published status, e.g. TRUE.",
+                    "type": "string",
+                    "location": "body_array"
+                },
+                "external_id": {
+                    "doc": "External ID up to 72 characters to be used for relating to external content.",
+                    "type": "string",
+                    "location": "body_array"
+                }
+            }
+        },
+        "create_notifier": {
+            "doc": "Sends a request to post a message in notifier.",
+            "extends": "default",
+            "uri": "notifier",
+            "method": "POST",
+            "params": {
+                "title": {
+                    "doc": "Title of notifier message.",
+                    "type": "string",
+                    "required": true,
+                    "location": "body_array"
+                },
+                "body": {
+                    "doc": "Body of notifier message.",
+                    "type": "string",
+                    "required": true,
+                    "location": "body_array"
+                }
+            }
+        },
+        "get_groups": {
+            "doc": "Get a list of all site groups",
+            "extends": "default",
+            "uri": "groups",
+            "method": "GET"
+        }
+    }
+}

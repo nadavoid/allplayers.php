@@ -1,0 +1,12 @@
+{
+    "name": "allplayers/allplayers-php",
+    "type": "library",
+    "description": "AllPlayers PHP Client",
+    "require": {
+        "php": ">=5.3.2",
+        "guzzle/guzzle": "2.8.*"
+    },
+    "autoload": {
+        "psr-0": { "AllPlayers": "" }
+    }
+}
