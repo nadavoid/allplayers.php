@@ -113,9 +113,18 @@ class Client extends HttpClient
             'password'  => $password
         );
         try {
+            // @TODO - We're forced to save cookies before user create because
+            // it seems to clear them.
+            $cookies = $this->cookiePlugin->getCookieJar()->all();
+
             $ret = $this->post('users', array_filter($userData));
-        } catch (ErrorException $e) {
-            $messageJson = $this->rest->getResponse();
+
+            // @TODO - Restoring previously saved cookies, shouldn't be needed.
+            foreach ($cookies as $cookie) {
+              $this->cookiePlugin->getCookieJar()->add($cookie);
+            }
+        } catch (\Guzzle\Http\Exception\ClientErrorResponseException $e) {
+            $messageJson = $e->getResponse()->getBody();
             $messageParts = json_decode($messageJson);
             if (!empty($messageParts->form_errors)) {
                 // If there are form errors besides captcha.
@@ -341,7 +350,6 @@ class Client extends HttpClient
     public function userLogin($user, $pass)
     {
         $ret = $this->post('users/login', array('username' => $user, 'password' => $pass));
-        $this->session = array('session_name' => $ret->session_name, 'sessid' => $ret->sessid);
 
         return $ret;
     }
@@ -349,13 +357,15 @@ class Client extends HttpClient
     /**
      * Logout via user endpoint.
      */
-    public function userLogout()
+    public function userLogout($fast = true)
     {
-        $ret = $this->post('users/logout');
-        $this->sess = null;
-        $this->session_name = null;
-        $this->cookies = array();
-        $this->session = null;
+        $ret = null;
+        if (!$fast) {
+            $ret = $this->post('users/logout');
+        }
+
+        // Clear cookies.
+        $this->cookiePlugin->getCookieJar()->remove();
 
         return $ret;
     }

@@ -615,8 +615,8 @@ class Client extends HttpClient
     {
         // Changing login path to 'user/login' (was 'users/login').
         // 'user/' path is from core services. 'users/' path is custom resource.
-        $ret = $this->post('user/login', array('username' => $user, 'password' => $pass), $this->headers);
-        $this->session = array('session_name' => $ret->session_name, 'sessid' => $ret->sessid);
+        $ret = $this->post('user/login', array('username' => $user, 'password' => $pass));
+        //$this->session = array('session_name' => $ret->session_name, 'sessid' => $ret->sessid);
 
         return $ret;
     }
