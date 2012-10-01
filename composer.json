@@ -1,5 +1,6 @@
 {
-  "name": "allplayers/allplayers-php",
+  "name": "allplayers/allplayers",
+  "description": "AllPlayers.com PHP Client",
   "autoload": {
     "psr-0": { "AllPlayers": "" }
   },
