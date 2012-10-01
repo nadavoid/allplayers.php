@@ -117,4 +117,40 @@ class AllPlayersCommand extends DynamicCommand
             $visitor->after($this, $this->request);
         }
     }
+
+    /**
+     * Create the result of the command after the request has been completed.
+     *
+     * Sets the result as the response by default.  If the response is an XML
+     * document, this will set the result as a SimpleXMLElement.  If the XML
+     * response is invalid, the result will remain the Response, not XML.
+     * If an application/json response is received, the result will automat-
+     * ically become an array.
+     */
+    protected function process()
+    {
+        // Uses the response object by default
+        $this->result = $this->getRequest()->getResponse();
+        $contentType = $this->result->getContentType();
+
+        // Is the body an JSON document?  If so, set the result to be an array
+        if (stripos($contentType, 'json') !== false) {
+            if ($body = trim($this->result->getBody(true))) {
+                $decoded = json_decode($body, false);
+                if (JSON_ERROR_NONE !== json_last_error()) {
+                    throw new JsonException('The response body can not be decoded to JSON', json_last_error());
+                }
+
+                $this->result = $decoded;
+            }
+        } if (stripos($contentType, 'xml') !== false) {
+            // Is the body an XML document?  If so, set the result to be a SimpleXMLElement
+            if ($body = trim($this->result->getBody(true))) {
+                // Silently allow parsing the XML to fail
+                try {
+                    $this->result = new \SimpleXMLElement($body);
+                } catch (\Exception $e) {}
+            }
+        }
+    }
 }
