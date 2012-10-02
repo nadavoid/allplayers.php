@@ -26,7 +26,7 @@ class GetUserTest extends GuzzleTestCase
     public function testGetUser()
     {
         $client = $this->getServiceBuilder()->get('test.allplayers');
-        $command = $client->getCommand('get_user', array('uuid' => $this->user['uuid']));
+        $command = $client->getCommand('get_user', array('uuid' => $this->user->uuid));
         //$this->setMockResponse($client, 'UserResponse');
         $user_retrieved = $client->execute($command);
         $this->assertEquals($user_retrieved, $this->user);
