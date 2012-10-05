@@ -10,7 +10,7 @@ class CreateUserTest extends GuzzleTestCase
 {
     public function testCreateUser()
     {
-        $client = $this->getServiceBuilder()->get('test.allplayers');
+        $client = $this->getServiceBuilder()->get('admin.basic');
         $client->getEventDispatcher()->addListener('request.error', function(Event $event) {
             if ($event['response']->getStatusCode() == 406)
             {

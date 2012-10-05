@@ -17,7 +17,7 @@ class GetUserTest extends GuzzleTestCase
      */
     public function setUp()
     {
-        $client = $this->getServiceBuilder()->get('test.allplayers');
+        $client = $this->getServiceBuilder()->get('admin.basic');
         $random_user = new RandomUser();
         $command = $client->getCommand('create_user', (array) $random_user);
         $this->user = $client->execute($command);
@@ -25,7 +25,7 @@ class GetUserTest extends GuzzleTestCase
 
     public function testGetUser()
     {
-        $client = $this->getServiceBuilder()->get('test.allplayers');
+        $client = $this->getServiceBuilder()->get('admin.basic');
         $command = $client->getCommand('get_user', array('uuid' => $this->user->uuid));
         //$this->setMockResponse($client, 'UserResponse');
         $user_retrieved = $client->execute($command);

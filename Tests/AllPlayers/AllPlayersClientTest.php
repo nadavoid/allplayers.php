@@ -10,7 +10,7 @@ class AllPlayersClientTest extends \Guzzle\Tests\GuzzleTestCase
     // Use phpunit.xml file to set _SERVER params for user and password.
     public function testBuilderCreatesClient()
     {
-        $client = $this->getServiceBuilder()->get('test.allplayers');
+        $client = $this->getServiceBuilder()->get('admin.basic');
         $this->assertInstanceOf('AllPlayers\AllPlayersClient', $client);
     }
 }

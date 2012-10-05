@@ -22,6 +22,32 @@
                 }
             }
         },
+        "login_user": {
+            "doc": "Endpoint to login using username and password.",
+            "extends": "default",
+            "uri": "users/login",
+            "method": "POST",
+            "params": {
+                "email": {
+                    "doc": "AllPlayers username or email",
+                    "type": "string",
+                    "required": true,
+                    "location": "body_array"
+                },
+                "password": {
+                    "doc": "AllPlayers password",
+                    "type": "string",
+                    "required": true,
+                    "location": "body_array"
+                }
+            }
+        },
+        "logout_user": {
+            "doc": "Endpoint to logout a user.",
+            "extends": "default",
+            "uri": "users/logout",
+            "method": "POST"
+        },
         "create_user": {
             "doc": "Sends an API request to create a user.",
             "extends": "default",

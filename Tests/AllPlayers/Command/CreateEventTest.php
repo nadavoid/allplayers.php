@@ -8,7 +8,7 @@ class CreateEventTest extends GuzzleTestCase
 {
     public function testCreateEvent()
     {
-        $client = $this->getServiceBuilder()->get('test.allplayers');
+        $client = $this->getServiceBuilder()->get('admin.basic');
         $random_event = array(
             'groups' => array(
                 0 => '0f16af3c-aab1-11e1-b16a-12313d186528'

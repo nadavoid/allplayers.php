@@ -38,12 +38,32 @@ require_once 'Objects/User.php';
 require_once 'User/Fixtures/RandomUser.php';
 
 $service_builder = Guzzle\Tests\GuzzleTestCase::setServiceBuilder(Guzzle\Service\Builder\ServiceBuilder::factory(array(
-    'test.allplayers' => array(
+    'admin.basic' => array(
+        'auth' => 'basic',
         'class' => 'AllPlayers.AllPlayersClient',
         'params' => array(
-            'username' => (isset($_SERVER['API_USER'])) ? $_SERVER['API_USER'] : NULL,
-            'password' => (isset($_SERVER['API_PASSWORD'])) ? $_SERVER['API_PASSWORD'] : NULL,
-            'host' => (isset($_SERVER['API_HOST'])) ? $_SERVER['API_HOST'] : 'www.pdup.allplayers.com',
+            'username' => $_SERVER['API_USER'],
+            'password' => $_SERVER['API_PASSWORD'],
+            'host' => $_SERVER['API_HOST'],
+            'curl.CURLOPT_SSL_VERIFYHOST' => false,
+            'curl.CURLOPT_SSL_VERIFYPEER' => false
+        )
+    ),
+    'admin.cookies' => array(
+        'auth' => 'cookies',
+        'class' => 'AllPlayers.AllPlayersClient',
+        'params' => array(
+            'username' => $_SERVER['API_USER'],
+            'password' => $_SERVER['API_PASSWORD'],
+            'host' => $_SERVER['API_HOST'],
+            'curl.CURLOPT_SSL_VERIFYHOST' => false,
+            'curl.CURLOPT_SSL_VERIFYPEER' => false
+        )
+    ),
+    'anonymous.allplayers' => array(
+        'class' => 'AllPlayers.AllPlayersClient',
+        'params' => array(
+            'host' => $_SERVER['API_HOST'],
             'curl.CURLOPT_SSL_VERIFYHOST' => false,
             'curl.CURLOPT_SSL_VERIFYPEER' => false
         )
