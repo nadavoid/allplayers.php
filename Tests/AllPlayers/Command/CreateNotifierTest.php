@@ -8,7 +8,7 @@ class CreateNotifierTest extends GuzzleTestCase
 {
     public function testCreateNotifier()
     {
-        $client = $this->getServiceBuilder()->get('test.allplayers');
+        $client = $this->getServiceBuilder()->get('admin.basic');
         $command = $client->getCommand('create_notifier', array(
             'title' => 'test',
             'body' => 'testing'

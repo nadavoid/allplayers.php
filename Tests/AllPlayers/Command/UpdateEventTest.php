@@ -8,7 +8,7 @@ class UpdateEventTest extends GuzzleTestCase
 {
     public function testUpdateEvent()
     {
-        $client = $this->getServiceBuilder()->get('test.allplayers');
+        $client = $this->getServiceBuilder()->get('admin.basic');
         $updates = array(
             'external_id' => 'updating_from_guzzle',
             'uuid' => '28500664-033c-11e2-bc4d-005056b1e1d9'

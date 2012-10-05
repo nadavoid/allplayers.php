@@ -9,7 +9,7 @@ class GetUserGroupsTest extends GuzzleTestCase
 
     public function testGetUserGroups()
     {
-        $client = $this->getServiceBuilder()->get('test.allplayers');
+        $client = $this->getServiceBuilder()->get('admin.basic');
         $command = $client->getCommand('GetUserGroups');
         $groups = $client->getIterator($command);
         foreach ($groups as $group)

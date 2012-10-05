@@ -8,6 +8,9 @@ use Guzzle\Service\Description\ServiceDescription;
 use Guzzle\Http\Plugin\CurlAuthPlugin;
 use Guzzle\Http\Plugin\OauthPlugin;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Guzzle\Http\CookieJar\ArrayCookieJar;
+use Guzzle\Http\Plugin\CookiePlugin;
+use Guzzle\Http\Cookie;
 
 class AllPlayersClient extends Client
 {
@@ -38,6 +41,8 @@ class AllPlayersClient extends Client
             case 'oauth':
                 $auth = new OauthPlugin($config->get('oauth'));
                 break;
+            case 'cookies':
+                $auth = new CookiePlugin(new ArrayCookieJar());
         }
         $client = new self($config->get('base_url'), $auth);
         $client->setConfig($config);
