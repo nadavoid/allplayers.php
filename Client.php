@@ -580,7 +580,7 @@ class Client extends HttpClient
             $path .= "/$user_uuid";
         }
 
-        return $this->index($path);
+        return (array) $this->index($path);
     }
 
     /**
