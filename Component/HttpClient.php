@@ -168,11 +168,6 @@ class HttpClient
         // Add Query String
         $request->getQuery()->merge($query);
 
-        if (!empty($body)) {
-            $request->getCurlOptions()->set('body_as_string', true);
-        }
-        $request->getCurlOptions()->set(CURLOPT_FOLLOWLOCATION, $allow_redirects);
-
         $this->logger->info("HTTP $verb: $url");
 
         $response = $request->send();
