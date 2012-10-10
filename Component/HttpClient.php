@@ -114,7 +114,7 @@ class HttpClient
         }
 
         // Register logger.
-        $logPlugin = new LogPlugin(new MonologLogAdapter($this->logger), LogPlugin::LOG_VERBOSE);
+        $logPlugin = new LogPlugin(new MonologLogAdapter($this->logger), LogPlugin::LOG_CONTEXT);
         $this->client->addSubscriber($logPlugin);
     }
 
@@ -168,15 +168,11 @@ class HttpClient
         // Add Query String
         $request->getQuery()->merge($query);
 
-        $this->logger->info("HTTP $verb: $url");
-
         $response = $request->send();
         $this->lastResponse = $response;
 
         $this->responseCode = $response->getStatusCode();
         $this->responseBody = $response->getBody();
-
-        $this->logger->info("HTTP $this->responseCode from $url");
 
         return $this->decodeResponse($response);
     }
