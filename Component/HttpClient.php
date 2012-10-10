@@ -9,12 +9,10 @@ use Guzzle\Http\Plugin\CookiePlugin;
 use Guzzle\Http\Plugin\LogPlugin;
 use Guzzle\Common\Log\MonologLogAdapter;
 
-use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
-use ErrorException;
 use InvalidArgumentException;
-use Log;
 
 
 /**
@@ -43,7 +41,7 @@ class HttpClient
      *
      * @var Guzzle\Http\Client;
      */
-    public $client = null;
+    protected $client = null;
 
     /**
      * Control wheter or not to print debug information. Use with care, may dump
@@ -56,9 +54,9 @@ class HttpClient
     /**
      * Log instance to control log information generated during a request.
      *
-     * @var Log
+     * @var Logger
      */
-    public $logger = null;
+    protected $logger = null;
 
     /**
      * HTTP Response code of last request.
@@ -70,10 +68,8 @@ class HttpClient
     /**
      * Cookies to be reused between requests.
      *
-     * @var string
+     * @var CookiePlugin
      */
-    public $cookies = array();
-
     public $cookiePlugin;
 
     public $lastResponse;
@@ -88,12 +84,12 @@ class HttpClient
     /**
      * @param string $url
      *   e.g. https://www.allplayers.com/api/v1/rest.
-     * @param Log $logger
+     * @param Logger $logger
      *   (optional)
      *
      * @todo Just extend a REST Class in the future.
      */
-    public function __construct($url_prefix, Log $logger = null, CookiePlugin $cookie_plugin = null)
+    public function __construct($url_prefix, Logger $logger = null, CookiePlugin $cookie_plugin = null)
     {
         // Validate $url argument.
         if (!filter_var($url_prefix, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
@@ -108,19 +104,18 @@ class HttpClient
         $this->cookiePlugin = ($cookie_plugin) ? $cookie_plugin : new CookiePlugin(new ArrayCookieJar());
         $this->client->addSubscriber($this->cookiePlugin);
 
-        $log = new Logger('output');
-        $log->pushHandler(new StreamHandler('php://output', Logger::DEBUG));
-        $logPlugin = new LogPlugin(new MonologLogAdapter($log), LogPlugin::LOG_VERBOSE);
-        $this->client->addSubscriber($logPlugin);
-
-        // Handle $logger argument.
-        if (isset($logger)) {
-            $this->logger = $logger;
-        } else {
-            // Disable logging by default.
-            $this->logger = Log::singleton('console', '', __CLASS__, PEAR_LOG_DEBUG);
-            $this->logger->setMask(PEAR_LOG_NONE);
+        // Create or use passed in monolog instance.
+        if ($logger) {
+          $this->logger = $logger;
         }
+        else {
+          $this->logger = new Logger('output');
+          $this->logger->pushHandler(new StreamHandler('php://output', Logger::DEBUG));
+        }
+
+        // Register logger.
+        $logPlugin = new LogPlugin(new MonologLogAdapter($this->logger), LogPlugin::LOG_VERBOSE);
+        $this->client->addSubscriber($logPlugin);
     }
 
     /**
@@ -179,10 +174,8 @@ class HttpClient
         $request->getCurlOptions()->set(CURLOPT_FOLLOWLOCATION, $allow_redirects);
 
         $this->logger->info("HTTP $verb: $url");
-//         $this->logger->info((string) $request);
 
         $response = $request->send();
-//         $this->logger->info((string) $response);
         $this->lastResponse = $response;
 
         $this->responseCode = $response->getStatusCode();
@@ -371,8 +364,7 @@ class HttpClient
      */
     public function ssoSessionInit($cookie_name, $cookie, $auth_path = 'group_stores')
     {
-        $this->cookies[] = array('name' => $cookie_name, 'value' => $cookie);
-
+        // @TODO - This really isn't needed with the cookie jar.
         $this->get($auth_path, array(), array(), false);
     }
 

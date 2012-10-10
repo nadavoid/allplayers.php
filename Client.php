@@ -3,8 +3,9 @@ namespace AllPlayers;
 
 use AllPlayers\Component\HttpClient;
 
+use Monolog\Logger;
+
 use ErrorException;
-use Log;
 
 /**
  * Methods for interacting with the main AllPlayers application API.
@@ -14,10 +15,10 @@ class Client extends HttpClient
     /**
      * @param string $url
      *   e.g. https://www.allplayers.com
-     * @param Log $logger
+     * @param Logger $logger
      *   (optional)
      */
-    public function __construct($base_url, Log $logger = null)
+    public function __construct($base_url, Logger $logger = null)
     {
         parent::__construct("$base_url/api/v1/rest", $logger);
     }
