@@ -7,7 +7,8 @@ use InvalidArgumentException;
 
 use AllPlayers\Component\HttpClient;
 
-use Monolog\Logger;
+use Guzzle\Http\Plugin\CookiePlugin;
+use Guzzle\Http\Plugin\LogPlugin;
 
 class Client extends HttpClient
 {
@@ -47,13 +48,13 @@ class Client extends HttpClient
      * @param Logger $logger
      *   (Optional)
      */
-    public function __construct($base_url, Logger $logger = null)
+    public function __construct($base_url, LogPlugin $log_plugin = null, $cookie_plugin = null)
     {
         if (empty($base_url)) {
             throw new InvalidArgumentException('Invalid argument 1: base_url must be a base URL to the Store.');
         }
         $this->base_url = $base_url;
-        parent::__construct($base_url . self::ENDPOINT, $logger);
+        parent::__construct($base_url . self::ENDPOINT, $log_plugin, $cookie_plugin);
     }
 
     /**
