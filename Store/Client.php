@@ -1,12 +1,13 @@
 <?php
 namespace AllPlayers\Store;
 
-use Log;
 use DateTime;
 use DateTimeZone;
+use InvalidArgumentException;
 
 use AllPlayers\Component\HttpClient;
-use InvalidArgumentException;
+
+use Monolog\Logger;
 
 class Client extends HttpClient
 {
@@ -43,10 +44,10 @@ class Client extends HttpClient
     /**
      * @param string $base_url
      *   e.g. "https://store.mercury.dev.allplayers.com".
-     * @param Log $logger
+     * @param Logger $logger
      *   (Optional)
      */
-    public function __construct($base_url, Log $logger = null)
+    public function __construct($base_url, Logger $logger = null)
     {
         if (empty($base_url)) {
             throw new InvalidArgumentException('Invalid argument 1: base_url must be a base URL to the Store.');
@@ -615,10 +616,7 @@ class Client extends HttpClient
     {
         // Changing login path to 'user/login' (was 'users/login').
         // 'user/' path is from core services. 'users/' path is custom resource.
-        $ret = $this->post('user/login', array('username' => $user, 'password' => $pass), $this->headers);
-        $this->session = array('session_name' => $ret->session_name, 'sessid' => $ret->sessid);
-
-        return $ret;
+        return $this->post('user/login', array('username' => $user, 'password' => $pass));
     }
 
     /**

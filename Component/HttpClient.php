@@ -1,18 +1,19 @@
 <?php
 namespace AllPlayers\Component;
 
-use RESTClient;
+use Guzzle\Http\Client;
+use Guzzle\Http\CookieJar\ArrayCookieJar;
+use Guzzle\Http\Message\RequestInterface;
+use Guzzle\Http\Message\Response;
+use Guzzle\Http\Plugin\CookiePlugin;
+use Guzzle\Http\Plugin\LogPlugin;
+use Guzzle\Common\Log\MonologLogAdapter;
 
-use ErrorException;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+
 use InvalidArgumentException;
-use Log;
 
-/**
- * @todo Replace dependency on Request-bcm and RESTClient with HttpRequest2
- * or similar.
- */
-require_once dirname(__FILE__) . '/../Legacy/Request-bcm.php';
-require_once dirname(__FILE__) . '/../Legacy/RESTClient.php';
 
 /**
  * Handy RESTful wrapper.
@@ -36,15 +37,11 @@ class HttpClient
     public $format = 'application/json';
 
     /**
-     * RESTClient object.
+     * Guzzle instance.
      *
-     * @deprecated
-     *
-     * @var RESTClient
-     *
-     * @todo This should be wrapped/extended by the main class.
+     * @var Guzzle\Http\Client;
      */
-    public $rest = null;
+    protected $client = null;
 
     /**
      * Control wheter or not to print debug information. Use with care, may dump
@@ -57,9 +54,9 @@ class HttpClient
     /**
      * Log instance to control log information generated during a request.
      *
-     * @var Log
+     * @var Logger
      */
-    public $logger = null;
+    protected $logger = null;
 
     /**
      * HTTP Response code of last request.
@@ -71,9 +68,11 @@ class HttpClient
     /**
      * Cookies to be reused between requests.
      *
-     * @var string
+     * @var CookiePlugin
      */
-    public $cookies = array();
+    public $cookiePlugin;
+
+    public $lastResponse;
 
     /**
      * Headers variable for setting on an http request.
@@ -85,12 +84,12 @@ class HttpClient
     /**
      * @param string $url
      *   e.g. https://www.allplayers.com/api/v1/rest.
-     * @param Log $logger
+     * @param Logger $logger
      *   (optional)
      *
      * @todo Just extend a REST Class in the future.
      */
-    public function __construct($url_prefix, Log $logger = null)
+    public function __construct($url_prefix, Logger $logger = null, CookiePlugin $cookie_plugin = null)
     {
         // Validate $url argument.
         if (!filter_var($url_prefix, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
@@ -100,17 +99,23 @@ class HttpClient
         }
         $this->urlPrefix = $url_prefix;
 
-        // TODO: Just extend a REST Class in the future.
-        $this->rest = new RESTClient();
+        $this->client = new Client();
 
-        // Handle $logger argument.
-        if (isset($logger)) {
-            $this->logger = $logger;
-        } else {
-            // Disable logging by default.
-            $this->logger = Log::singleton('console', '', __CLASS__, PEAR_LOG_DEBUG);
-            $this->logger->setMask(PEAR_LOG_NONE);
+        $this->cookiePlugin = ($cookie_plugin) ? $cookie_plugin : new CookiePlugin(new ArrayCookieJar());
+        $this->client->addSubscriber($this->cookiePlugin);
+
+        // Create or use passed in monolog instance.
+        if ($logger) {
+          $this->logger = $logger;
         }
+        else {
+          $this->logger = new Logger('output');
+          $this->logger->pushHandler(new StreamHandler('php://output', Logger::DEBUG));
+        }
+
+        // Register logger.
+        $logPlugin = new LogPlugin(new MonologLogAdapter($this->logger), LogPlugin::LOG_CONTEXT);
+        $this->client->addSubscriber($logPlugin);
     }
 
     /**
@@ -149,37 +154,27 @@ class HttpClient
     ) {
         $url = "$this->urlPrefix/$path";
 
-        if (!empty($query)) {
-            $url .= '?' . http_build_query($query, 0, '&');
-        }
+        $default_headers = array(
+            'Cache-Control' => 'no-cache, must-revalidate, post-check=0, pre-check=0',
+            'Accept' => $this->format,
+            'Content-Type' => $this->format,
+        );
+        $headers = array_merge($default_headers, $headers, $this->headers);
 
-        $this->rest->createRequest($url, $verb, null, $allow_redirects);
-        $this->rest->setBody(json_encode($params));
-        $this->rest->addHeader('Cache-Control', 'no-cache, must-revalidate, post-check=0, pre-check=0');
-        $this->rest->addHeader('Accept', $this->format);
-        $this->rest->addHeader('Content-Type', $this->format);
-        $headers = array_merge($this->headers, $headers);
-        foreach ($headers as $key => $value) {
-            $this->rest->addHeader($key, $value);
-        }
-        $this->addCookies();
+        $body = ($params) ? json_encode($params) : null;
 
-        $this->logger->info("HTTP $verb: $url");
-        $this->rest->sendRequest();
+        $request = $this->client->createRequest($verb, $url, $headers, $body);
 
-        $this->responseCode = $this->rest->responseCode;
-        $this->responseBody = $this->rest->getResponse();
-        if ((int) $this->responseCode >= 400) {
-            if ($this->debug) {
-                $this->logger->debug(print_r($this->rest, true));
-            }
-            $this->logger->err("HTTP $this->responseCode from $url");
-            throw new ErrorException("HTTP $this->responseCode $this->responseBody", $this->responseCode);
-        }
+        // Add Query String
+        $request->getQuery()->merge($query);
 
-        $this->logger->info("HTTP $this->responseCode from $url");
+        $response = $request->send();
+        $this->lastResponse = $response;
 
-        return $this->decodeResponse();
+        $this->responseCode = $response->getStatusCode();
+        $this->responseBody = $response->getBody();
+
+        return $this->decodeResponse($response);
     }
 
     /**
@@ -269,45 +264,22 @@ class HttpClient
      * @return mixed
      *   Decoded response from the last rest request.
      */
-    public function decodeResponse()
+    public function decodeResponse(Response $response)
     {
         switch ($this->format) {
             case 'application/json':
-                $ret = json_decode($this->rest->getResponse(), false);
+                $ret = json_decode($response->getBody(), FALSE);
                 // Bubble up decode errors.
                 if (json_last_error() !== JSON_ERROR_NONE) {
-                    $this->logger->info('Invalid JSON: ' . $this->rest->getResponse());
-                    throw new ErrorException('Failed to decode JSON response.', json_last_error());
+                  $this->logger->info('Invalid JSON: ' . $response->getBody());
+                  throw new ErrorException('Failed to decode JSON response.', json_last_error());
                 }
                 break;
             default:
-                $ret = $this->rest->getResponse();
+                $ret = $response->getBody();
 
         }
         return $ret;
-    }
-
-    /**
-     * Add stored cookies to next request.
-     */
-    public function addCookies()
-    {
-        if (isset($this->session)) {
-            $this->rest->addCookie($this->session['session_name'], $this->session['sessid']);
-        }
-        foreach ($this->cookies as $cookie) {
-            $this->rest->addCookie($cookie['name'], $cookie['value']);
-        }
-    }
-
-    /**
-     * Store cookies from last response.
-     *
-     * @todo Review proper cookie handling.
-     */
-    public function storeCookies()
-    {
-        $this->cookies = $this->rest->getResponseCookies();
     }
 
     /**
@@ -383,10 +355,8 @@ class HttpClient
      */
     public function ssoSessionInit($cookie_name, $cookie, $auth_path = 'group_stores')
     {
-        $this->cookies[] = array('name' => $cookie_name, 'value' => $cookie);
-
+        // @TODO - This really isn't needed with the cookie jar.
         $this->get($auth_path, array(), array(), false);
-        $this->storeCookies();
     }
 
     /**

@@ -1,22 +1,14 @@
 {
-  "name": "allplayers/allplayers",
-  "description": "AllPlayers.com PHP Client",
-  "autoload": {
-    "psr-0": { "AllPlayers": "" }
-  },
-  "target-dir": "AllPlayers",
-  "require":{
-    "php":">=5.3.0",
-    "pear-pear/HTTP_Request": "*",
-    "pear-pear/Log": "*",
-    "pear-pear/Net_Socket": "*",
-    "pear-pear/Net_Url": "*",
-    "pear-pear/PEAR": "*"
-  },
-  "repositories":[
-    {
-      "type":"pear",
-      "url":"pear.php.net"
+    "name": "allplayers/allplayers",
+    "autoload": {
+        "psr-0": {
+            "AllPlayers": ""
+        }
+    },
+    "target-dir": "AllPlayers",
+    "require":{
+        "php": ">=5.3.2",
+        "guzzle/guzzle": ">=2.8.7",
+        "monolog/monolog": "1.2.*"
     }
-  ]
 }

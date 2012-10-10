@@ -3,8 +3,9 @@ namespace AllPlayers;
 
 use AllPlayers\Component\HttpClient;
 
+use Monolog\Logger;
+
 use ErrorException;
-use Log;
 
 /**
  * Methods for interacting with the main AllPlayers application API.
@@ -14,10 +15,10 @@ class Client extends HttpClient
     /**
      * @param string $url
      *   e.g. https://www.allplayers.com
-     * @param Log $logger
+     * @param Logger $logger
      *   (optional)
      */
-    public function __construct($base_url, Log $logger = null)
+    public function __construct($base_url, Logger $logger = null)
     {
         parent::__construct("$base_url/api/v1/rest", $logger);
     }
@@ -114,8 +115,8 @@ class Client extends HttpClient
         );
         try {
             $ret = $this->post('users', array_filter($userData));
-        } catch (ErrorException $e) {
-            $messageJson = $this->rest->getResponse();
+        } catch (\Guzzle\Http\Exception\ClientErrorResponseException $e) {
+            $messageJson = $e->getResponse()->getBody();
             $messageParts = json_decode($messageJson);
             if (!empty($messageParts->form_errors)) {
                 // If there are form errors besides captcha.
@@ -341,7 +342,6 @@ class Client extends HttpClient
     public function userLogin($user, $pass)
     {
         $ret = $this->post('users/login', array('username' => $user, 'password' => $pass));
-        $this->session = array('session_name' => $ret->session_name, 'sessid' => $ret->sessid);
 
         return $ret;
     }
@@ -349,13 +349,15 @@ class Client extends HttpClient
     /**
      * Logout via user endpoint.
      */
-    public function userLogout()
+    public function userLogout($fast = true)
     {
-        $ret = $this->post('users/logout');
-        $this->sess = null;
-        $this->session_name = null;
-        $this->cookies = array();
-        $this->session = null;
+        $ret = null;
+        if (!$fast) {
+            $ret = $this->post('users/logout');
+        }
+
+        // Clear cookies.
+        $this->cookiePlugin->getCookieJar()->remove();
 
         return $ret;
     }
