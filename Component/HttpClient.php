@@ -159,10 +159,6 @@ class HttpClient
     ) {
         $url = "$this->urlPrefix/$path";
 
-        if (!empty($query)) {
-            $url .= '?' . http_build_query($query, 0, '&');
-        }
-
         $default_headers = array(
             'Cache-Control' => 'no-cache, must-revalidate, post-check=0, pre-check=0',
             'Accept' => $this->format,
@@ -173,6 +169,9 @@ class HttpClient
         $body = ($params) ? json_encode($params) : null;
 
         $request = $this->client->createRequest($verb, $url, $headers, $body);
+
+        // Add Query String
+        $request->getQuery()->merge($query);
 
         if (!empty($body)) {
             $request->getCurlOptions()->set('body_as_string', true);
