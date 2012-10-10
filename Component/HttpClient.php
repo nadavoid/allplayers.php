@@ -1,16 +1,13 @@
 <?php
 namespace AllPlayers\Component;
 
+use Guzzle\Common\Log\ClosureLogAdapter;
 use Guzzle\Http\Client;
 use Guzzle\Http\CookieJar\ArrayCookieJar;
 use Guzzle\Http\Message\RequestInterface;
 use Guzzle\Http\Message\Response;
 use Guzzle\Http\Plugin\CookiePlugin;
 use Guzzle\Http\Plugin\LogPlugin;
-use Guzzle\Common\Log\MonologLogAdapter;
-
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 
 use InvalidArgumentException;
 
@@ -75,6 +72,16 @@ class HttpClient
     public $lastResponse;
 
     /**
+     * LogPlugin registred with Guzzle.
+     *
+     * Usage:
+     *   $this->logPlugin->getLogAdapter()->log('hi mom', LOG_INFO, array('extra stuff'));
+     *
+     * @var LogPlugin
+     */
+    protected $logPlugin;
+
+    /**
      * Headers variable for setting on an http request.
      *
      * @var array
@@ -89,7 +96,7 @@ class HttpClient
      *
      * @todo Just extend a REST Class in the future.
      */
-    public function __construct($url_prefix, Logger $logger = null, CookiePlugin $cookie_plugin = null)
+    public function __construct($url_prefix, LogPlugin $log_plugin = null, CookiePlugin $cookie_plugin = null)
     {
         // Validate $url argument.
         if (!filter_var($url_prefix, FILTER_VALIDATE_URL, FILTER_FLAG_PATH_REQUIRED)) {
@@ -101,21 +108,18 @@ class HttpClient
 
         $this->client = new Client();
 
+        // Use passed in CookiePlugin or use basic array backed version.
         $this->cookiePlugin = ($cookie_plugin) ? $cookie_plugin : new CookiePlugin(new ArrayCookieJar());
         $this->client->addSubscriber($this->cookiePlugin);
 
-        // Create or use passed in monolog instance.
-        if ($logger) {
-          $this->logger = $logger;
+        if ($log_plugin) {
+          // Register passed in LogPlugin.
+          $this->logPlugin = $log_plugin;
+          $this->client->addSubscriber($this->logPlugin);
+        } else {
+          // Create a noop logger for consistency, but don't register it for performance.
+          $this->logPlugin = new LogPlugin(new ClosureLogAdapter(function(){}));
         }
-        else {
-          $this->logger = new Logger('output');
-          $this->logger->pushHandler(new StreamHandler('php://output', Logger::DEBUG));
-        }
-
-        // Register logger.
-        $logPlugin = new LogPlugin(new MonologLogAdapter($this->logger), LogPlugin::LOG_CONTEXT);
-        $this->client->addSubscriber($logPlugin);
     }
 
     /**

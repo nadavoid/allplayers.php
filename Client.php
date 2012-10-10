@@ -3,7 +3,8 @@ namespace AllPlayers;
 
 use AllPlayers\Component\HttpClient;
 
-use Monolog\Logger;
+use Guzzle\Http\Plugin\CookiePlugin;
+use Guzzle\Http\Plugin\LogPlugin;
 
 use ErrorException;
 
@@ -13,14 +14,11 @@ use ErrorException;
 class Client extends HttpClient
 {
     /**
-     * @param string $url
-     *   e.g. https://www.allplayers.com
-     * @param Logger $logger
-     *   (optional)
+     * {@inheritdoc}
      */
-    public function __construct($base_url, Logger $logger = null)
+    public function __construct($base_url, LogPlugin $log_plugin = null, $cookie_plugin = null)
     {
-        parent::__construct("$base_url/api/v1/rest", $logger);
+        parent::__construct("$base_url/api/v1/rest", $log_plugin, $cookie_plugin);
     }
 
     /**
