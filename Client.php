@@ -114,16 +114,7 @@ class Client extends HttpClient
             'password'  => $password
         );
         try {
-            // @TODO - We're forced to save cookies before user create because
-            // it seems to clear them.
-            $cookies = $this->cookiePlugin->getCookieJar()->all();
-
             $ret = $this->post('users', array_filter($userData));
-
-            // @TODO - Restoring previously saved cookies, shouldn't be needed.
-            foreach ($cookies as $cookie) {
-              $this->cookiePlugin->getCookieJar()->add($cookie);
-            }
         } catch (\Guzzle\Http\Exception\ClientErrorResponseException $e) {
             $messageJson = $e->getResponse()->getBody();
             $messageParts = json_decode($messageJson);
