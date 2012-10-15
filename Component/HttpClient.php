@@ -36,7 +36,7 @@ class HttpClient
     /**
      * Guzzle instance.
      *
-     * @var Guzzle\Http\Client;
+     * @var Guzzle\Http\ClientInterface;
      */
     protected $client = null;
 
@@ -120,6 +120,15 @@ class HttpClient
           // Create a noop logger for consistency, but don't register it for performance.
           $this->logPlugin = new LogPlugin(new ClosureLogAdapter(function(){}));
         }
+    }
+
+    /**
+     * Get the Guzzle client.
+     *
+     * @return Guzzle\Http\ClientInterface
+     */
+    public function getClient() {
+      return $this->client;
     }
 
     /**
