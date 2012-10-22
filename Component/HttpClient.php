@@ -170,12 +170,31 @@ class HttpClient
 
         $body = ($params) ? json_encode($params) : null;
 
-        $request = $this->client->createRequest($verb, $url, $headers, $body);
+        $request = $this->getClient()->createRequest($verb, $url, $headers, $body);
 
         // Add Query String
         $request->getQuery()->merge($query);
 
-        $response = $request->send();
+        // @TODO - Redirects when not GET throw exceptions.
+        // @see https://github.com/guzzle/guzzle/issues/120
+        if ($verb !== 'GET') {
+            $request->getCurlOptions()->set('body_as_string', true);
+        }
+
+        try {
+            $response = $request->send();
+        } catch (\Guzzle\Http\Exception\CurlException $e) {
+            switch ($e->getErrorNo()) {
+                case 47:
+                    // @TODO - Cookies are not updated on GET redirect, re-issue works.
+                    // @see https://github.com/guzzle/guzzle/issues/149
+                    $request->getCurlOptions()->set('CURLOPT_MAXREDIRS', 5);
+                    $response = $request->send();
+                    break;
+                default:
+                    throw $e;
+            }
+        }
         $this->lastResponse = $response;
 
         $this->responseCode = $response->getStatusCode();
